@@ -73,20 +73,20 @@ let hubNodeContact = NotificationHub<(SKNode, contact:SKPhysicsContact)>()
     
     if let didChangeSceneSizedFrom = b.didChangeSceneSizedFrom {
       self.observerSize = hubSize.subscribeNotificationForName("didChangeSceneSizedFrom", sender: scene) { [weak self] notification in
-        if let x = self { if x.isEnabled { didChangeSceneSizedFrom(notification.userInfo!) } }
+        didChangeSceneSizedFrom(notification.userInfo!)
       }
       
     }
     
     if let didMoveToView = b.didMoveToView {
       self.observersView.append(hubView.subscribeNotificationForName("didMoveToView", sender: scene) { [weak self] notification in
-        if let x = self { if x.isEnabled { didMoveToView(notification.userInfo!) } }
+        didMoveToView(notification.userInfo!)
       })
     }
     
     if let willMoveFromView = b.willMoveFromView {
       self.observersView.append(hubView.subscribeNotificationForName("willMoveFromView", sender: scene) { [weak self] notification in
-        if let x = self { if x.isEnabled { willMoveFromView(notification.userInfo!) } }
+        willMoveFromView(notification.userInfo!)
         })
     }
     
