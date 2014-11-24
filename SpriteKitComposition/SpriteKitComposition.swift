@@ -41,11 +41,11 @@ let hubNodeContact = NotificationHub<(SKNode, contact:SKPhysicsContact)>()
 
 @objc public class Component : ComponentBehaviour  {
   var observerUpdated:Notification<CFTimeInterval>?
-  var observersEmpty = [Notification<SKNode>]()
   var observerSize:Notification<CGSize>?
-  var observersView = [Notification<SKView>]()
-  var observersContact = [Notification<SKPhysicsContact>]()
-  var observersNodeContact = [Notification<(SKNode, contact:SKPhysicsContact)>]()
+  var observersEmpty        = [Notification<SKNode>]()
+  var observersView         = [Notification<SKView>]()
+  var observersContact      = [Notification<SKPhysicsContact>]()
+  var observersNodeContact  = [Notification<(SKNode, contact:SKPhysicsContact)>]()
   
   private var behaviour:ComponentBehaviour { return self as ComponentBehaviour }
   var isEnabled:Bool = true
