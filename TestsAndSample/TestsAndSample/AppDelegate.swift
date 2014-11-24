@@ -22,12 +22,12 @@ class Player : SKSpriteNode {
     self.color = color
     self.size = size
   }
-  
 
-  required init(coder aDecoder: NSCoder) {
-    super.init(coder: aDecoder)
+  required init?(coder aDecoder: NSCoder) {
       fatalError("init(coder:) has not been implemented")
   }
+  
+
   
   func didEndContact(contact: SKPhysicsContact) {
     println("DID END CONTACT")
@@ -38,8 +38,6 @@ class Player : SKSpriteNode {
 //color: UIColor.blueColor(), size: CGSize(width: 40, height: 40))
 
 class Toucher : Component {
-  var isEnabled:Bool = true
-  weak var node:SKNode?
 
   func didAddToNode() {
     self.node?.userInteractionEnabled = true
@@ -71,8 +69,6 @@ class MyScene : SKScene {
 }
 
 class SceneDebugger : Component {
-  var isEnabled:Bool = true
-  weak var node:SKNode?
   func didAddToNode() {
     let skView = (self.node as SKScene).view
     skView?.showsFPS = true
@@ -87,11 +83,9 @@ class SceneDebugger : Component {
 }
 
 class GravityLessBounds : Component {
-  var isEnabled:Bool = true
-  weak var node:SKNode?
   func didAddToNode() {
     let scene = (self.node as SKScene)
-    scene.physicsWorld.gravity = CGVector(0,0)
+    scene.physicsWorld.gravity = CGVector(dx: 0,dy: 0)
     scene.physicsBody = SKPhysicsBody(edgeLoopFromRect: scene.frame)
   }
   
@@ -103,8 +97,6 @@ enum Contact : UInt32 {
 }
 
 class Physical : Component {
-  var isEnabled:Bool = true
-  weak var node:SKNode?
   func didAddToNode() {
     self.node?.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: 40, height: 40))
   }
@@ -112,8 +104,6 @@ class Physical : Component {
 }
 
 class Pinned : Component {
-  var isEnabled:Bool = true
-  weak var node:SKNode?
 //   override func didAddToNode() {
    func didAddToNode() {
 //    super.didAddToNode()
@@ -123,6 +113,7 @@ class Pinned : Component {
     self.node?.physicsBody?.categoryBitMask = Contact.Pinned.rawValue
     self.node?.physicsBody?.contactTestBitMask = Contact.Moving.rawValue
     self.node?.physicsBody?.collisionBitMask = Contact.Moving.rawValue
+    self.node?.physicsBody?.pinned = true
 
   }
   
@@ -136,8 +127,6 @@ class Pinned : Component {
 
 
 class Reseting : Component {
-  var isEnabled:Bool = true
-  weak var node:SKNode?
 
   func didAddToNode() {
     self.node?.physicsBody = nil
@@ -146,15 +135,18 @@ class Reseting : Component {
     self.node?.physicsBody?.categoryBitMask = Contact.Moving.rawValue
     self.node?.physicsBody?.contactTestBitMask = Contact.Pinned.rawValue
     self.node?.physicsBody?.collisionBitMask = Contact.Pinned.rawValue
+    self.node?.physicsBody?.dynamic = true
+    self.node?.physicsBody?.pinned = false
   }
   
   func didAddNodeToScene() {
-    self.node?.physicsBody?.applyImpulse(CGVector(5.0,5.0))
+   self.node?.physicsBody?.applyImpulse(CGVector(dx: 15.0,dy: 15.0))
   }
   
   func didEndContact(contact:SKPhysicsContact) {
+    let node = self.node
     self.node?.removeComponent(self)
-    self.node?.addComponent(Reseting())
+    node?.addComponent(Reseting())
 
   }
 
