@@ -11,6 +11,7 @@
 		22A84F2219C7461100020B69 /* SpriteKitCompositionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A84F2119C7461100020B69 /* SpriteKitCompositionTests.swift */; };
 		22AFC47F195F9D02003572F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AFC47E195F9D02003572F3 /* AppDelegate.swift */; };
 		22AFC481195F9D02003572F3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22AFC480195F9D02003572F3 /* Images.xcassets */; };
+		22EC4C071A22D6D800C07BA9 /* NotificationHub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EC4C061A22D6D800C07BA9 /* NotificationHub.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,7 @@
 		22AFC480195F9D02003572F3 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		22AFC486195F9D02003572F3 /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		22AFC48B195F9D02003572F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		22EC4C061A22D6D800C07BA9 /* NotificationHub.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationHub.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 		2201CDFC19AA68FE00F4BCED /* SpriteKitComposition */ = {
 			isa = PBXGroup;
 			children = (
+				22EC4C051A22D6CE00C07BA9 /* NotificationHub */,
 				2201CDFD19AA68FE00F4BCED /* SpriteKitComposition.swift */,
 			);
 			name = SpriteKitComposition;
@@ -122,6 +125,14 @@
 				22AFC48B195F9D02003572F3 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		22EC4C051A22D6CE00C07BA9 /* NotificationHub */ = {
+			isa = PBXGroup;
+			children = (
+				22EC4C061A22D6D800C07BA9 /* NotificationHub.swift */,
+			);
+			path = NotificationHub;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -223,6 +234,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2201CDFE19AA68FE00F4BCED /* SpriteKitComposition.swift in Sources */,
+				22EC4C071A22D6D800C07BA9 /* NotificationHub.swift in Sources */,
 				22AFC47F195F9D02003572F3 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -22,12 +22,12 @@ class Player : SKSpriteNode {
     self.color = color
     self.size = size
   }
-  
 
-  required init(coder aDecoder: NSCoder) {
-    super.init(coder: aDecoder)
+  required init?(coder aDecoder: NSCoder) {
       fatalError("init(coder:) has not been implemented")
   }
+  
+
   
   func didEndContact(contact: SKPhysicsContact) {
     println("DID END CONTACT")
@@ -85,7 +85,7 @@ class SceneDebugger : Component {
 class GravityLessBounds : Component {
   func didAddToNode() {
     let scene = (self.node as SKScene)
-    scene.physicsWorld.gravity = CGVector(0,0)
+    scene.physicsWorld.gravity = CGVector(dx: 0,dy: 0)
     scene.physicsBody = SKPhysicsBody(edgeLoopFromRect: scene.frame)
   }
   
@@ -140,7 +140,7 @@ class Reseting : Component {
   }
   
   func didAddNodeToScene() {
-   self.node?.physicsBody?.applyImpulse(CGVector(15.0,15.0))
+   self.node?.physicsBody?.applyImpulse(CGVector(dx: 15.0,dy: 15.0))
   }
   
   func didEndContact(contact:SKPhysicsContact) {
