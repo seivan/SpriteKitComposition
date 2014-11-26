@@ -26,29 +26,28 @@ import SpriteKit
   optional func didEndContact(contact:SKPhysicsContact)
   
   optional func touchesBegan(touches: [UITouch], withEvent event: UIEvent)
-  
-  
 }
 
 private struct hub {
-  static let timeInterval     = NotificationHub<CFTimeInterval>()
-  static let node       = NotificationHub<SKNode>()
-  static let size        = NotificationHub<CGSize>()
-  static let view        = NotificationHub<SKView>()
-  static let contact     = NotificationHub<SKPhysicsContact>()
-  static let nodeContact = NotificationHub<(SKNode, contact:SKPhysicsContact)>()
+  static let timeInterval = NotificationHub<CFTimeInterval>()
+  static let node         = NotificationHub<SKNode>()
+  static let size         = NotificationHub<CGSize>()
+  static let view         = NotificationHub<SKView>()
+  static let contact      = NotificationHub<SKPhysicsContact>()
+  static let nodeContact  = NotificationHub<(SKNode, contact:SKPhysicsContact)>()
 }
 
 
 @objc public class Component : ComponentBehaviour  {
-  var observerUpdated:Notification<CFTimeInterval>?
-  var observerSize:Notification<CGSize>?
-  var observersEmpty        = [Notification<SKNode>]()
-  var observersView         = [Notification<SKView>]()
-  var observersContact      = [Notification<SKPhysicsContact>]()
-  var observersNodeContact  = [Notification<(SKNode, contact:SKPhysicsContact)>]()
+  private var observerUpdated:Notification<CFTimeInterval>?
+  private var observerSize:Notification<CGSize>?
+  private var observersEmpty        = [Notification<SKNode>]()
+  private var observersView         = [Notification<SKView>]()
+  private var observersContact      = [Notification<SKPhysicsContact>]()
+  private var observersNodeContact  = [Notification<(SKNode, contact:SKPhysicsContact)>]()
   
   private var behaviour:ComponentBehaviour { return self as ComponentBehaviour }
+  
   var isEnabled:Bool = true
   private(set) weak var node:SKNode? {
     didSet {
@@ -64,9 +63,7 @@ private struct hub {
   }
   
   init(){}
-  
-  
-  
+ 
   final private func addObservers() {
     self.removeObservers()
     let b = self.behaviour

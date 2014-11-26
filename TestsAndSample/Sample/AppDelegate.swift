@@ -71,12 +71,12 @@ class MyScene : SKScene {
 class SceneDebugger : Component {
   func didAddToNode() {
     let skView = (self.node as SKScene).view
-    skView?.showsFPS = true
+    skView?.showsFPS       = true
     skView?.showsNodeCount = true
     skView?.showsDrawCount = true
     skView?.showsQuadCount = true
-    skView?.showsPhysics = true
-    skView?.showsFields = true
+    skView?.showsPhysics   = true
+    skView?.showsFields    = true
     skView?.setValue(NSNumber(bool: true), forKey: "_showsCulledNodesInNodeCount")
 //    skView?.multipleTouchEnabled = true
   }
