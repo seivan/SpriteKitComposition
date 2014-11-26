@@ -11,21 +11,26 @@ import XCTest
 import SpriteKit
 
 class ComponentTests: SpriteKitTestCase {
-  let component = SampleComponent()
+  var component = SampleComponent()
   
   override func setUp() {
     super.setUp()
-    self.scene?.addComponent(self.component)
+    var component = SampleComponent()
   }
   func testDidAddToNode() {
+    self.node?.addComponent(self.component)
     XCTAssertTrue(self.component.assertionDidAddToNode)
-    self.scene?.removeComponent(self.component);
   }
   func testDidAddNodeToScene() {
+    self.node?.addComponent(self.component)
     XCTAssertTrue(self.component.assertionDidAddNodeToScene)
   }
   func testDidRemoveFromNode() {
+    self.node?.addComponent(self.component)
+    let didRemove = self.component.removeFromNode()
+    XCTAssertTrue(didRemove)
     XCTAssertTrue(self.component.assertionDidRemoveFromNode)
+
   }
   func testDidRemoveNodeFromScene() {
     XCTAssertTrue(self.component.assertionDidRemoveFromNode)    

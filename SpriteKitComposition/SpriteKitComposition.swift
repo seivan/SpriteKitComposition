@@ -64,6 +64,12 @@ private struct hub {
   
   init(){}
  
+  final func removeFromNode() -> Bool {
+    if let node = self.node { return node.removeComponent(self) }
+    else { return false }
+    
+  }
+  
   final private func addObservers() {
     self.removeObservers()
     let b = self.behaviour
@@ -166,6 +172,7 @@ private struct hub {
   
   final private func _didRemoveFromNode() {
     self.removeObservers()
+    self.behaviour.didRemoveFromNode?()
     self.behaviour.didRemoveNodeFromScene?()
   }
   
