@@ -308,17 +308,13 @@ extension SKScene : SKPhysicsContactDelegate {
     hub.contact.publishNotificationName("didBeginContact", sender: self, userInfo:contact)
     let nodeA = contact.bodyA.node
     let nodeB = contact.bodyB.node
+    
+    if let nodeA = nodeA {
+      hub.nodeContact.publishNotificationName("didBeginContactWithNode", sender: nodeB, userInfo:(nodeA,contact:contact))
+    }
+
     if let nodeB = nodeB {
       hub.nodeContact.publishNotificationName("didBeginContactWithNode", sender: nodeA, userInfo:(nodeB,contact:contact))
-    }
-    if let nodeA = nodeA {
-      print("nodeA-------")
-      println(nodeA.name)
-      
-      print("nodeB--------")
-      println(nodeB?.name)
-
-      hub.nodeContact.publishNotificationName("didBeginContactWithNode", sender: nodeB, userInfo:(nodeA,contact:contact))
     }
   }
   
@@ -326,13 +322,15 @@ extension SKScene : SKPhysicsContactDelegate {
     hub.contact.publishNotificationName("didEndContact", sender: self, userInfo:contact)
     let nodeA = contact.bodyA.node
     let nodeB = contact.bodyB.node
-    if let nodeB = nodeB {
-      hub.nodeContact.publishNotificationName("didEndContactWithNode", sender: nodeA, userInfo:(nodeB,contact:contact))
-    }
     
     if let nodeA = nodeA {
       hub.nodeContact.publishNotificationName("didEndContactWithNode", sender: nodeB, userInfo:(nodeA,contact:contact))
     }
+    
+    if let nodeB = nodeB {
+      hub.nodeContact.publishNotificationName("didEndContactWithNode", sender: nodeA, userInfo:(nodeB,contact:contact))
+    }
+
     
   }
   

@@ -221,10 +221,36 @@ class ComponentTests: SpriteKitTestCase {
   }
   
   func testBeginContact() {
+    self.node?.addComponent(self.component)
+    self.setUpPhysicsContact() { node in
+      XCTAssertEqual(self.component.assertionDidBeginContact!.bodyA.node!, node)
+      XCTAssertEqual(self.component.assertionDidBeginContact!.bodyB.node!, self.node!)
+    }
+    
+    self.setUpScene()
+    self.node?.addComponent(self.component)
+    self.component.isEnabled = false
+    self.component.assertionDidBeginContact = nil
+    self.setUpPhysicsContact() { node in
+      XCTAssertTrue(self.component.assertionDidBeginContact == nil)
+    }
     
   }
   
   func testDidEndContact() {
+    self.node?.addComponent(self.component)
+    self.setUpPhysicsContact() { node in
+      XCTAssertEqual(self.component.assertionDidEndContact!.bodyA.node!, node)
+      XCTAssertEqual(self.component.assertionDidEndContact!.bodyB.node!, self.node!)
+    }
+    
+    self.setUpScene()
+    self.node?.addComponent(self.component)
+    self.component.isEnabled = false
+    self.component.assertionDidEndContact = nil
+    self.setUpPhysicsContact() { node in
+      XCTAssertTrue(self.component.assertionDidEndContact == nil)
+    }
     
   }
 
