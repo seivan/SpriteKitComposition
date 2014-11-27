@@ -103,6 +103,7 @@ class ComponentTests: SpriteKitTestCase {
     XCTAssertEqual(self.component.assertionDidMoveToView!, oldView!)
     
   }
+  
   func testDidUpdate() {
     self.node?.addComponent(self.component)
     
@@ -117,35 +118,145 @@ class ComponentTests: SpriteKitTestCase {
     self.component.isEnabled = false
     self.component.assertionDidUpdate = 0
     expectation = self.expectationWithDescription(__FUNCTION__)
-    dispatch_after(dispatch_time( DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
+    dispatch_after(dispatch_time( DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
       expectation.fulfill()
     }
-    self.waitForExpectationsWithTimeout(5, nil)
+    self.waitForExpectationsWithTimeout(0.1, nil)
     XCTAssertEqual(self.component.assertionDidUpdate!, 0)
 
 
   }
+  
   func testDidEvaluateActions() {
+    self.node?.addComponent(self.component)
+    
+    var expectation = self.expectationWithDescription(__FUNCTION__)
+    dispatch_after(dispatch_time( DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
+      expectation.fulfill()
+    }
+    self.waitForExpectationsWithTimeout(0.2, nil)
+    XCTAssertTrue(self.component.assertionDidEvaluateActions)
+
+    
+    self.component.isEnabled = false
+    self.component.assertionDidEvaluateActions = false
+    expectation = self.expectationWithDescription(__FUNCTION__)
+    dispatch_after(dispatch_time( DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
+      expectation.fulfill()
+    }
+    self.waitForExpectationsWithTimeout(0.2, nil)
+    XCTAssertFalse(self.component.assertionDidEvaluateActions)
     
   }
+  
   func testDidSimulatePhysics() {
+    self.node?.addComponent(self.component)
     
+    var expectation = self.expectationWithDescription(__FUNCTION__)
+    dispatch_after(dispatch_time( DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
+      expectation.fulfill()
+    }
+    self.waitForExpectationsWithTimeout(0.2, nil)
+    XCTAssertTrue(self.component.assertionDidSimulatePhysics)
+    
+    
+    self.component.isEnabled = false
+    self.component.assertionDidSimulatePhysics = false
+    expectation = self.expectationWithDescription(__FUNCTION__)
+    dispatch_after(dispatch_time( DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
+      expectation.fulfill()
+    }
+    self.waitForExpectationsWithTimeout(0.2, nil)
+    XCTAssertFalse(self.component.assertionDidSimulatePhysics)
+  
   }
+  
   func testDidApplyConstraints() {
+    self.node?.addComponent(self.component)
+    
+    var expectation = self.expectationWithDescription(__FUNCTION__)
+    dispatch_after(dispatch_time( DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
+      expectation.fulfill()
+    }
+    self.waitForExpectationsWithTimeout(0.2, nil)
+    XCTAssertTrue(self.component.assertionDidApplyConstraints)
+    
+    
+    self.component.isEnabled = false
+    self.component.assertionDidApplyConstraints = false
+    expectation = self.expectationWithDescription(__FUNCTION__)
+    dispatch_after(dispatch_time( DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
+      expectation.fulfill()
+    }
+    self.waitForExpectationsWithTimeout(0.2, nil)
+    XCTAssertFalse(self.component.assertionDidApplyConstraints)
     
   }
+  
   func testDidFinishUpdate() {
+    self.node?.addComponent(self.component)
+    
+    var expectation = self.expectationWithDescription(__FUNCTION__)
+    dispatch_after(dispatch_time( DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
+      expectation.fulfill()
+    }
+    self.waitForExpectationsWithTimeout(0.2, nil)
+    XCTAssertTrue(self.component.assertionDidFinishUpdate)
+    
+    
+    self.component.isEnabled = false
+    self.component.assertionDidFinishUpdate = false
+    expectation = self.expectationWithDescription(__FUNCTION__)
+    dispatch_after(dispatch_time( DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
+      expectation.fulfill()
+    }
+    self.waitForExpectationsWithTimeout(0.2, nil)
+    XCTAssertFalse(self.component.assertionDidFinishUpdate)
     
   }
-  func testDidBeginContactWithNode() {
-      
+  
+  func testDidBeginContactWithNodeEnabled() {
+    var expectation = self.expectationWithDescription(__FUNCTION__)
+    self.scene?.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
+    self.node?.addComponent(self.component)
+    let otherNode = SKSpriteNode(color: UIColor.yellowColor(), size: CGSize(width: 50, height: 50))
+    self.scene?.addChild(otherNode)
+    
+    for node in [otherNode, self.node!] {
+      node.position = CGPoint(x: 100, y: 100)
+      node.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: 40, height: 40))
+      node.physicsBody?.dynamic = true
+      node.physicsBody?.pinned = false
+    }
+    
+    self.node?.physicsBody?.categoryBitMask = 2
+    otherNode.physicsBody?.categoryBitMask = 1
+    self.node?.physicsBody?.contactTestBitMask = 1
+    otherNode.physicsBody?.contactTestBitMask = 2
+    
+    self.node?.position = CGPoint(x: 20, y: 20)
+    self.node?.physicsBody?.applyImpulse(CGVector(dx: 10, dy: 10))
+
+    
+    dispatch_after(dispatch_time( DISPATCH_TIME_NOW, Int64(10 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
+      expectation.fulfill()
+    }
+    self.waitForExpectationsWithTimeout(10, nil)
+
+    
+
+
+    
   }
+  
   func testDidEndContactWithNode() {
     
   }
+  
   func testBeginContact() {
     
   }
+  
   func testDidEndContact() {
     
   }

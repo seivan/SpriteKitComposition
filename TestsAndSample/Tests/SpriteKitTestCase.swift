@@ -24,7 +24,7 @@ class SpriteKitTestCase: XCTestCase {
     self.controller!.view = view
     window.rootViewController = controller
     self.scene = SKScene(size: self.controller!.view.frame.size)
-    self.node = SKNode()
+    self.node = SKSpriteNode(color: UIColor.yellowColor(), size: CGSize(width: 50, height: 50))
     view.presentScene(self.scene)
     self.scene?.addChild(self.node!)
     window.makeKeyAndVisible()
