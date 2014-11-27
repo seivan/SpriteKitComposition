@@ -11,21 +11,25 @@ import XCTest
 import SpriteKit
 class NodeTests: SpriteKitTestCase {
   
+  override func setUp() {
+    super.setUp()
+
+  }
+
   func testComponents() {
-    let node = SKNode()
     var components = [Component]()
     for i in 0..<5 {
       let component = Component()
-      node.addComponent(component)
+      self.node?.addComponent(component, withKey: String(i))
       components.append(component)
     }
-    XCTAssertEqual(node.components.count, components.count)
+    XCTAssertEqual(self.node!.components.count, components.count)
   }
   
+  
   func testchildNodes() {
-    let node = SKNode()
-    for i in 0..<5 { node.addChild(SKNode()) }
-    XCTAssertEqual(node.childNodes.count, node.children.count)
+    for i in 0..<5 { self.node!.addChild(SKNode()) }
+    XCTAssertEqual(self.node!.childNodes.count, self.node!.children.count)
     
   }
   

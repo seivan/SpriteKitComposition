@@ -16,6 +16,17 @@ class SpriteKitTestCase: XCTestCase {
   var node:SKNode?
   var controller:UIViewController?
   
+  
+  
+  override func setUp() {
+    super.setUp()
+    self.setUpScene()
+  }
+    
+  override func tearDown() {
+    super.tearDown()
+  }
+  
   func nextGameLoop(handler:()->()) {
     let time:NSTimeInterval = 0.1
     let expectation = self.expectationWithDescription(__FUNCTION__)
@@ -39,7 +50,7 @@ class SpriteKitTestCase: XCTestCase {
       node.physicsBody?.dynamic = true
       node.physicsBody?.pinned = false
     }
-
+    
     self.node?.physicsBody?.contactTestBitMask = 1
     self.node?.physicsBody?.categoryBitMask = 2
     
@@ -55,9 +66,9 @@ class SpriteKitTestCase: XCTestCase {
       handler(otherNode: otherNode)
     }
     self.waitForExpectationsWithTimeout(1.1, nil)
-
+    
   }
-
+  
   func setUpScene() {
     let app = UIApplication.sharedApplication().delegate!
     self.controller = UIViewController()
@@ -72,14 +83,6 @@ class SpriteKitTestCase: XCTestCase {
     self.scene?.addChild(self.node!)
     window.makeKeyAndVisible()
     
-  }
-  override func setUp() {
-    super.setUp()
-    self.setUpScene()
-  }
-    
-  override func tearDown() {
-    super.tearDown()
   }
     
   
