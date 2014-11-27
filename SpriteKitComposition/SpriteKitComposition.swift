@@ -173,7 +173,6 @@ private struct hub {
   final private func _didRemoveFromNode() {
     self.removeObservers()
     self.behaviour.didRemoveFromNode?()
-    self.behaviour.didRemoveNodeFromScene?()
   }
   
   final private func _didRemoveNodeFromScene() {
