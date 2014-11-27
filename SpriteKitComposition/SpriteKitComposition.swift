@@ -38,6 +38,10 @@ private struct hub {
 }
 
 
+func ==(lhs: Component, rhs: Component) -> Bool {
+  return lhs === rhs
+}
+
 @objc public class Component : ComponentBehaviour  {
   private var observerUpdated:Notification<CFTimeInterval>?
   private var observerSize:Notification<CGSize>?
@@ -257,8 +261,6 @@ extension SKNode {
   }
   
 }
-
-
 
 extension SKScene : SKPhysicsContactDelegate {
   

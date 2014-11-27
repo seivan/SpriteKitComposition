@@ -8,8 +8,53 @@
 
 import UIKit
 import XCTest
-
-class NodeTests: XCTestCase {
-
+import SpriteKit
+class NodeTests: SpriteKitTestCase {
+  
+  func testComponents() {
+    let node = SKNode()
+    var components = [Component]()
+    for i in 0..<5 {
+      let component = Component()
+      node.addComponent(component)
+      components.append(component)
+    }
+    XCTAssertEqual(node.components.count, components.count)
+  }
+  
+  func testchildNodes() {
+    let node = SKNode()
+    for i in 0..<5 { node.addChild(SKNode()) }
+    XCTAssertEqual(node.childNodes.count, node.children.count)
+    
+  }
+  
+  func testComponentWithClass() {
+    
+  }
+  
+  func testComponentWithKey() {
+    
+  }
+  
+  func testAddComponentWithKey() {
+    
+  }
+  
+  func testAddComponent() {
+    
+  }
+  
+  func testRemoveComponentWithClass() {
+    
+  }
+  
+  func testRemoveComponentWithKey() {
+    
+  }
+  
+  func testRemoveComponent() {
+    
+  }
 
 }
