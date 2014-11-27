@@ -26,7 +26,7 @@ class SpriteKitTestCase: XCTestCase {
     
   }
   
-  func setUpPhysicsContact(handler:(otherNode:SKNode)->()) {
+  func nextPhysicsContact(handler:(otherNode:SKNode)->()) {
     var expectation = self.expectationWithDescription(__FUNCTION__)
     self.scene?.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
     let otherNode = SKSpriteNode(color: UIColor.redColor(), size: CGSize(width: 50, height: 50))

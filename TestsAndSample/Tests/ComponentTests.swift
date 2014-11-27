@@ -187,7 +187,7 @@ class ComponentTests: SpriteKitTestCase {
   
   func testDidBeginContactWithNode() {
     self.node?.addComponent(self.component)
-    self.setUpPhysicsContact() { node in
+    self.nextPhysicsContact() { node in
       XCTAssertEqual(self.component.assertionDidBeginContactWithNode!.node, node)
       XCTAssertEqual(self.component.assertionDidBeginContactWithNode!.contact.bodyB.node!, self.node!)
     }
@@ -196,7 +196,7 @@ class ComponentTests: SpriteKitTestCase {
     self.node?.addComponent(self.component)
     self.component.isEnabled = false
     self.component.assertionDidBeginContactWithNode = nil
-    self.setUpPhysicsContact() { node in
+    self.nextPhysicsContact() { node in
       XCTAssertTrue(self.component.assertionDidBeginContactWithNode == nil)
     }
 
@@ -205,7 +205,7 @@ class ComponentTests: SpriteKitTestCase {
   
   func testDidEndContactWithNode() {
     self.node?.addComponent(self.component)
-    self.setUpPhysicsContact() { node in
+    self.nextPhysicsContact() { node in
       XCTAssertEqual(self.component.assertionDidEndContactWithNode!.node, node)
       XCTAssertEqual(self.component.assertionDidEndContactWithNode!.contact.bodyB.node!, self.node!)
     }
@@ -214,7 +214,7 @@ class ComponentTests: SpriteKitTestCase {
     self.node?.addComponent(self.component)
     self.component.isEnabled = false
     self.component.assertionDidEndContactWithNode = nil
-    self.setUpPhysicsContact() { node in
+    self.nextPhysicsContact() { node in
       XCTAssertTrue(self.component.assertionDidEndContactWithNode == nil)
     }
     
@@ -222,7 +222,7 @@ class ComponentTests: SpriteKitTestCase {
   
   func testBeginContact() {
     self.node?.addComponent(self.component)
-    self.setUpPhysicsContact() { node in
+    self.nextPhysicsContact() { node in
       XCTAssertEqual(self.component.assertionDidBeginContact!.bodyA.node!, node)
       XCTAssertEqual(self.component.assertionDidBeginContact!.bodyB.node!, self.node!)
     }
@@ -231,7 +231,7 @@ class ComponentTests: SpriteKitTestCase {
     self.node?.addComponent(self.component)
     self.component.isEnabled = false
     self.component.assertionDidBeginContact = nil
-    self.setUpPhysicsContact() { node in
+    self.nextPhysicsContact() { node in
       XCTAssertTrue(self.component.assertionDidBeginContact == nil)
     }
     
@@ -239,7 +239,7 @@ class ComponentTests: SpriteKitTestCase {
   
   func testDidEndContact() {
     self.node?.addComponent(self.component)
-    self.setUpPhysicsContact() { node in
+    self.nextPhysicsContact() { node in
       XCTAssertEqual(self.component.assertionDidEndContact!.bodyA.node!, node)
       XCTAssertEqual(self.component.assertionDidEndContact!.bodyB.node!, self.node!)
     }
@@ -248,7 +248,7 @@ class ComponentTests: SpriteKitTestCase {
     self.node?.addComponent(self.component)
     self.component.isEnabled = false
     self.component.assertionDidEndContact = nil
-    self.setUpPhysicsContact() { node in
+    self.nextPhysicsContact() { node in
       XCTAssertTrue(self.component.assertionDidEndContact == nil)
     }
     
