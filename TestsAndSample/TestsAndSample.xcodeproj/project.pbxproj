@@ -15,7 +15,7 @@
 		228C0ACE1A26539500025DEC /* SpriteKitTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C0AC61A26538F00025DEC /* SpriteKitTestCase.swift */; };
 		228C0AD11A2657A400025DEC /* SceneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C0AD01A2657A400025DEC /* SceneTests.swift */; };
 		228C0AD31A2657B300025DEC /* NodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C0AD21A2657B300025DEC /* NodeTests.swift */; };
-		228C0AD51A2657C600025DEC /* ComponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C0AD41A2657C600025DEC /* ComponentTests.swift */; };
+		228C0AD51A2657C600025DEC /* ComponentCallbackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C0AD41A2657C600025DEC /* ComponentCallbackTests.swift */; };
 		228C0ADC1A26587300025DEC /* SampleComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C0AD61A2657E200025DEC /* SampleComponent.swift */; };
 		228C0ADD1A2666A800025DEC /* SpriteKitComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2201CDFD19AA68FE00F4BCED /* SpriteKitComposition.swift */; };
 		228C0ADE1A2666B100025DEC /* NotificationHub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EC4C061A22D6D800C07BA9 /* NotificationHub.swift */; };
@@ -46,7 +46,7 @@
 		228C0AC91A26538F00025DEC /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		228C0AD01A2657A400025DEC /* SceneTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneTests.swift; sourceTree = "<group>"; };
 		228C0AD21A2657B300025DEC /* NodeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeTests.swift; sourceTree = "<group>"; };
-		228C0AD41A2657C600025DEC /* ComponentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComponentTests.swift; sourceTree = "<group>"; };
+		228C0AD41A2657C600025DEC /* ComponentCallbackTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComponentCallbackTests.swift; sourceTree = "<group>"; };
 		228C0AD61A2657E200025DEC /* SampleComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleComponent.swift; sourceTree = "<group>"; };
 		22AFC479195F9D02003572F3 /* Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		22EC4C061A22D6D800C07BA9 /* NotificationHub.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationHub.swift; sourceTree = "<group>"; };
@@ -106,7 +106,7 @@
 				228C0AC71A26538F00025DEC /* TestHost */,
 				228C0AD01A2657A400025DEC /* SceneTests.swift */,
 				228C0AD21A2657B300025DEC /* NodeTests.swift */,
-				228C0AD41A2657C600025DEC /* ComponentTests.swift */,
+				228C0AD41A2657C600025DEC /* ComponentCallbackTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -286,7 +286,7 @@
 				228C0ADD1A2666A800025DEC /* SpriteKitComposition.swift in Sources */,
 				228C0ADF1A2667C700025DEC /* SampleComponent.swift in Sources */,
 				228C0AD11A2657A400025DEC /* SceneTests.swift in Sources */,
-				228C0AD51A2657C600025DEC /* ComponentTests.swift in Sources */,
+				228C0AD51A2657C600025DEC /* ComponentCallbackTests.swift in Sources */,
 				228C0AD31A2657B300025DEC /* NodeTests.swift in Sources */,
 				228C0ADE1A2666B100025DEC /* NotificationHub.swift in Sources */,
 				228C0ACE1A26539500025DEC /* SpriteKitTestCase.swift in Sources */,

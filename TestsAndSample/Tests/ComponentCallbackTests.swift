@@ -10,7 +10,7 @@ import UIKit
 import XCTest
 import SpriteKit
 
-class ComponentTests: SpriteKitTestCase {
+class ComponentCallbackTests: SpriteKitTestCase {
   var component = SampleComponent()
   
   override func setUp() {
