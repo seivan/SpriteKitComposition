@@ -101,12 +101,12 @@
 			isa = PBXGroup;
 			children = (
 				228C0AC51A26538F00025DEC /* Info.plist */,
+				228C0AD61A2657E200025DEC /* SampleComponent.swift */,
 				228C0AC61A26538F00025DEC /* SpriteKitTestCase.swift */,
 				228C0AC71A26538F00025DEC /* TestHost */,
 				228C0AD01A2657A400025DEC /* SceneTests.swift */,
 				228C0AD21A2657B300025DEC /* NodeTests.swift */,
 				228C0AD41A2657C600025DEC /* ComponentTests.swift */,
-				228C0AD61A2657E200025DEC /* SampleComponent.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -492,6 +492,7 @@
 				228C0AC01A26534300025DEC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		228C0AC11A26534300025DEC /* Build configuration list for PBXNativeTarget "Tests" */ = {
 			isa = XCConfigurationList;
@@ -500,6 +501,7 @@
 				228C0AC31A26534300025DEC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		22AFC474195F9D02003572F3 /* Build configuration list for PBXProject "TestsAndSample" */ = {
 			isa = XCConfigurationList;

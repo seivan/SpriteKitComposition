@@ -28,6 +28,8 @@ class SampleComponent: Component {
   var assertionDidEndContact:SKPhysicsContact? = nil
   
   
+  
+  
   func didAddToNode() {
     self.assertionDidAddToNode = true
   }

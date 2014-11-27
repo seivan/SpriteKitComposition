@@ -144,14 +144,14 @@ private struct hub {
     
     if let didBeginContactWithNode =  b.didBeginContactWithNode {
       self.observersNodeContact.append(
-        hub.nodeContact.subscribeNotificationForName("didBeginContactWithNode", sender: scene) { [weak self] notification in
-          if let x = self { if x.isEnabled { didBeginContactWithNode(notification.userInfo!) } }
+        hub.nodeContact.subscribeNotificationForName("didBeginContactWithNode", sender: self.node) { [weak self] notification in
+          if let x = self { if x.isEnabled == true { didBeginContactWithNode(notification.userInfo!) } }
         })
     }
     
     if let didEndContactWithNode = b.didEndContactWithNode {
       self.observersNodeContact.append(
-        hub.nodeContact.subscribeNotificationForName("didEndContactWithNode", sender: scene) { [weak self] notification in
+        hub.nodeContact.subscribeNotificationForName("didEndContactWithNode", sender: self.node) { [weak self] notification in
           if let x = self { if x.isEnabled { didEndContactWithNode(notification.userInfo!) } }
         })
     }
@@ -312,6 +312,12 @@ extension SKScene : SKPhysicsContactDelegate {
       hub.nodeContact.publishNotificationName("didBeginContactWithNode", sender: nodeA, userInfo:(nodeB,contact:contact))
     }
     if let nodeA = nodeA {
+      print("nodeA-------")
+      println(nodeA.name)
+      
+      print("nodeB--------")
+      println(nodeB?.name)
+
       hub.nodeContact.publishNotificationName("didBeginContactWithNode", sender: nodeB, userInfo:(nodeA,contact:contact))
     }
   }
