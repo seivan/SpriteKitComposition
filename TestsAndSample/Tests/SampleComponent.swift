@@ -14,18 +14,18 @@ class SampleComponent: Component {
   var assertionDidAddNodeToScene = false
   var assertionDidRemoveFromNode = false
   var assertionDidRemoveNodeFromScene = false
-  var assertionDidChangeSceneSizedFrom:CGSize? = nil
-  var assertionDidMoveToView:SKView? = nil
-  var assertionWillMoveFromView:SKView? = nil
-  var assertionDidUpdate:NSTimeInterval? = nil
+  var assertionDidChangeSceneSizedFrom:CGSize! = nil
+  var assertionDidMoveToView:SKView! = nil
+  var assertionWillMoveFromView:SKView! = nil
+  var assertionDidUpdate:NSTimeInterval! = nil
   var assertionDidEvaluateActions = false
   var assertionDidSimulatePhysics = false
   var assertionDidApplyConstraints = false
   var assertionDidFinishUpdate = false
-  var assertionDidBeginContactWithNode:(node:SKNode, contact:SKPhysicsContact)? = nil
-  var assertionDidEndContactWithNode:(node:SKNode, contact:SKPhysicsContact)? = nil
-  var assertionDidBeginContact:SKPhysicsContact? = nil
-  var assertionDidEndContact:SKPhysicsContact? = nil
+  var assertionDidBeginContactWithNode:(node:SKNode, contact:SKPhysicsContact)! = nil
+  var assertionDidEndContactWithNode:(node:SKNode, contact:SKPhysicsContact)! = nil
+  var assertionDidBeginContact:SKPhysicsContact! = nil
+  var assertionDidEndContact:SKPhysicsContact! = nil
   
   
   

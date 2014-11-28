@@ -12,9 +12,9 @@ import SpriteKit
 
 class SpriteKitTestCase: XCTestCase {
 
-  var scene:SKScene?
-  var node:SKNode?
-  var controller:UIViewController?
+  var scene:SKScene!
+  var node:SKNode!
+  var controller:UIViewController!
   
   
   
@@ -39,10 +39,10 @@ class SpriteKitTestCase: XCTestCase {
   
   func nextPhysicsContact(handler:(otherNode:SKNode)->()) {
     var expectation = self.expectationWithDescription(__FUNCTION__)
-    self.scene?.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
+    self.scene.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
     let otherNode = SKSpriteNode(color: UIColor.redColor(), size: CGSize(width: 50, height: 50))
     otherNode.name = "blueNode"
-    self.scene?.addChild(otherNode)
+    self.scene.addChild(otherNode)
     
     for node in [otherNode, self.node!] {
       node.position = CGPoint(x: 100, y: 100)
@@ -51,14 +51,14 @@ class SpriteKitTestCase: XCTestCase {
       node.physicsBody?.pinned = false
     }
     
-    self.node?.physicsBody?.contactTestBitMask = 1
+    self.node.physicsBody?.contactTestBitMask = 1
     self.node?.physicsBody?.categoryBitMask = 2
     
     otherNode.physicsBody?.categoryBitMask = 1
     otherNode.physicsBody?.contactTestBitMask = 2
     
-    self.node?.position = CGPoint(x: 20, y: 20)
-    self.node?.physicsBody?.applyImpulse(CGVector(dx: 10, dy: 10))
+    self.node.position = CGPoint(x: 20, y: 20)
+    self.node.physicsBody?.applyImpulse(CGVector(dx: 10, dy: 10))
     
     
     dispatch_after(dispatch_time( DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
@@ -72,15 +72,15 @@ class SpriteKitTestCase: XCTestCase {
   func setUpScene() {
     let app = UIApplication.sharedApplication().delegate!
     self.controller = UIViewController()
-    let view = SKView(frame: self.controller!.view.frame)
+    let view = SKView(frame: self.controller.view.frame)
     let window = app.window!!
-    self.controller!.view = view
+    self.controller.view = view
     window.rootViewController = controller
-    self.scene = SKScene(size: self.controller!.view.frame.size)
+    self.scene = SKScene(size: self.controller.view.frame.size)
     self.node = SKSpriteNode(color: UIColor.blueColor(), size: CGSize(width: 50, height: 50))
-    self.node?.name = "redNode"
+    self.node.name = "redNode"
     view.presentScene(self.scene)
-    self.scene?.addChild(self.node!)
+    self.scene.addChild(self.node!)
     window.makeKeyAndVisible()
     
   }
