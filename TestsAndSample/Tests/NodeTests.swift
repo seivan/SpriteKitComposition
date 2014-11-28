@@ -23,14 +23,20 @@ class NodeTests: SpriteKitTestCase {
       self.node?.addComponent(component, withKey: String(i))
       components.append(component)
     }
+    
     XCTAssertEqual(self.node!.components.count, components.count)
+
+    for component in components {
+      XCTAssertTrue(contains(self.node!.components, component))
+    }
+    
   }
   
   
   func testchildNodes() {
     for i in 0..<5 { self.node!.addChild(SKNode()) }
     XCTAssertEqual(self.node!.childNodes.count, self.node!.children.count)
-    
+    XCTAssertEqual(self.node!.childNodes, self.node!.children as [SKNode])
   }
   
   func testComponentWithClass() {

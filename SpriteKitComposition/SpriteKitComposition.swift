@@ -37,11 +37,6 @@ private struct hub {
   static let nodeContact  = NotificationHub<(SKNode, contact:SKPhysicsContact)>()
 }
 
-
-func ==(lhs: Component, rhs: Component) -> Bool {
-  return lhs === rhs
-}
-
 @objc public class Component : ComponentBehaviour  {
   private var observerUpdated:Notification<CFTimeInterval>?
   private var observerSize:Notification<CGSize>?
@@ -487,3 +482,8 @@ final private class SharedComponentManager {
   }
 }
 
+
+public func ==(lhs: Component, rhs: Component) -> Bool { return lhs === rhs }
+public func ==(lhs: SKNode, rhs: SKNode) -> Bool { return lhs === rhs }
+extension Component : Equatable {}
+extension SKNode : Equatable {}
