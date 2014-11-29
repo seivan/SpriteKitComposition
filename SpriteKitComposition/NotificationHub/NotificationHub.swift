@@ -15,10 +15,10 @@ public class Notification<T>  {
     self.name     = name
     self.closure  = handler
     self.sender   = sender
+    
     #if DEBUG
       NotificationHubMock.onSubscribeMockHandler?(name:self.name,sender:self.sender)
     #endif
-
 
   }
   
@@ -185,6 +185,10 @@ public class NotificationHub<T>  {
         if not.sender == nil || not.sender === sender {
           notifications.removeObject(not)
           not.hub = nil
+          #if DEBUG
+            NotificationHubMock.onRemoveMockHandler?(name:notification.name, sender:notification.sender)
+          #endif
+
         }
       }
     }
@@ -227,12 +231,7 @@ public class NotificationHub<T>  {
     if let notifications = notifications {
       for notificationList in notifications {
         for notification in notificationList {
-          if notification.sender === sender {
-            notification.remove()
-            #if DEBUG
-              NotificationHubMock.onRemoveMockHandler?(name:notification.name, sender:notification.sender)
-            #endif
-          }
+          if notification.sender === sender { notification.remove() }
         }
       }
     }
