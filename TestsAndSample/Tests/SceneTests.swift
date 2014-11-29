@@ -10,28 +10,25 @@ import UIKit
 import XCTest
 import SpriteKit
 
-var notificationName:String!
-var notificationSender:AnyObject?
-var notificationUserInfo:Any?
 
 
 
 class SceneTests: SpriteKitTestCase {
+  
+  var notificationName:String!
+  var notificationSender:AnyObject?
+  var notificationUserInfo:Any?
+  
   override func setUp() {
     super.setUp()
-    #if DEBUG
-        println("AAAAAAAAAAAAAAAAAAAAAAE")
-      #else
-      
-    #endif
+    self.scene = SKScene()
+  }
+  override func tearDown() {
+    self.notificationName     = nil
+    self.notificationSender   = nil
+    self.notificationUserInfo = nil
+    self.scene = nil
 
-//    NotificationHubMock.onPublishMockHandler { (name, sender, userInfo) -> Void in
-//      notificationName = name
-//      notificationSender = sender
-//    }
-//    NotificationHubMock.onSubscribeMockHandler { (name, sender, userInfo) -> Void in
-//      
-//    }
   }
   
   func testsConformsToSKPhysicsContactDelegate() {
@@ -39,11 +36,18 @@ class SceneTests: SpriteKitTestCase {
     XCTAssertTrue(self.scene.respondsToSelector("didBeginContact:"))
     XCTAssertTrue(self.scene.respondsToSelector("didEndContact:"))
   }
+  
   func testDidChangeSize() {
+    
+    NotificationHubMock.onPublishingMockHandler { (name, sender, userInfo) -> (Void) in
+      self.notificationName = name
+      self.notificationSender = sender
+      self.notificationUserInfo = userInfo
+    }
     self.scene.didChangeSize(CGSizeZero)
-//    XCTAssertEqual(notificationName, "didChangeSize")
-//    XCTAssertEqual(notificationSender! as SKScene, self.scene)
-//    XCTAssertEqual(notificationUserInfo! as CGSize, CGSizeZero)
+    XCTAssertEqual(notificationName, "didChangeSceneSizedFrom")
+    XCTAssertEqual(notificationSender! as SKScene, self.scene)
+    XCTAssertEqual(notificationUserInfo! as CGSize, CGSizeZero)
   }
 
 }
