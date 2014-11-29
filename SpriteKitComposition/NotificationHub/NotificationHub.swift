@@ -16,7 +16,7 @@ public class Notification<T>  {
     self.closure  = handler
     self.sender   = sender
     #if DEBUG
-      NotificationHubMock.onSubscribeMock?(name:self.name,sender:self.sender)
+      NotificationHubMock.onSubscribeMockHandler?(name:self.name,sender:self.sender)
     #endif
 
 
@@ -27,8 +27,9 @@ public class Notification<T>  {
     if(self.hub == nil) { return false }
     
     #if DEBUG
-      NotificationHubMock.onPublishMock?(name:self.name,sender:self.sender, userInfo:nil)
+      NotificationHubMock.onPublishMockHandler?(name: self.name, sender: self.sender, userInfo: userInfo)
     #endif
+    
     self.userInfo = userInfo
     self.closure(self)
     self.userInfo = nil
@@ -59,18 +60,21 @@ get { return NotificationHub<[String:Any]>.defaultHub }
 
 #if DEBUG
 public struct NotificationHubMock {
-  private static var onPublishingMockHandler:((name:String, sender:AnyObject?, userInfo:Any?) -> Void)?
-  private static var onSubscribeMock:((name:String, sender:AnyObject?) -> Void)?
-  private static var onRemovingMockHandler:((name:String, sender:AnyObject?) -> Void)?
+//  typealias closureType = (parameterTypes) -> (returnType)
+
+  private static var onPublishMockHandler:((name:String, sender:AnyObject?, userInfo:Any?) -> (Void))?
+  static func onPublishingMockHandler(handler:(name:String, sender:AnyObject?, userInfo:Any?) -> (Void))  {
+    self.onPublishMockHandler = handler
+  }
   
-  static func onPublishingMockHandler(handler:(name:String, sender:AnyObject?, userInfo:Any?) -> Void)  {
-    self.onPublishingMockHandler = handler
+  private static var onSubscribeMockHandler:((name:String, sender:AnyObject?) -> Void)?
+  static func onSubscribingMock(handler:(name:String, sender:AnyObject?) -> Void)  {
+    self.onSubscribeMockHandler = handler
   }
-  static func onSubscribeMock(handler:(name:String, sender:AnyObject?) -> Void)  {
-    self.onSubscribeMock = handler
-  }
+  
+  private static var onRemoveMockHandler:((name:String, sender:AnyObject?) -> Void)?
   static func onRemovingMockHandler(handler:(name:String, sender:AnyObject?) -> Void)  {
-    self.onRemovingMockHandler = handler
+    self.onRemoveMockHandler = handler
   }
 
   }
@@ -130,7 +134,6 @@ public class NotificationHub<T>  {
             didPublish = not.publishUserInfo(userInfo)
             not.sender = nil
           }
-
           else if  not.sender === sender { didPublish = not.publishUserInfo(userInfo) }
         }
       }
@@ -164,6 +167,10 @@ public class NotificationHub<T>  {
     if notifications?.count == 0  { self.internalNotifications.removeObjectForKey(name) }
     notification.hub = nil
 
+    #if DEBUG
+      NotificationHubMock.onRemoveMockHandler?(name:notification.name, sender:notification.sender)
+    #endif
+
     return true
   }
   
@@ -186,6 +193,9 @@ public class NotificationHub<T>  {
     if postCount == 0 {self.internalNotifications.removeObjectForKey(name) }
     
 
+    #if DEBUG
+      NotificationHubMock.onRemoveMockHandler?(name:name, sender:sender)
+    #endif
     return preCount != postCount
     
   }
@@ -199,6 +209,10 @@ public class NotificationHub<T>  {
       for notification in notifications {
         let not:Notification = notification as Notification<T>
         not.hub = nil
+        #if DEBUG
+          NotificationHubMock.onRemoveMockHandler?(name:not.name, sender:not.sender)
+        #endif
+
       }
     }
     
@@ -213,7 +227,12 @@ public class NotificationHub<T>  {
     if let notifications = notifications {
       for notificationList in notifications {
         for notification in notificationList {
-          if notification.sender === sender { notification.remove() }
+          if notification.sender === sender {
+            notification.remove()
+            #if DEBUG
+              NotificationHubMock.onRemoveMockHandler?(name:notification.name, sender:notification.sender)
+            #endif
+          }
         }
       }
     }
@@ -232,6 +251,10 @@ public class NotificationHub<T>  {
       for notificationList in notifications {
         for notification in notificationList {
           notification.hub = nil
+          #if DEBUG
+            NotificationHubMock.onRemoveMockHandler?(name:notification.name, sender:notification.sender)
+          #endif
+
         }
       }
     }
