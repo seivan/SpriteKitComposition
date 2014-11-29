@@ -261,7 +261,6 @@ extension SKScene : SKPhysicsContactDelegate {
   
   public func didChangeSize(oldSize: CGSize) {
     hub.size.publishNotificationName("didChangeSceneSizedFrom", sender: self, userInfo:oldSize)
-
   }
   
   public func didMoveToView(view: SKView) {

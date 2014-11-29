@@ -11,10 +11,6 @@ import XCTest
 import SpriteKit
 class NodeTests: SpriteKitTestCase {
   
-  override func setUp() {
-    super.setUp()
-
-  }
 
   func testComponents() {
     var components = [Component]()
