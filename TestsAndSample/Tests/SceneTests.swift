@@ -171,25 +171,30 @@ class SceneTests: SpriteKitTestCase {
     
     let currentScene = self.scene
     self.setUpScene()
-    NotificationHubMock.onPublishingMockHandler { (name, sender, userInfo) -> (Void) in
-      if name == "didBeginContactWithNode" {
-        self.notificationName = name
-        self.notificationSender = sender
-        self.notificationUserInfo = userInfo
-      }
-    }
-    
     let component = SampleComponent()
     self.node.addComponent(component)
     self.nextPhysicsContact { (otherNode) -> () in
+      var counter = 0
+      NotificationHubMock.onPublishingMockHandler { (name, sender, userInfo) -> (Void) in
+        if counter == 0 {
+          XCTAssertNotEqual(name, "didBeginContactWithNode")
+        }
+        else {
+          let tuple = userInfo as (SKNode, contact: SKPhysicsContact)
+          XCTAssertEqual(name, "didBeginContactWithNode")
+          XCTAssertNotNil(sender as SKNode)
+          XCTAssertNotNil(tuple.0)
+          XCTAssertNotEqual(sender as SKNode, tuple.0)
+          XCTAssertEqual(tuple.contact, component.assertionDidBeginContactWithNode.contact)
+        }
+        counter += 1
+      }
       currentScene.didBeginContact(component.assertionDidBeginContactWithNode.contact)
-      XCTAssertEqual(self.notificationName, "didBeginContactWithNode")
-      XCTAssertNotNil(self.notificationSender)
-      XCTAssertTrue(self.notificationUserInfo != nil)
+      XCTAssertEqual(counter, 3)
       
     }
-    
   }
+
 
   func testDidEndContact() {
     
@@ -217,27 +222,31 @@ class SceneTests: SpriteKitTestCase {
   
   
   func testDidEndContactWithNode() {
-    
+
     let currentScene = self.scene
     self.setUpScene()
-    NotificationHubMock.onPublishingMockHandler { (name, sender, userInfo) -> (Void) in
-      if name == "didEndContactWithNode" {
-        self.notificationName = name
-        self.notificationSender = sender
-        self.notificationUserInfo = userInfo
-      }
-    }
-    
     let component = SampleComponent()
     self.node.addComponent(component)
     self.nextPhysicsContact { (otherNode) -> () in
-      currentScene.didEndContact(component.assertionDidBeginContactWithNode.contact)
-      XCTAssertEqual(self.notificationName, "didEndContactWithNode")
-      XCTAssertNotNil(self.notificationSender)
-      XCTAssertTrue(self.notificationUserInfo != nil)
-      
+      var counter = 0
+      NotificationHubMock.onPublishingMockHandler { (name, sender, userInfo) -> (Void) in
+        if counter == 0 {
+          XCTAssertNotEqual(name, "didEndContactWithNode")
+        }
+        else {
+          let tuple = userInfo as (SKNode, contact: SKPhysicsContact)
+          XCTAssertEqual(name, "didEndContactWithNode")
+          XCTAssertNotNil(sender as SKNode)
+          XCTAssertNotNil(tuple.0)
+          XCTAssertNotEqual(sender as SKNode, tuple.0)
+          XCTAssertEqual(tuple.contact, component.assertionDidEndContactWithNode.contact)
+        }
+        counter += 1
+      }
+      currentScene.didEndContact(component.assertionDidEndContactWithNode.contact)
+      XCTAssertEqual(counter, 3)
+ 
     }
-    
   }
 
   
