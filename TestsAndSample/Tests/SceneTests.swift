@@ -146,23 +146,21 @@ class SceneTests: SpriteKitTestCase {
 
     let currentScene = self.scene
     self.setUpScene()
-    NotificationHubMock.onPublishingMockHandler { (name, sender, userInfo) -> (Void) in
-      if name == "didBeginContact" {
-        self.notificationName = name
-        self.notificationSender = sender
-        self.notificationUserInfo = userInfo
-      }
-    }
-    
     let component = SampleComponent()
     self.node.addComponent(component)
     self.nextPhysicsContact { (otherNode) -> () in
-      currentScene.didBeginContact(component.assertionDidBeginContact)
-      XCTAssertEqual(self.notificationName, "didBeginContact")
-      XCTAssertEqual(self.notificationSender! as SKScene, currentScene)
-      XCTAssertTrue(self.notificationUserInfo != nil)
+      var counter = 0
+      NotificationHubMock.onPublishingMockHandler { (name, sender, userInfo) -> (Void) in
+        if counter == 0 {
+          XCTAssertEqual(name, "didBeginContact")
+        }
+        counter += 1
+      }
+      currentScene.didBeginContact(component.assertionDidBeginContactWithNode.contact)
+      XCTAssertEqual(counter, 3)
       
     }
+
 
   }
   
