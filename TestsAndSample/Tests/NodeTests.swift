@@ -12,6 +12,17 @@ import SpriteKit
 class NodeTests: SpriteKitTestCase {
   
 
+  override func setUp() {
+    super.setUp()
+    self.scene = SKScene()
+    self.node = SKNode()
+  }
+  
+  override func tearDown() {
+    super.tearDown()
+    self.node = nil
+    self.scene = nil
+  }
   func testComponents() {
     var components = [Component]()
     for i in 0..<5 {
@@ -113,5 +124,36 @@ class NodeTests: SpriteKitTestCase {
     XCTAssertTrue(self.node.components.isEmpty)
     
   }
+  
+  func testAddChild() {
+    let mainComponent   = SampleComponent()
+    let nestedComponent = SampleComponent()
+    self.node.addComponent(mainComponent)
+    let node = SKNode()
+    node.addComponent(nestedComponent)
+    self.node.addChild(node)
+    
+    
+    XCTAssertFalse(mainComponent.assertionDidAddNodeToScene)
+    XCTAssertFalse(nestedComponent.assertionDidAddNodeToScene)
+    
+    self.scene.addChild(self.node)
+    XCTAssertTrue(mainComponent.assertionDidAddNodeToScene)
+    XCTAssertTrue(nestedComponent.assertionDidAddNodeToScene)
+    mainComponent.assertionDidAddNodeToScene = false
+    nestedComponent.assertionDidAddNodeToScene = false
+    
+    let oldScene = self.scene
+    self.scene = SKScene()
+    self.scene.addChild(self.node)
+    
+    XCTAssertTrue(mainComponent.assertionDidAddNodeToScene)
+    XCTAssertTrue(nestedComponent.assertionDidAddNodeToScene)
+    XCTAssertNotEqual(self.node.scene!, oldScene)
+    XCTAssertNotEqual(node.scene!, oldScene)
+
+  }
+  
+
 
 }
