@@ -12,6 +12,10 @@ import SpriteKit
   optional func willMoveFromView(view: SKView)
   
   
+  
+
+  
+  
   //if isEnabled
   optional func didUpdate(time:NSTimeInterval)
   optional func didEvaluateActions()

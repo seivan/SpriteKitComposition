@@ -91,7 +91,6 @@ class NodeTests: SpriteKitTestCase {
     XCTAssertFalse(self.node.removeComponentWithClass(Component.self))
     XCTAssertTrue(self.node.components.isEmpty)
 
-
     
   }
   

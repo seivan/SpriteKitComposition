@@ -25,6 +25,10 @@ class SpriteKitTestCase: XCTestCase {
     
   override func tearDown() {
     super.tearDown()
+    NotificationHubMock.onPublishingMockHandler { (name, sender, userInfo) -> (Void) in }
+    NotificationHubMock.onRemovingMockHandler { (name, sender) -> (Void) in }
+    NotificationHubMock.onSubscribingMock { (name, sender) -> (Void) in }
+
   }
   
   func nextGameLoop(handler:()->()) {

@@ -255,7 +255,7 @@ public func ==<T>(lhs: NotificationHub<T>, rhs: NotificationHub<T>) -> Bool { re
 #if DEBUG
   public struct NotificationHubMock {
     
-    private static var onPublishMockHandler:((name:String, sender:AnyObject?, userInfo:Any?) -> (Void))?
+    static var onPublishMockHandler:((name:String, sender:AnyObject?, userInfo:Any?) -> (Void))?
     static func onPublishingMockHandler(handler:(name:String, sender:AnyObject?, userInfo:Any?) -> (Void))  {
       self.onPublishMockHandler = handler
     }
