@@ -153,6 +153,91 @@ class NodeTests: SpriteKitTestCase {
     XCTAssertNotEqual(node.scene!, oldScene)
 
   }
+
+  func testInsertChild() {
+    let mainComponent   = SampleComponent()
+    let nestedComponent = SampleComponent()
+    self.node.addComponent(mainComponent)
+    let node = SKNode()
+    node.addComponent(nestedComponent)
+    self.node.insertChild(node, atIndex:0)
+    
+    
+    XCTAssertFalse(mainComponent.assertionDidAddNodeToScene)
+    XCTAssertFalse(nestedComponent.assertionDidAddNodeToScene)
+    
+    self.scene.insertChild(self.node, atIndex:0)
+    XCTAssertTrue(mainComponent.assertionDidAddNodeToScene)
+    XCTAssertTrue(nestedComponent.assertionDidAddNodeToScene)
+    mainComponent.assertionDidAddNodeToScene = false
+    nestedComponent.assertionDidAddNodeToScene = false
+    
+    let oldScene = self.scene
+    self.scene = SKScene()
+    self.scene.addChild(self.node)
+    
+    XCTAssertTrue(mainComponent.assertionDidAddNodeToScene)
+    XCTAssertTrue(nestedComponent.assertionDidAddNodeToScene)
+    XCTAssertNotEqual(self.node.scene!, oldScene)
+    XCTAssertNotEqual(node.scene!, oldScene)
+
+  }
+
+  func testRemoveFromParent() {
+    let mainComponent   = SampleComponent()
+    let nestedComponent = SampleComponent()
+    self.node.addComponent(mainComponent)
+    let node = SKNode()
+    node.addComponent(nestedComponent)
+    self.node.addChild(node)
+    self.scene.addChild(self.node)
+    
+    
+    self.node.removeFromParent()
+    XCTAssertTrue(mainComponent.assertionDidRemoveNodeFromScene)
+    XCTAssertTrue(nestedComponent.assertionDidRemoveNodeFromScene)
+    XCTAssertNil(self.node.scene)
+    XCTAssertNil(node.scene)
+
+  }
+  
+  func testRemoveAllChildren() {
+    let mainComponent   = SampleComponent()
+    let nestedComponent = SampleComponent()
+    self.node.addComponent(mainComponent)
+    let node = SKNode()
+    node.addComponent(nestedComponent)
+    self.node.addChild(node)
+    self.scene.addChild(self.node)
+    
+    
+    self.scene.removeAllChildren()
+    XCTAssertTrue(mainComponent.assertionDidRemoveNodeFromScene)
+    XCTAssertTrue(nestedComponent.assertionDidRemoveNodeFromScene)
+    XCTAssertNil(self.node.scene)
+    XCTAssertNil(node.scene)
+    
+  }
+
+  func testRemoveChildrenInArray() {
+    let mainComponent   = SampleComponent()
+    let nestedComponent = SampleComponent()
+    self.node.addComponent(mainComponent)
+    let node = SKNode()
+    node.addComponent(nestedComponent)
+    self.node.addChild(node)
+    self.scene.addChild(self.node)
+    
+    
+    self.scene.removeChildrenInArray([self.node])
+    XCTAssertTrue(mainComponent.assertionDidRemoveNodeFromScene)
+    XCTAssertTrue(nestedComponent.assertionDidRemoveNodeFromScene)
+    XCTAssertNil(self.node.scene)
+    XCTAssertNil(node.scene)
+    
+  }
+
+
   
 
 
