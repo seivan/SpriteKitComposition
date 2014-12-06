@@ -77,6 +77,7 @@ class NodeTests: SpriteKitTestCase {
     XCTAssertTrue(self.node.addComponent(component, withKey:"added"))
     XCTAssertFalse(self.node.addComponent(Component(), withKey:"added"))
     XCTAssertEqual(self.node.components, [component])
+    XCTAssertEqual(self.node, component.node!)
   }
   
   func testAddComponent() {
@@ -85,7 +86,7 @@ class NodeTests: SpriteKitTestCase {
     XCTAssertFalse(self.node.addComponent(component))
     XCTAssertFalse(self.node.addComponent(Component()))
     XCTAssertEqual(self.node.components, [component])
-    
+    XCTAssertEqual(self.node, component.node!)    
   }
   
   func testRemoveComponentWithClass() {
