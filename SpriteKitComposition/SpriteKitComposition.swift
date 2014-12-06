@@ -95,63 +95,63 @@ private struct hub {
     
     if let didUpdate = b.didUpdate {
       self.observerUpdated = hub.timeInterval.subscribeNotificationForName("didUpdate", sender: scene) { [weak self] notification in
-        if let x = self { if x.isEnabled { didUpdate(notification.userInfo!) } }
+           if self?.isEnabled == true { didUpdate(notification.userInfo!) }
       }
     }
     
     if let didEvaluateActions =  b.didEvaluateActions {
       self.observersEmpty.append(
         hub.node.subscribeNotificationForName("didEvaluateActions", sender: scene) { [weak self] notification in
-          if let x = self { if x.isEnabled { didEvaluateActions() } }
+           if self?.isEnabled == true { didEvaluateActions() }
         })
     }
     
     if let didSimulatePhysics = b.didSimulatePhysics? {
       self.observersEmpty.append(
         hub.node.subscribeNotificationForName("didSimulatePhysics", sender: scene) { [weak self] notification in
-          if let x = self { if x.isEnabled { didSimulatePhysics() } }
+           if self?.isEnabled == true { didSimulatePhysics() }
         })
     }
     
     if let didApplyConstraints = b.didApplyConstraints? {
       self.observersEmpty.append(
         hub.node.subscribeNotificationForName("didApplyConstraints", sender: scene) { [weak self] notification in
-          if let x = self { if x.isEnabled { didApplyConstraints() } }
+           if self?.isEnabled == true { didApplyConstraints() }
         })
     }
     
     if let didFinishUpdate = b.didFinishUpdate {
       self.observersEmpty.append(
         hub.node.subscribeNotificationForName("didFinishUpdate", sender: scene) { [weak self] notification in
-          if let x = self { if x.isEnabled { didFinishUpdate() } }
+           if self?.isEnabled == true  { didFinishUpdate() }
         })
     }
     
     if let didBeginContact = b.didBeginContact {
       self.observersContact.append(
         hub.contact.subscribeNotificationForName("didBeginContact", sender: scene) { [weak self] notification in
-          if let x = self { if x.isEnabled { didBeginContact(notification.userInfo!) } }
+           if self?.isEnabled == true { didBeginContact(notification.userInfo!) }
         })
     }
     
     if let didEndContact = b.didEndContact {
       self.observersContact.append(
         hub.contact.subscribeNotificationForName("didEndContact", sender: scene) { [weak self] notification in
-          if let x = self { if x.isEnabled { didEndContact(notification.userInfo!) } }
+           if self?.isEnabled == true { didEndContact(notification.userInfo!) }
         })
     }
     
     if let didBeginContactWithNode =  b.didBeginContactWithNode {
       self.observersNodeContact.append(
         hub.nodeContact.subscribeNotificationForName("didBeginContactWithNode", sender: self.node) { [weak self] notification in
-          if let x = self { if x.isEnabled == true { didBeginContactWithNode(notification.userInfo!) } }
+           if self?.isEnabled == true { didBeginContactWithNode(notification.userInfo!) }
         })
     }
     
     if let didEndContactWithNode = b.didEndContactWithNode {
       self.observersNodeContact.append(
         hub.nodeContact.subscribeNotificationForName("didEndContactWithNode", sender: self.node) { [weak self] notification in
-          if let x = self { if x.isEnabled { didEndContactWithNode(notification.userInfo!) } }
+           if self?.isEnabled == true { didEndContactWithNode(notification.userInfo!) }
         })
     }
     
