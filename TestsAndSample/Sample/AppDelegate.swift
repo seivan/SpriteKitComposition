@@ -114,6 +114,7 @@ class Pinned : Component {
     self.node?.physicsBody?.contactTestBitMask = Contact.Moving.rawValue
     self.node?.physicsBody?.collisionBitMask = Contact.Moving.rawValue
     self.node?.physicsBody?.pinned = true
+    self.node?.physicsBody?.usesPreciseCollisionDetection = true
 
   }
   
@@ -137,6 +138,7 @@ class Reseting : Component {
     self.node?.physicsBody?.collisionBitMask = Contact.Pinned.rawValue
     self.node?.physicsBody?.dynamic = true
     self.node?.physicsBody?.pinned = false
+    self.node?.physicsBody?.usesPreciseCollisionDetection = true
   }
   
   func didAddNodeToScene() {
