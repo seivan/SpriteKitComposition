@@ -55,9 +55,10 @@ private struct hub {
   }
   private(set) weak var node:SKNode? {
     didSet {
-      self.isEnabled =  self.node != nil
-      if self.isEnabled { self._didAddToNode() }
+      let isWithNode = self.node != nil
+      if isWithNode { self._didAddToNode() }
       else { self._didRemoveFromNode() }
+      self.isEnabled =  isWithNode
     }
   }
   
@@ -360,7 +361,7 @@ extension SKNode {
       for component in node.components { component._didAddNodeToScene() }
       for childNode in node.childNodes { node._addedChild(childNode) }
     }
-    else if self.parent != nil {
+    else if self.scene != nil {
       for component in node.components { component._didAddNodeToScene() }
       for childNode in node.childNodes { node._addedChild(childNode) }
     }
