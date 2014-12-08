@@ -48,6 +48,7 @@ class Toucher : Component {
   }
 }
 
+
 class MyScene : SKScene {
   override func update(currentTime: NSTimeInterval) {
     super.update(currentTime)
@@ -82,79 +83,37 @@ class SceneDebugger : Component {
   }
 }
 
-class GravityLessBounds : Component {
+class Sample : Component {
   func didAddToNode() {
-    let scene = (self.node as SKScene)
-    scene.physicsWorld.gravity = CGVector(dx: 0,dy: 0)
-    scene.physicsBody = SKPhysicsBody(edgeLoopFromRect: scene.frame)
-  }
-  
-}
-
-enum Contact : UInt32 {
-  case Pinned
-  case Moving
-}
-
-class Physical : Component {
-  func didAddToNode() {
-    self.node?.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: 40, height: 40))
-  }
-  
-}
-
-class Pinned : Component {
-//   override func didAddToNode() {
-   func didAddToNode() {
-//    super.didAddToNode()
-    self.node?.physicsBody = nil
-    self.node?.position = CGPoint(x: 200, y: 200)
-    self.node?.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: 40, height: 40))
-    self.node?.physicsBody?.categoryBitMask = Contact.Pinned.rawValue
-    self.node?.physicsBody?.contactTestBitMask = Contact.Moving.rawValue
-    self.node?.physicsBody?.collisionBitMask = Contact.Moving.rawValue
-    self.node?.physicsBody?.pinned = true
-    self.node?.physicsBody?.usesPreciseCollisionDetection = true
-
-  }
-  
-  func didEndContact(contact:SKPhysicsContact) {
-    self.node?.removeComponentWithClass(Pinned.self)
-    self.node?.addComponent(Pinned())
-    
-  }
-
-}
-
-
-class Reseting : Component {
-
-  func didAddToNode() {
-    self.node?.physicsBody = nil
-    self.node?.position = CGPoint(x: 100, y: 100)
-    self.node?.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: 40, height: 40))
-    self.node?.physicsBody?.categoryBitMask = Contact.Moving.rawValue
-    self.node?.physicsBody?.contactTestBitMask = Contact.Pinned.rawValue
-    self.node?.physicsBody?.collisionBitMask = Contact.Pinned.rawValue
-    self.node?.physicsBody?.dynamic = true
-    self.node?.physicsBody?.pinned = false
-    self.node?.physicsBody?.usesPreciseCollisionDetection = true
+    println("didAddToNode \(self.node?.name) & \(self.node?.scene?.name)")
   }
   
   func didAddNodeToScene() {
-   self.node?.physicsBody?.applyImpulse(CGVector(dx: 15.0,dy: 15.0))
+    println("didAddNodeToScene \(self.node?.scene?.name) & \(self.node?.scene?.name)")
+
   }
   
-  func didEndContact(contact:SKPhysicsContact) {
-    let node = self.node
-    self.node?.removeComponent(self)
-    node?.addComponent(Reseting())
-
+  func didRemoveFromNode() {
+    println("didRemoveFromNode \(self.node?.name) & \(self.node?.scene?.name)")
+  }
+  
+  func didRemoveNodeFromScene() {
+    println("didRemoveNodeFromScene \(self.node?.name) & \(self.node?.scene?.name)")
+  }
+  
+  func didChangeSceneSizedFrom(previousSize:CGSize) {
+    
+  }
+  
+  func didMoveToView(view: SKView) {
+    println("didMoveToView \(self.node?.name)")
+  }
+  
+  func willMoveFromView(view: SKView) {
+    println("willMoveFromView \(self.node?.name)")
   }
 
-
 }
-
 
 
 
@@ -182,41 +141,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     scene.name = "MAAAAAAAAAAIn"
     skView.presentScene(scene)
     self.window?.rootViewController = controller
-    
-    
-    
-
-
-    
-
     let enemy = Player(color: UIColor.redColor(), size: CGSize(width: 40, height: 40))
     enemy.name = "ENEMY"
-    
-    
     let player = Player(color: UIColor.blueColor(), size:  CGSize(width: 40, height: 40))
     player.name = "PLAYER"
-
-
-    
-
-    
-    let gun = SKNode()
+    let gun = Player(color: UIColor.orangeColor(), size:  CGSize(width: 20, height: 20))
     gun.name = "GUN"
+    
+//    player.addChild(gun)
+
+    
+//    scene.addComponent(SceneDebugger())
+//    
+//    scene.addChild(enemy)
+
+    gun.removeFromParent()
     player.addChild(gun)
 
-    
-    enemy.addComponent(Reseting())
-    player.addComponent(Pinned())
+   scene.addChild(player)
+    gun.addComponent(Sample())
 
-    
-    scene.addComponent(GravityLessBounds())
-    scene.addComponent(SceneDebugger())
-    
-    scene.addComponent(Toucher())
-    player.addComponent(Toucher())
+   player.removeFromParent()
+   gun.removeComponentWithClass(Sample.self)
 
-    scene.addChild(enemy)
-    scene.addChild(player)
 
     return true
   }

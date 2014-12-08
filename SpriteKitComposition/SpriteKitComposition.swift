@@ -54,11 +54,11 @@ private struct hub {
     }
   }
   private(set) weak var node:SKNode? {
+    willSet { if newValue == nil { self._didRemoveFromNode() } }
     didSet {
-      let isWithNode = self.node != nil
-      if isWithNode { self._didAddToNode() }
-      else { self._didRemoveFromNode() }
-      self.isEnabled =  isWithNode
+      let isEnabled = self.node != nil
+      if isEnabled { self._didAddToNode() }
+      self.isEnabled = isEnabled
     }
   }
   
@@ -171,7 +171,6 @@ private struct hub {
   }
   
   final private func _didRemoveFromNode() {
-    self.removeObservers()
     self.behaviour.didRemoveFromNode?()
   }
   
@@ -333,8 +332,6 @@ extension SKScene : SKPhysicsContactDelegate {
   
   
   
-  
-  
 }
 
 extension SKNode {
@@ -394,7 +391,7 @@ extension SKNode {
       for component in node.components { component._didRemoveNodeFromScene() }
       for childNode in node.childNodes { node._removedChild(childNode) }
     }
-    else if self.parent != nil {
+    else if self.scene != nil {
       for component in node.components { component._didRemoveNodeFromScene() }
       for childNode in node.childNodes { node._removedChild(childNode) }
     }
