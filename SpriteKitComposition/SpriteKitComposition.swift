@@ -69,7 +69,11 @@ import SpriteKit
   }
   private(set) weak var node:SKNode? {
     willSet { if newValue   == nil { self._didRemoveFromNode() } }
-    didSet  { if self.node !=  nil { self._didAddToNode()      } }
+    didSet  {
+      let hasNode = self.node != nil
+      if hasNode { self._didAddToNode() }
+      self.isEnabled = hasNode
+    }
   }
   
   init(){}
