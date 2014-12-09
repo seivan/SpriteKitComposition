@@ -66,8 +66,8 @@ import SpriteKit
   
   var isEnabled:Bool = false {
     didSet {
-      if      (oldValue == false && self.isEnabled == true)  { self._addObservers()   }
-      else if (oldValue == true  && self.isEnabled == false) { self.removeObservers() }
+      if      oldValue == false && self.isEnabled == true  { self._addObservers()   }
+      else if oldValue == true  && self.isEnabled == false { self.removeObservers() }
       
 //      self.removeObservers()
 //      if (self.isEnabled == true) { self.addObservers() }
@@ -183,11 +183,10 @@ import SpriteKit
   
   final private func _didAddToNode() {
     (self as ComponentBehaviour).didAddToNode?()
-    if(self.node?.scene != nil) { self._didAddNodeToScene() }
+    if self.node?.scene != nil { self._didAddNodeToScene() }
     
   }
   final private func _didAddNodeToScene() {
-    self.isEnabled = true
     (self as ComponentBehaviour).didAddNodeToScene?()
   }
   
