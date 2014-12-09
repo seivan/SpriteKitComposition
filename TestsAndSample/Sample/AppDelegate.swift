@@ -112,6 +112,11 @@ class Sample : Component {
   func willMoveFromView(view: SKView) {
     println("willMoveFromView \(self.node?.name)")
   }
+  
+  func didUpdate(time:NSTimeInterval) {
+    println(time)
+  }
+
 
 }
 
@@ -157,14 +162,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     let sample = Sample()
     println(sample.isEnabled)
-
-    player.addChild(gun)
-
-   scene.addChild(player)
     gun.addComponent(sample)
+    println(sample.isEnabled)
+    
+    player.addChild(gun)
+    scene.addChild(player)
+   
 
-   player.removeFromParent()
-   gun.removeComponentWithClass(Sample.self)
+
+//   player.removeFromParent()
+//   gun.removeComponentWithClass(Sample.self)
 //    sample.removeFromNode()
 
 

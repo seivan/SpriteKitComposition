@@ -23,6 +23,7 @@ class NodeTests: SpriteKitTestCase {
     self.node = nil
     self.scene = nil
   }
+  
   func testComponents() {
     var components = [Component]()
     for i in 0..<5 {
