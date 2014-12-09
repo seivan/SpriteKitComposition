@@ -49,8 +49,8 @@ private struct hub {
   
   var isEnabled:Bool = false {
     didSet {
-      if self.isEnabled && self.node?.scene != nil { self.addObservers() }
-      else { self.removeObservers() }
+      if (oldValue == false &&  self.isEnabled == true) { self.addObservers() }
+      else if (oldValue == true && self.isEnabled == false) { self.removeObservers() }
     }
   }
   private(set) weak var node:SKNode? {
@@ -71,89 +71,89 @@ private struct hub {
   }
   
   final private func addObservers() {
-    self.removeObservers()
-    let b = self.behaviour
-    let scene = self.node!.scene!
-    
-    if let didChangeSceneSizedFrom = b.didChangeSceneSizedFrom {
-      self.observerSize = hub.size.subscribeNotificationForName("didChangeSceneSizedFrom", sender: scene) { notification in
-        didChangeSceneSizedFrom(notification.userInfo!)
+    if let scene = self.node!.scene {
+      let b = self.behaviour
+      
+      if let didChangeSceneSizedFrom = b.didChangeSceneSizedFrom {
+        self.observerSize = hub.size.subscribeNotificationForName("didChangeSceneSizedFrom", sender: scene) { n in
+          didChangeSceneSizedFrom(n.userInfo!)
+        }
+        
       }
       
-    }
-    
-    if let didMoveToView = b.didMoveToView {
-      self.observersView.append(hub.view.subscribeNotificationForName("didMoveToView", sender: scene) { notification in
-        didMoveToView(notification.userInfo!)
-        })
-    }
-    
-    if let willMoveFromView = b.willMoveFromView {
-      self.observersView.append(hub.view.subscribeNotificationForName("willMoveFromView", sender: scene) { notification in
-        willMoveFromView(notification.userInfo!)
-        })
-    }
-    
-    if let didUpdate = b.didUpdate {
-      self.observerUpdated = hub.timeInterval.subscribeNotificationForName("didUpdate", sender: scene) { notification in
-        didUpdate(notification.userInfo!)
+      if let didMoveToView = b.didMoveToView {
+        self.observersView.append(hub.view.subscribeNotificationForName("didMoveToView", sender: scene) { n in
+          didMoveToView(n.userInfo!)
+          })
       }
-    }
-    
-    if let didEvaluateActions =  b.didEvaluateActions {
-      self.observersEmpty.append(
-        hub.node.subscribeNotificationForName("didEvaluateActions", sender: scene) { notification in
-          didEvaluateActions()
-        })
-    }
-    
-    if let didSimulatePhysics = b.didSimulatePhysics? {
-      self.observersEmpty.append(
-        hub.node.subscribeNotificationForName("didSimulatePhysics", sender: scene) { notification in
-          didSimulatePhysics()
-        })
-    }
-    
-    if let didApplyConstraints = b.didApplyConstraints? {
-      self.observersEmpty.append(
-        hub.node.subscribeNotificationForName("didApplyConstraints", sender: scene) { notification in
-          didApplyConstraints()
-        })
-    }
-    
-    if let didFinishUpdate = b.didFinishUpdate {
-      self.observersEmpty.append(
-        hub.node.subscribeNotificationForName("didFinishUpdate", sender: scene) { notification in
-          didFinishUpdate()
-        })
-    }
-    
-    if let didBeginContact = b.didBeginContact {
-      self.observersContact.append(
-        hub.contact.subscribeNotificationForName("didBeginContact", sender: scene) { notification in
-          didBeginContact(notification.userInfo!)
-        })
-    }
-    
-    if let didEndContact = b.didEndContact {
-      self.observersContact.append(
-        hub.contact.subscribeNotificationForName("didEndContact", sender: scene) { notification in
-          didEndContact(notification.userInfo!)
-        })
-    }
-    
-    if let didBeginContactWithNode =  b.didBeginContactWithNode {
-      self.observersNodeContact.append(
-        hub.nodeContact.subscribeNotificationForName("didBeginContactWithNode", sender: self.node) { notification in
-          didBeginContactWithNode(notification.userInfo!)
-        })
-    }
-    
-    if let didEndContactWithNode = b.didEndContactWithNode {
-      self.observersNodeContact.append(
-        hub.nodeContact.subscribeNotificationForName("didEndContactWithNode", sender: self.node) { notification in
-          didEndContactWithNode(notification.userInfo!)
-        })
+      
+      if let willMoveFromView = b.willMoveFromView {
+        self.observersView.append(hub.view.subscribeNotificationForName("willMoveFromView", sender: scene) { n in
+          willMoveFromView(n.userInfo!)
+          })
+      }
+      
+      if let didUpdate = b.didUpdate {
+        self.observerUpdated = hub.timeInterval.subscribeNotificationForName("didUpdate", sender: scene) { n in
+          didUpdate(n.userInfo!)
+        }
+      }
+      
+      if let didEvaluateActions =  b.didEvaluateActions {
+        self.observersEmpty.append(
+          hub.node.subscribeNotificationForName("didEvaluateActions", sender: scene) { n in
+            didEvaluateActions()
+          })
+      }
+      
+      if let didSimulatePhysics = b.didSimulatePhysics? {
+        self.observersEmpty.append(
+          hub.node.subscribeNotificationForName("didSimulatePhysics", sender: scene) { n in
+            didSimulatePhysics()
+          })
+      }
+      
+      if let didApplyConstraints = b.didApplyConstraints? {
+        self.observersEmpty.append(
+          hub.node.subscribeNotificationForName("didApplyConstraints", sender: scene) { n in
+            didApplyConstraints()
+          })
+      }
+      
+      if let didFinishUpdate = b.didFinishUpdate {
+        self.observersEmpty.append(
+          hub.node.subscribeNotificationForName("didFinishUpdate", sender: scene) { n in
+            didFinishUpdate()
+          })
+      }
+      
+      if let didBeginContact = b.didBeginContact {
+        self.observersContact.append(
+          hub.contact.subscribeNotificationForName("didBeginContact", sender: scene) { n in
+            didBeginContact(n.userInfo!)
+          })
+      }
+      
+      if let didEndContact = b.didEndContact {
+        self.observersContact.append(
+          hub.contact.subscribeNotificationForName("didEndContact", sender: scene) { n in
+            didEndContact(n.userInfo!)
+          })
+      }
+      
+      if let didBeginContactWithNode =  b.didBeginContactWithNode {
+        self.observersNodeContact.append(
+          hub.nodeContact.subscribeNotificationForName("didBeginContactWithNode", sender: self.node) { n in
+            didBeginContactWithNode(n.userInfo!)
+          })
+      }
+      
+      if let didEndContactWithNode = b.didEndContactWithNode {
+        self.observersNodeContact.append(
+          hub.nodeContact.subscribeNotificationForName("didEndContactWithNode", sender: self.node) { n in
+            didEndContactWithNode(n.userInfo!)
+          })
+      }
     }
     
     
@@ -174,6 +174,7 @@ private struct hub {
   }
   
   final private func _didRemoveNodeFromScene() {
+    self.isEnabled = false
     self.behaviour.didRemoveNodeFromScene?()
   }
   
@@ -187,9 +188,7 @@ private struct hub {
     for observer in self.observersView        { observer.remove() }
   }
   
-  deinit {
-    self.removeObservers()
-  }
+  deinit { self.removeObservers() }
   
 }
 

@@ -35,6 +35,7 @@ class SpriteKitTestCase: XCTestCase {
     let time:NSTimeInterval = 0.1
     let expectation = self.expectationWithDescription(__FUNCTION__)
     dispatch_after(dispatch_time( DISPATCH_TIME_NOW, Int64(time * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
+      handler()
       expectation.fulfill()
     }
     self.waitForExpectationsWithTimeout(time+0.1, nil)
