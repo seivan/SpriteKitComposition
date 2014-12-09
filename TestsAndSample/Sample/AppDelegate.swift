@@ -155,14 +155,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //    
 //    scene.addChild(enemy)
 
-    gun.removeFromParent()
+    let sample = Sample()
+    println(sample.isEnabled)
+
     player.addChild(gun)
 
    scene.addChild(player)
-    gun.addComponent(Sample())
+    gun.addComponent(sample)
 
    player.removeFromParent()
    gun.removeComponentWithClass(Sample.self)
+//    sample.removeFromNode()
 
 
     return true

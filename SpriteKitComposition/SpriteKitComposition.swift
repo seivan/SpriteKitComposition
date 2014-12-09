@@ -47,7 +47,7 @@ private struct hub {
   
   private var behaviour:ComponentBehaviour { return self as ComponentBehaviour }
   
-  var isEnabled:Bool = true {
+  var isEnabled:Bool = false {
     didSet {
       if self.isEnabled && self.node?.scene != nil { self.addObservers() }
       else { self.removeObservers() }
@@ -65,7 +65,7 @@ private struct hub {
   init(){}
   
   final func removeFromNode() -> Bool {
-    if let node = self.node { return node.removeComponent(self) }
+    if let n = self.node { return n.removeComponent(self) }
     else { return false }
     
   }
@@ -166,7 +166,6 @@ private struct hub {
     
   }
   final private func _didAddNodeToScene() {
-    self.addObservers()
     self.behaviour.didAddNodeToScene?()
   }
   
@@ -175,7 +174,6 @@ private struct hub {
   }
   
   final private func _didRemoveNodeFromScene() {
-    self.isEnabled = false
     self.behaviour.didRemoveNodeFromScene?()
   }
   
