@@ -38,7 +38,6 @@ import SpriteKit
 }
 
 @objc public class Component : ComponentBehaviour  {
-  
   private struct ObserverCollection {
     var updated:Notification<CFTimeInterval>?
     var size:Notification<CGSize>?
@@ -61,26 +60,16 @@ import SpriteKit
   }
   
   private var observerCollection = ObserverCollection()
-  
 
-  
-  var isEnabled:Bool = false {
+  var isEnabled:Bool = true {
     didSet {
-      if      oldValue == false && self.isEnabled == true  { self._addObservers()   }
-      else if oldValue == true  && self.isEnabled == false { self.removeObservers() }
-      
-//      self.removeObservers()
-//      if (self.isEnabled == true) { self.addObservers() }
-
+      self._removeObservers()
+      if self.isEnabled == true  { self._addObservers() }
     }
   }
   private(set) weak var node:SKNode? {
-    willSet { if newValue == nil { self._didRemoveFromNode() } }
-    didSet {
-      let isEnabled = self.node != nil
-      if isEnabled { self._didAddToNode() }
-      self.isEnabled = isEnabled
-    }
+    willSet { if newValue   == nil { self._didRemoveFromNode() } }
+    didSet  { if self.node !=  nil { self._didAddToNode()      } }
   }
   
   init(){}
@@ -92,9 +81,9 @@ import SpriteKit
   }
   
   final private func _addObservers() {
-    if let scene = self.node!.scene {
+
       let b = (self as ComponentBehaviour)
-      
+      let scene = self.node!.scene!
       if let didChangeSceneSizedFrom = b.didChangeSceneSizedFrom {
         self.observerCollection.size = __HubCollection.size.subscribeNotificationForName("didChangeSceneSizedFrom", sender: scene) {
           n in didChangeSceneSizedFrom(n.userInfo!)
@@ -175,7 +164,7 @@ import SpriteKit
             n in didEndContactWithNode(n.userInfo!)
           })
       }
-    }
+    
     
     
   }
@@ -188,22 +177,25 @@ import SpriteKit
   }
   final private func _didAddNodeToScene() {
     (self as ComponentBehaviour).didAddNodeToScene?()
+    self.isEnabled = true
   }
   
   final private func _didRemoveFromNode() {
     (self as ComponentBehaviour).didRemoveFromNode?()
+    if self.node?.scene != nil { self._didRemoveNodeFromScene() }
+    self.isEnabled = false
   }
   
   final private func _didRemoveNodeFromScene() {
-    self.isEnabled = false
     (self as ComponentBehaviour).didRemoveNodeFromScene?()
+    self.isEnabled = false
   }
   
-  final private func removeObservers() {
+  final private func _removeObservers() {
     self.observerCollection.removeAll()
   }
   
-  deinit { self.removeObservers() }
+  deinit { self._removeObservers() }
   
 }
 
