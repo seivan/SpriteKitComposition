@@ -26,6 +26,10 @@ import SpriteKit
   optional func didEndContact(contact:SKPhysicsContact)
   
   optional func touchesBegan(touches: [UITouch], withEvent event: UIEvent)
+  optional func touchesMoved(touches: [UITouch], withEvent event: UIEvent)
+  optional func touchesEnded(touches: [UITouch], withEvent event: UIEvent)
+  optional func touchesCancelled(touches: [UITouch], withEvent event: UIEvent)
+
 }
 
 private struct __HubCollection {
@@ -35,6 +39,7 @@ private struct __HubCollection {
   static let view         = NotificationHub<SKView>()
   static let contact      = NotificationHub<SKPhysicsContact>()
   static let nodeContact  = NotificationHub<(SKNode, contact:SKPhysicsContact)>()
+  static let touch        = NotificationHub<([UITouch], withEvent:UIEvent)>()
 }
 
 @objc public class Component : ComponentBehaviour  {
@@ -45,15 +50,18 @@ private struct __HubCollection {
     var view         = [Notification<SKView>]()
     var contact      = [Notification<SKPhysicsContact>]()
     var nodeContact  = [Notification<(SKNode, contact:SKPhysicsContact)>]()
+    var touch        = [Notification<([UITouch], withEvent:UIEvent)>]()
     
     init(){}
     func removeAll() {
       self.updated?.remove()
       self.size?.remove()
       for observer in self.empty       { observer.remove() }
+      for observer in self.view        { observer.remove() }
       for observer in self.contact     { observer.remove() }
       for observer in self.nodeContact { observer.remove() }
-      for observer in self.view { observer.remove() }
+      for observer in self.touch       { observer.remove() }
+
 
     }
     
@@ -83,7 +91,6 @@ private struct __HubCollection {
   }
   
   final private func _addObservers() {
-//    if let scene = self.node!.scene {
       let b = (self as ComponentBehaviour)
       let scene = self.node!.scene!
     
@@ -167,7 +174,15 @@ private struct __HubCollection {
             n in didEndContactWithNode(n.userInfo!)
           })
       }
-//    }
+    
+    if let touchesBegan = b.touchesBegan {
+      self.observerCollection.touch.append(
+        __HubCollection.touch.subscribeNotificationForName("touchesBegan", sender: scene) {
+          n in touchesBegan(n.userInfo!)
+        }
+      )
+
+    }
     
     
     
@@ -345,18 +360,21 @@ extension SKScene : SKPhysicsContactDelegate {
 
 extension SKNode {
   
-  //
-  //
-  //  final private func internalTouchesBegan(touches: [UITouch], withEvent event: UIEvent) {
-  //    for component in self.components { if component.isEnabled { component.touchesBegan?(touches, withEvent: event) } }
-  //    //    for child in self.childNodes     { child.internalTouchesBegan(touches, withEvent: event) }
-  //
-  //  }
-  //
-  //  override public func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-  //    let touchesList:[UITouch] = touches.allObjects as [UITouch]
-  //    self.internalTouchesBegan(touchesList, withEvent: event)
-  //  }
+  
+  
+//    final private func internalTouchesBegan(touches: [UITouch], withEvent event: UIEvent) {
+      
+      
+//      for component in self.components { if component.isEnabled { component.touchesBegan?(touches, withEvent: event) } }
+//      for child in self.childNodes     { child.internalTouchesBegan(touches, withEvent: event) }
+  
+//    }
+
+  override public func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+    let touchesList:[UITouch] = touches.allObjects as [UITouch]
+    __HubCollection.touch.publishNotificationName("touchesBegan", sender: self, userInfo: (touchesList, withEvent:event))
+    // self.internalTouchesBegan(touchesList, withEvent: event)
+   }
   
 }
 

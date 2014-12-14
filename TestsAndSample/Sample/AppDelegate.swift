@@ -116,8 +116,14 @@ class Sample : Component {
   }
   
   func didUpdate(time:NSTimeInterval) {
-    println("didUpdate \(time)")
-    self.isEnabled = false
+//    println("didUpdate \(time)")
+//    self.isEnabled = false
+  }
+
+  
+  func touchesBegan(touches: [UITouch], withEvent event: UIEvent) {
+//    println(touches)
+    println(touches)
   }
 
 
@@ -132,6 +138,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
 
 
+  func fuck(t:UIPanGestureRecognizer) {
+    print(t)
+  }
   func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: NSDictionary?) -> Bool {
     self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
     // Override point for customization after application launch.
@@ -155,7 +164,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     player.name = "PLAYER"
     let gun = Player(color: UIColor.orangeColor(), size:  CGSize(width: 20, height: 20))
     gun.name = "GUN"
+    player.position = CGPoint(x: 100, y: 100)
+
     
+
 //    player.addChild(gun)
 
     
@@ -178,14 +190,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     
-    var delayX = 3 * Double(NSEC_PER_SEC)
+    var delayX = 2 * Double(NSEC_PER_SEC)
     var timeX = dispatch_time(DISPATCH_TIME_NOW, Int64(delayX))
     dispatch_after(timeX, dispatch_get_main_queue()) {
       player.addChild(gun)
       gun.addComponent(sample)
       
     }
-   
+
+    var delayXZ = 3 * Double(NSEC_PER_SEC)
+    var timeXZ = dispatch_time(DISPATCH_TIME_NOW, Int64(delayXZ))
+    dispatch_after(timeXZ, dispatch_get_main_queue()) {
+      sample.isEnabled = true
+    }
+
 
 
 //   player.removeFromParent()
