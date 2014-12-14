@@ -187,11 +187,13 @@ private struct __HubCollection {
   
   final private func _didRemoveFromNode() {
     (self as ComponentBehaviour).didRemoveFromNode?()
-    if self.node?.scene != nil { self._didRemoveNodeFromScene() }
+    self._removeObservers()
+
   }
   
   final private func _didRemoveNodeFromScene() {
     (self as ComponentBehaviour).didRemoveNodeFromScene?()
+    self._removeObservers()
   }
   
   final private func _removeObservers() {

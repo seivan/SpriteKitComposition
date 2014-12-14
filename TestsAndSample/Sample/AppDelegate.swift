@@ -100,6 +100,7 @@ class Sample : Component {
   
   func didRemoveNodeFromScene() {
     println("didRemoveNodeFromScene \(self.node?.name) & \(self.node?.scene?.name)")
+    self.node?.removeComponent(self)
   }
   
   func didChangeSceneSizedFrom(previousSize:CGSize) {
@@ -116,6 +117,10 @@ class Sample : Component {
   
   func didUpdate(time:NSTimeInterval) {
     println(time)
+    self.isEnabled = false
+//    self.node?.removeComponent(self)
+
+    self.node?.removeFromParent()
   }
 
 
