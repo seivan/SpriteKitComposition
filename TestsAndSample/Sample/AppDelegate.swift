@@ -84,6 +84,7 @@ class SceneDebugger : Component {
 }
 
 class Sample : Component {
+  
   func didAddToNode() {
     println("didAddToNode \(self.node?.name) & \(self.node?.scene?.name)")
   }
@@ -161,9 +162,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //    scene.addChild(enemy)
 
     let sample = Sample()
-    println(sample.isEnabled)
     gun.addComponent(sample)
-    println(sample.isEnabled)
     
     player.addChild(gun)
     scene.addChild(player)

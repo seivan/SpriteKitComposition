@@ -28,7 +28,7 @@ import SpriteKit
   optional func touchesBegan(touches: [UITouch], withEvent event: UIEvent)
 }
 
- private struct __HubCollection {
+private struct __HubCollection {
   static let timeInterval = NotificationHub<CFTimeInterval>()
   static let node         = NotificationHub<SKNode>()
   static let size         = NotificationHub<CGSize>()
@@ -62,17 +62,15 @@ import SpriteKit
   private var observerCollection = ObserverCollection()
 
   var isEnabled:Bool = true {
-    didSet {
+    willSet {
       self._removeObservers()
-      if self.isEnabled == true  { self._addObservers() }
+      if newValue == true && self.node?.scene != nil { self._addObservers() }
     }
   }
   private(set) weak var node:SKNode? {
-    willSet { if newValue   == nil { self._didRemoveFromNode() } }
+    willSet { if newValue  == nil { self._didRemoveFromNode() } }
     didSet  {
-      let hasNode = self.node != nil
-      if hasNode { self._didAddToNode() }
-      self.isEnabled = hasNode
+      if self.node != nil { self._didAddToNode() }
     }
   }
   
@@ -85,9 +83,10 @@ import SpriteKit
   }
   
   final private func _addObservers() {
-
+//    if let scene = self.node!.scene {
       let b = (self as ComponentBehaviour)
       let scene = self.node!.scene!
+    
       if let didChangeSceneSizedFrom = b.didChangeSceneSizedFrom {
         self.observerCollection.size = __HubCollection.size.subscribeNotificationForName("didChangeSceneSizedFrom", sender: scene) {
           n in didChangeSceneSizedFrom(n.userInfo!)
@@ -168,6 +167,7 @@ import SpriteKit
             n in didEndContactWithNode(n.userInfo!)
           })
       }
+//    }
     
     
     
@@ -181,18 +181,17 @@ import SpriteKit
   }
   final private func _didAddNodeToScene() {
     (self as ComponentBehaviour).didAddNodeToScene?()
-    self.isEnabled = true
+    if(self.isEnabled) { self._addObservers() }
+    
   }
   
   final private func _didRemoveFromNode() {
     (self as ComponentBehaviour).didRemoveFromNode?()
     if self.node?.scene != nil { self._didRemoveNodeFromScene() }
-    self.isEnabled = false
   }
   
   final private func _didRemoveNodeFromScene() {
     (self as ComponentBehaviour).didRemoveNodeFromScene?()
-    self.isEnabled = false
   }
   
   final private func _removeObservers() {
@@ -362,11 +361,11 @@ extension SKNode {
 extension SKNode {
   
   private func _addedChild(node:SKNode) {
-    if self is SKScene {
-      for component in node.components { component._didAddNodeToScene() }
-      for childNode in node.childNodes { node._addedChild(childNode) }
-    }
-    else if self.scene != nil {
+//    if self is SKScene {
+//      for component in node.components { component._didAddNodeToScene() }
+//      for childNode in node.childNodes { node._addedChild(childNode) }
+//    }
+   if self.scene != nil {
       for component in node.components { component._didAddNodeToScene() }
       for childNode in node.childNodes { node._addedChild(childNode) }
     }
@@ -395,11 +394,11 @@ extension SKNode {
   }
   
   private func _removedChild(node:SKNode) {
-    if self is SKScene {
-      for component in node.components { component._didRemoveNodeFromScene() }
-      for childNode in node.childNodes { node._removedChild(childNode) }
-    }
-    else if self.scene != nil {
+//    if self is SKScene {
+//      for component in node.components { component._didRemoveNodeFromScene() }
+//      for childNode in node.childNodes { node._removedChild(childNode) }
+//    }
+    if self.scene != nil {
       for component in node.components { component._didRemoveNodeFromScene() }
       for childNode in node.childNodes { node._removedChild(childNode) }
     }
