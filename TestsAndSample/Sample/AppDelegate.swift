@@ -96,11 +96,11 @@ class Sample : Component {
   
   func didRemoveFromNode() {
     println("didRemoveFromNode \(self.node?.name) & \(self.node?.scene?.name)")
+
   }
   
   func didRemoveNodeFromScene() {
     println("didRemoveNodeFromScene \(self.node?.name) & \(self.node?.scene?.name)")
-    self.node?.removeComponent(self)
   }
   
   func didChangeSceneSizedFrom(previousSize:CGSize) {
@@ -116,11 +116,8 @@ class Sample : Component {
   }
   
   func didUpdate(time:NSTimeInterval) {
-    println(time)
+    println("didUpdate \(time)")
     self.isEnabled = false
-//    self.node?.removeComponent(self)
-
-    self.node?.removeFromParent()
   }
 
 
@@ -171,6 +168,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     player.addChild(gun)
     scene.addChild(player)
+
+    var delay = 1.0 * Double(NSEC_PER_SEC)
+    var time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+    dispatch_after(time, dispatch_get_main_queue()) {
+      gun.removeFromParent()
+      sample.removeFromNode()
+      return
+    }
+
+    
+    var delayX = 3 * Double(NSEC_PER_SEC)
+    var timeX = dispatch_time(DISPATCH_TIME_NOW, Int64(delayX))
+    dispatch_after(timeX, dispatch_get_main_queue()) {
+      player.addChild(gun)
+      gun.addComponent(sample)
+      
+    }
    
 
 
