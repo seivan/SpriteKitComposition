@@ -121,9 +121,20 @@ class Sample : Component {
   }
 
   
-  func touchesBegan(touches: [UITouch], withEvent event: UIEvent) {
-//    println(touches)
-    println(touches)
+  func didBeginNodeTouches(touches:[UITouch]) {
+    println("NODE")
+  }
+  
+  func didBeginSceneTouches(touches:[UITouch]) {
+    println("SCENE")
+  }
+
+  func didMoveNodeTouches(touches:[UITouch]) {
+    println("MOVE NODE")
+  }
+  
+  func didMoveSceneTouches(touches:[UITouch]) {
+    println("MOVE SCENE")
   }
 
 

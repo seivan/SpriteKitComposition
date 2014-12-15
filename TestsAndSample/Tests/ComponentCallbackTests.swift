@@ -253,5 +253,31 @@ class ComponentCallbackTests: SpriteKitTestCase {
     }
     
   }
+  
+  func testDidBeginNodeTouches() {
+    
+  }
+  func testDidMoveNodeTouches() {
+
+  }
+  func testDidEndNodeTouches() {
+
+  }
+  func testDidCancelNodeTouches() {
+
+  }
+  func testDidBeginSceneTouches() {
+
+  }
+  func testDidMoveSceneTouches() {
+
+  }
+  func testDidEndSceneTouches() {
+
+  }
+  func testDidCancelSceneTouches() {
+
+  }
+
 
 }

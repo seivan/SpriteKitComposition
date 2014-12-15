@@ -26,7 +26,15 @@ class SampleComponent: Component {
   var assertionDidEndContactWithNode:(node:SKNode, contact:SKPhysicsContact)! = nil
   var assertionDidBeginContact:SKPhysicsContact! = nil
   var assertionDidEndContact:SKPhysicsContact! = nil
-  
+
+  var assertionDidBeginNodeTouches:[UITouch]! = nil
+  var assertionDidMoveNodeTouches:[UITouch]! = nil
+  var assertionDidEndNodeTouches:[UITouch]! = nil
+  var assertionDidCancelNodeTouches:[UITouch]! = nil
+  var assertionDidBeginSceneTouches:[UITouch]! = nil
+  var assertionDidMoveSceneTouches:[UITouch]! = nil
+  var assertionDidEndSceneTouches:[UITouch]! = nil
+  var assertionDidCancelSceneTouches:[UITouch]! = nil
   
   
   
@@ -78,9 +86,31 @@ class SampleComponent: Component {
   func didEndContact(contact:SKPhysicsContact) {
     self.assertionDidEndContact = contact
   }
-  func touchesBegan(touches: [UITouch], withEvent event: UIEvent) {
-    
+  func didBeginNodeTouches(touches:[UITouch]) {
+    self.assertionDidBeginNodeTouches = touches
   }
+  func didMoveNodeTouches(touches:[UITouch]) {
+    self.assertionDidMoveNodeTouches = touches
+  }
+  func didEndNodeTouches(touches:[UITouch]) {
+    self.assertionDidEndNodeTouches = touches
+  }
+  func didCancelNodeTouches(touches:[UITouch]) {
+    self.assertionDidCancelNodeTouches = touches
+  }
+  func didBeginSceneTouches(touches:[UITouch]) {
+    self.assertionDidBeginSceneTouches = touches
+  }
+  func didMoveSceneTouches(touches:[UITouch]) {
+    self.assertionDidMoveSceneTouches = touches
+  }
+  func didEndSceneTouches(touches:[UITouch]) {
+    self.assertionDidEndSceneTouches = touches
+  }
+  func didCancelSceneTouches(touches:[UITouch]) {
+    self.assertionDidCancelSceneTouches = touches
+  }
+
 
 
 }

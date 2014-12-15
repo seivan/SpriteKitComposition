@@ -25,21 +25,29 @@ import SpriteKit
   optional func didBeginContact(contact:SKPhysicsContact)
   optional func didEndContact(contact:SKPhysicsContact)
   
-  optional func touchesBegan(touches: [UITouch], withEvent event: UIEvent)
-  optional func touchesMoved(touches: [UITouch], withEvent event: UIEvent)
-  optional func touchesEnded(touches: [UITouch], withEvent event: UIEvent)
-  optional func touchesCancelled(touches: [UITouch], withEvent event: UIEvent)
+  optional func didBeginNodeTouches(touches:[UITouch])
+  optional func didMoveNodeTouches(touches:[UITouch])
+  optional func didEndNodeTouches(touches:[UITouch])
+  optional func didCancelNodeTouches(touches:[UITouch])
+
+  optional func didBeginSceneTouches(touches:[UITouch])
+  optional func didMoveSceneTouches(touches:[UITouch])
+  optional func didEndSceneTouches(touches:[UITouch])
+  optional func didCancelSceneTouches(touches:[UITouch])
+
+  
+
 
 }
 
-private struct __HubCollection {
+private struct __Hubs {
   static let timeInterval = NotificationHub<CFTimeInterval>()
   static let node         = NotificationHub<SKNode>()
   static let size         = NotificationHub<CGSize>()
   static let view         = NotificationHub<SKView>()
   static let contact      = NotificationHub<SKPhysicsContact>()
   static let nodeContact  = NotificationHub<(SKNode, contact:SKPhysicsContact)>()
-  static let touch        = NotificationHub<([UITouch], withEvent:UIEvent)>()
+  static let touch        = NotificationHub<([UITouch])>()
 }
 
 @objc public class Component : ComponentBehaviour  {
@@ -50,7 +58,7 @@ private struct __HubCollection {
     var view         = [Notification<SKView>]()
     var contact      = [Notification<SKPhysicsContact>]()
     var nodeContact  = [Notification<(SKNode, contact:SKPhysicsContact)>]()
-    var touch        = [Notification<([UITouch], withEvent:UIEvent)>]()
+    var touch        = [Notification<([UITouch])>]()
     
     init(){}
     func removeAll() {
@@ -91,99 +99,150 @@ private struct __HubCollection {
   }
   
   final private func _addObservers() {
-      let b = (self as ComponentBehaviour)
-      let scene = self.node!.scene!
+    let b = (self as ComponentBehaviour)
+    let scene = self.node!.scene!
     
-      if let didChangeSceneSizedFrom = b.didChangeSceneSizedFrom {
-        self.observerCollection.size = __HubCollection.size.subscribeNotificationForName("didChangeSceneSizedFrom", sender: scene) {
-          n in didChangeSceneSizedFrom(n.userInfo!)
-        }
-        
+    if let didChangeSceneSizedFrom = b.didChangeSceneSizedFrom {
+      self.observerCollection.size = __Hubs.size.subscribeNotificationForName("didChangeSceneSizedFrom", sender: scene) {
+        n in didChangeSceneSizedFrom(n.userInfo!)
       }
       
-      if let didMoveToView = b.didMoveToView {
-        self.observerCollection.view.append(__HubCollection.view.subscribeNotificationForName("didMoveToView", sender: scene) {
-          n in didMoveToView(n.userInfo!)
-          })
-      }
-      
-      if let willMoveFromView = b.willMoveFromView {
-        self.observerCollection.view.append(__HubCollection.view.subscribeNotificationForName("willMoveFromView", sender: scene) {
-          n in willMoveFromView(n.userInfo!)
-          })
-      }
-      
-      if let didUpdate = b.didUpdate {
-        self.observerCollection.updated = __HubCollection.timeInterval.subscribeNotificationForName("didUpdate", sender: scene) {
-          n in didUpdate(n.userInfo!)
-        }
-      }
-      
-      if let didEvaluateActions =  b.didEvaluateActions {
-        self.observerCollection.empty.append(
-          __HubCollection.node.subscribeNotificationForName("didEvaluateActions", sender: scene) {
-            n in didEvaluateActions()
-          })
-      }
-      
-      if let didSimulatePhysics = b.didSimulatePhysics? {
-        self.observerCollection.empty.append(
-          __HubCollection.node.subscribeNotificationForName("didSimulatePhysics", sender: scene) {
-            n in didSimulatePhysics()
-          })
-      }
-      
-      if let didApplyConstraints = b.didApplyConstraints? {
-        self.observerCollection.empty.append(
-          __HubCollection.node.subscribeNotificationForName("didApplyConstraints", sender: scene) {
-            n in didApplyConstraints()
-          })
-      }
-      
-      if let didFinishUpdate = b.didFinishUpdate {
-        self.observerCollection.empty.append(
-          __HubCollection.node.subscribeNotificationForName("didFinishUpdate", sender: scene) {
-            n in didFinishUpdate()
-          })
-      }
-      
-      if let didBeginContact = b.didBeginContact {
-        self.observerCollection.contact.append(
-          __HubCollection.contact.subscribeNotificationForName("didBeginContact", sender: scene) {
-            n in didBeginContact(n.userInfo!)
-          })
-      }
-      
-      if let didEndContact = b.didEndContact {
-        self.observerCollection.contact.append(
-          __HubCollection.contact.subscribeNotificationForName("didEndContact", sender: scene) {
-            n in didEndContact(n.userInfo!)
-          })
-      }
-      
-      if let didBeginContactWithNode =  b.didBeginContactWithNode {
-        self.observerCollection.nodeContact.append(
-          __HubCollection.nodeContact.subscribeNotificationForName("didBeginContactWithNode", sender: self.node) {
-            n in didBeginContactWithNode(n.userInfo!)
-          })
-      }
-      
-      if let didEndContactWithNode = b.didEndContactWithNode {
-        self.observerCollection.nodeContact.append(
-          __HubCollection.nodeContact.subscribeNotificationForName("didEndContactWithNode", sender: self.node) {
-            n in didEndContactWithNode(n.userInfo!)
-          })
-      }
-    
-    if let touchesBegan = b.touchesBegan {
-      self.observerCollection.touch.append(
-        __HubCollection.touch.subscribeNotificationForName("touchesBegan", sender: scene) {
-          n in touchesBegan(n.userInfo!)
-        }
-      )
-
     }
     
+    if let didMoveToView = b.didMoveToView {
+      self.observerCollection.view.append(__Hubs.view.subscribeNotificationForName("didMoveToView", sender: scene) {
+        n in didMoveToView(n.userInfo!)
+        })
+    }
+    
+    if let willMoveFromView = b.willMoveFromView {
+      self.observerCollection.view.append(__Hubs.view.subscribeNotificationForName("willMoveFromView", sender: scene) {
+        n in willMoveFromView(n.userInfo!)
+        })
+    }
+    
+    if let didUpdate = b.didUpdate {
+      self.observerCollection.updated = __Hubs.timeInterval.subscribeNotificationForName("didUpdate", sender: scene) {
+        n in didUpdate(n.userInfo!)
+      }
+    }
+    
+    if let didEvaluateActions =  b.didEvaluateActions {
+      self.observerCollection.empty.append(
+        __Hubs.node.subscribeNotificationForName("didEvaluateActions", sender: scene) {
+          n in didEvaluateActions()
+        })
+    }
+    
+    if let didSimulatePhysics = b.didSimulatePhysics? {
+      self.observerCollection.empty.append(
+        __Hubs.node.subscribeNotificationForName("didSimulatePhysics", sender: scene) {
+          n in didSimulatePhysics()
+        })
+    }
+    
+    if let didApplyConstraints = b.didApplyConstraints? {
+      self.observerCollection.empty.append(
+        __Hubs.node.subscribeNotificationForName("didApplyConstraints", sender: scene) {
+          n in didApplyConstraints()
+        })
+    }
+    
+    if let didFinishUpdate = b.didFinishUpdate {
+      self.observerCollection.empty.append(
+        __Hubs.node.subscribeNotificationForName("didFinishUpdate", sender: scene) {
+          n in didFinishUpdate()
+        })
+    }
+    
+    if let didBeginContact = b.didBeginContact {
+      self.observerCollection.contact.append(
+        __Hubs.contact.subscribeNotificationForName("didBeginContact", sender: scene) {
+          n in didBeginContact(n.userInfo!)
+        })
+    }
+    
+    if let didEndContact = b.didEndContact {
+      self.observerCollection.contact.append(
+        __Hubs.contact.subscribeNotificationForName("didEndContact", sender: scene) {
+          n in didEndContact(n.userInfo!)
+        })
+    }
+    
+    if let didBeginContactWithNode =  b.didBeginContactWithNode {
+      self.observerCollection.nodeContact.append(
+        __Hubs.nodeContact.subscribeNotificationForName("didBeginContactWithNode", sender: self.node) {
+          n in didBeginContactWithNode(n.userInfo!)
+        })
+    }
+    
+    if let didEndContactWithNode = b.didEndContactWithNode {
+      self.observerCollection.nodeContact.append(
+        __Hubs.nodeContact.subscribeNotificationForName("didEndContactWithNode", sender: self.node) {
+          n in didEndContactWithNode(n.userInfo!)
+        })
+    }
+    
+    if let didBeginNodeTouches = b.didBeginNodeTouches {
+      self.node?.userInteractionEnabled = true
+      self.observerCollection.touch.append(
+        __Hubs.touch.subscribeNotificationForName("didBeginNodeTouches", sender: self.node) {
+          n in didBeginNodeTouches(n.userInfo!)
+        })
+    }
+    
+    if let didMoveNodeTouches = b.didMoveNodeTouches {
+      self.node?.userInteractionEnabled = true
+      self.observerCollection.touch.append(
+        __Hubs.touch.subscribeNotificationForName("didMoveNodeTouches", sender: self.node) {
+          n in didMoveNodeTouches(n.userInfo!)
+        })
+    }
+
+    if let didEndNodeTouches = b.didEndNodeTouches {
+      self.node?.userInteractionEnabled = true
+      self.observerCollection.touch.append(
+        __Hubs.touch.subscribeNotificationForName("didEndNodeTouches", sender: self.node) {
+          n in didEndNodeTouches(n.userInfo!)
+        })
+    }
+
+    if let didCancelNodeTouches = b.didCancelNodeTouches {
+      self.node?.userInteractionEnabled = true
+      self.observerCollection.touch.append(
+        __Hubs.touch.subscribeNotificationForName("didCancelNodeTouches", sender: self.node) {
+          n in didCancelNodeTouches(n.userInfo!)
+        })
+    }
+    
+    if let didBeginSceneTouches = b.didBeginSceneTouches {
+      self.observerCollection.touch.append(
+        __Hubs.touch.subscribeNotificationForName("didBeginSceneTouches", sender: scene) {
+          n in didBeginSceneTouches(n.userInfo!)
+        })
+    }
+    
+    if let didMoveSceneTouches = b.didMoveSceneTouches {
+      self.observerCollection.touch.append(
+        __Hubs.touch.subscribeNotificationForName("didMoveSceneTouches", sender: scene) {
+          n in didMoveSceneTouches(n.userInfo!)
+        })
+    }
+    
+    if let didEndSceneTouches = b.didEndSceneTouches {
+      self.observerCollection.touch.append(
+        __Hubs.touch.subscribeNotificationForName("didEndSceneTouches", sender: scene) {
+          n in didEndSceneTouches(n.userInfo!)
+        })
+    }
+    
+    if let didCancelSceneTouches = b.didCancelSceneTouches {
+      self.observerCollection.touch.append(
+        __Hubs.touch.subscribeNotificationForName("didCancelSceneTouches", sender: scene) {
+          n in didCancelSceneTouches(n.userInfo!)
+        })
+    }
+
     
     
   }
@@ -284,16 +343,16 @@ extension SKNode {
 extension SKScene : SKPhysicsContactDelegate {
   
   public func didChangeSize(oldSize: CGSize) {
-    __HubCollection.size.publishNotificationName("didChangeSceneSizedFrom", sender: self, userInfo:oldSize)
+    __Hubs.size.publishNotificationName("didChangeSceneSizedFrom", sender: self, userInfo:oldSize)
   }
   
   public func didMoveToView(view: SKView) {
     self.physicsWorld.contactDelegate = self
-    __HubCollection.view.publishNotificationName("didMoveToView", sender: self, userInfo:view)
+    __Hubs.view.publishNotificationName("didMoveToView", sender: self, userInfo:view)
   }
   
   public func willMoveFromView(view: SKView) {
-    __HubCollection.view.publishNotificationName("willMoveFromView", sender: self, userInfo:view)
+    __Hubs.view.publishNotificationName("willMoveFromView", sender: self, userInfo:view)
   }
   
   public func update(currentTime: NSTimeInterval) {
@@ -304,51 +363,51 @@ extension SKScene : SKPhysicsContactDelegate {
       timeSinceLast = 1.0 / 60.0
       container.lastUpdateTimeInterval = currentTime
     }
-    __HubCollection.timeInterval.publishNotificationName("didUpdate", sender: self, userInfo: timeSinceLast)
+    __Hubs.timeInterval.publishNotificationName("didUpdate", sender: self, userInfo: timeSinceLast)
   }
   
   public func didEvaluateActions() {
-    __HubCollection.node.publishNotificationName("didEvaluateActions", sender: self)
+    __Hubs.node.publishNotificationName("didEvaluateActions", sender: self)
   }
   
   public func didSimulatePhysics() {
-    __HubCollection.node.publishNotificationName("didSimulatePhysics", sender: self)
+    __Hubs.node.publishNotificationName("didSimulatePhysics", sender: self)
   }
   
   public func didApplyConstraints() {
-    __HubCollection.node.publishNotificationName("didApplyConstraints", sender: self)
+    __Hubs.node.publishNotificationName("didApplyConstraints", sender: self)
   }
   
   public func didFinishUpdate() {
-    __HubCollection.node.publishNotificationName("didFinishUpdate", sender: self)
+    __Hubs.node.publishNotificationName("didFinishUpdate", sender: self)
   }
   
   
   public func didBeginContact(contact: SKPhysicsContact) {
-    __HubCollection.contact.publishNotificationName("didBeginContact", sender: self, userInfo:contact)
+    __Hubs.contact.publishNotificationName("didBeginContact", sender: self, userInfo:contact)
     let nodeA = contact.bodyA.node
     let nodeB = contact.bodyB.node
     
     if let nodeA = nodeA {
-      __HubCollection.nodeContact.publishNotificationName("didBeginContactWithNode", sender: nodeB, userInfo:(nodeA,contact:contact))
+      __Hubs.nodeContact.publishNotificationName("didBeginContactWithNode", sender: nodeB, userInfo:(nodeA,contact:contact))
     }
     
     if let nodeB = nodeB {
-      __HubCollection.nodeContact.publishNotificationName("didBeginContactWithNode", sender: nodeA, userInfo:(nodeB,contact:contact))
+      __Hubs.nodeContact.publishNotificationName("didBeginContactWithNode", sender: nodeA, userInfo:(nodeB,contact:contact))
     }
   }
   
   public func didEndContact(contact: SKPhysicsContact) {
-    __HubCollection.contact.publishNotificationName("didEndContact", sender: self, userInfo:contact)
+    __Hubs.contact.publishNotificationName("didEndContact", sender: self, userInfo:contact)
     let nodeA = contact.bodyA.node
     let nodeB = contact.bodyB.node
     
     if let nodeA = nodeA {
-      __HubCollection.nodeContact.publishNotificationName("didEndContactWithNode", sender: nodeB, userInfo:(nodeA,contact:contact))
+      __Hubs.nodeContact.publishNotificationName("didEndContactWithNode", sender: nodeB, userInfo:(nodeA,contact:contact))
     }
     
     if let nodeB = nodeB {
-      __HubCollection.nodeContact.publishNotificationName("didEndContactWithNode", sender: nodeA, userInfo:(nodeB,contact:contact))
+      __Hubs.nodeContact.publishNotificationName("didEndContactWithNode", sender: nodeA, userInfo:(nodeB,contact:contact))
     }
     
     
@@ -372,9 +431,29 @@ extension SKNode {
 
   override public func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
     let touchesList:[UITouch] = touches.allObjects as [UITouch]
-    __HubCollection.touch.publishNotificationName("touchesBegan", sender: self, userInfo: (touchesList, withEvent:event))
-    // self.internalTouchesBegan(touchesList, withEvent: event)
+    __Hubs.touch.publishNotificationName("didBeginNodeTouches", sender: self, userInfo:touchesList)
+    __Hubs.touch.publishNotificationName("didBeginSceneTouches", sender: self.scene, userInfo:touchesList)
    }
+  
+  override public func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
+    let touchesList:[UITouch] = touches.allObjects as [UITouch]
+    __Hubs.touch.publishNotificationName("didMoveNodeTouches", sender: self, userInfo:touchesList)
+    __Hubs.touch.publishNotificationName("didMoveSceneTouches", sender: self.scene, userInfo:touchesList)
+  }
+
+  override public func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+    let touchesList:[UITouch] = touches.allObjects as [UITouch]
+    __Hubs.touch.publishNotificationName("didEndNodeTouches", sender: self, userInfo:touchesList)
+    __Hubs.touch.publishNotificationName("didEndSceneTouches", sender: self.scene, userInfo:touchesList)
+  }
+
+  override public func touchesCancelled(touches: NSSet, withEvent event: UIEvent) {
+    let touchesList:[UITouch] = touches.allObjects as [UITouch]
+    __Hubs.touch.publishNotificationName("didCancelNodeTouches", sender: self, userInfo:touchesList)
+    __Hubs.touch.publishNotificationName("didCancelSceneTouches", sender: self.scene, userInfo:touchesList)
+  }
+
+  
   
 }
 
