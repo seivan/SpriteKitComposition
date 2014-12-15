@@ -22,6 +22,14 @@ class SampleComponent: Component {
   var assertionDidSimulatePhysics = false
   var assertionDidApplyConstraints = false
   var assertionDidFinishUpdate = false
+  
+  var assertionDidContactOnScene:(contact:SKPhysicsContact, state:ComponentState)! = nil
+  var assertionDidContactWithNode:(node:SKNode, contact:SKPhysicsContact, state:ComponentState)! = nil
+  var assertionDidTouchOnScene:(touches:[UITouch], state:ComponentState)! = nil
+  var assertionDidTouchOnNode:(touches:[UITouch], state:ComponentState)! = nil
+  
+  
+  
   var assertionDidBeginContactWithNode:(node:SKNode, contact:SKPhysicsContact)! = nil
   var assertionDidEndContactWithNode:(node:SKNode, contact:SKPhysicsContact)! = nil
   var assertionDidBeginContact:SKPhysicsContact! = nil
@@ -74,42 +82,56 @@ class SampleComponent: Component {
   func didFinishUpdate() {
     self.assertionDidFinishUpdate = true
   }
-  func didBeginContactWithNode(node:SKNode, contact:SKPhysicsContact) {
-    self.assertionDidBeginContactWithNode = (node:node, contact:contact)
+  func didContactOnScene(contact:SKPhysicsContact, state:ComponentState) {
+    self.assertionDidContactOnScene = (contact:contact, state:state)
   }
-  func didEndContactWithNode(node:SKNode, contact:SKPhysicsContact) {
-    self.assertionDidEndContactWithNode = (node:node, contact:contact)
+  func didContactWithNode(node:SKNode, contact:SKPhysicsContact, state:ComponentState) {
+    self.assertionDidContactWithNode = (contact:contact, state:state)
   }
-  func didBeginContact(contact:SKPhysicsContact) {
-    self.assertionDidBeginContact = contact
+  func didTouchOnScene(touches:[UITouch], state:ComponentState) {
+    self.assertionDidTouchOnScene = (touches:[UITouch], state:ComponentState)
   }
-  func didEndContact(contact:SKPhysicsContact) {
-    self.assertionDidEndContact = contact
+  func didTouchOnNode(touches:[UITouch], state:ComponentState) {
+    self.assertionDidTouchOnNode = (touches:[UITouch], state:ComponentState)
   }
-  func didBeginNodeTouches(touches:[UITouch]) {
-    self.assertionDidBeginNodeTouches = touches
-  }
-  func didMoveNodeTouches(touches:[UITouch]) {
-    self.assertionDidMoveNodeTouches = touches
-  }
-  func didEndNodeTouches(touches:[UITouch]) {
-    self.assertionDidEndNodeTouches = touches
-  }
-  func didCancelNodeTouches(touches:[UITouch]) {
-    self.assertionDidCancelNodeTouches = touches
-  }
-  func didBeginSceneTouches(touches:[UITouch]) {
-    self.assertionDidBeginSceneTouches = touches
-  }
-  func didMoveSceneTouches(touches:[UITouch]) {
-    self.assertionDidMoveSceneTouches = touches
-  }
-  func didEndSceneTouches(touches:[UITouch]) {
-    self.assertionDidEndSceneTouches = touches
-  }
-  func didCancelSceneTouches(touches:[UITouch]) {
-    self.assertionDidCancelSceneTouches = touches
-  }
+
+  
+//  func didBeginContactWithNode(node:SKNode, contact:SKPhysicsContact) {
+//    self.assertionDidBeginContactWithNode = (node:node, contact:contact)
+//  }
+//  func didEndContactWithNode(node:SKNode, contact:SKPhysicsContact) {
+//    self.assertionDidEndContactWithNode = (node:node, contact:contact)
+//  }
+//  func didBeginContact(contact:SKPhysicsContact) {
+//    self.assertionDidBeginContact = contact
+//  }
+//  func didEndContact(contact:SKPhysicsContact) {
+//    self.assertionDidEndContact = contact
+//  }
+//  func didBeginNodeTouches(touches:[UITouch]) {
+//    self.assertionDidBeginNodeTouches = touches
+//  }
+//  func didMoveNodeTouches(touches:[UITouch]) {
+//    self.assertionDidMoveNodeTouches = touches
+//  }
+//  func didEndNodeTouches(touches:[UITouch]) {
+//    self.assertionDidEndNodeTouches = touches
+//  }
+//  func didCancelNodeTouches(touches:[UITouch]) {
+//    self.assertionDidCancelNodeTouches = touches
+//  }
+//  func didBeginSceneTouches(touches:[UITouch]) {
+//    self.assertionDidBeginSceneTouches = touches
+//  }
+//  func didMoveSceneTouches(touches:[UITouch]) {
+//    self.assertionDidMoveSceneTouches = touches
+//  }
+//  func didEndSceneTouches(touches:[UITouch]) {
+//    self.assertionDidEndSceneTouches = touches
+//  }
+//  func didCancelSceneTouches(touches:[UITouch]) {
+//    self.assertionDidCancelSceneTouches = touches
+//  }
 
 
 

@@ -122,13 +122,15 @@ private struct __Hubs {
     }
     
     if let didMoveToView = b.didMoveToView {
-      self.observerCollection.view.append(__Hubs.view.subscribeNotificationForName("didMoveToView", sender: scene) {
+      self.observerCollection.view.append(
+        __Hubs.view.subscribeNotificationForName("didMoveToView", sender: scene) {
         n in didMoveToView(n.userInfo!)
         })
     }
     
     if let willMoveFromView = b.willMoveFromView {
-      self.observerCollection.view.append(__Hubs.view.subscribeNotificationForName("willMoveFromView", sender: scene) {
+      self.observerCollection.view.append(
+        __Hubs.view.subscribeNotificationForName("willMoveFromView", sender: scene) {
         n in willMoveFromView(n.userInfo!)
         })
     }
