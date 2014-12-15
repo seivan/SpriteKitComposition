@@ -255,8 +255,15 @@ class ComponentCallbackTests: SpriteKitTestCase {
   }
   
   func testDidBeginNodeTouches() {
+    self.scene.touchesBegan(NSSet(), withEvent: UIEvent())
+    XCTAssertNil(self.component.assertionDidBeginNodeTouches)
+    XCTAssertNotNil(self.component.assertionDidBeginSceneTouches)
+    
+    self.node.touchesBegan(NSSet(), withEvent: UIEvent())
+    XCTAssertNotNil(self.component.assertionDidBeginNodeTouches)
     
   }
+  
   func testDidMoveNodeTouches() {
 
   }
