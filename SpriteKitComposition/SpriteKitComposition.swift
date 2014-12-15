@@ -6,13 +6,23 @@ private let ComponentStateChanged   = ComponentState(1)
 private let ComponentStateCompleted = ComponentState(2)
 private let ComponentStateCancelled = ComponentState(3)
 
-@objc public class ComponentState {
+@objc public class ComponentState : DebugPrintable, Printable {
   let value: Int
   init(_ val: Int) { value = val }
   class var Started:ComponentState   {  return ComponentStateStarted }
   class var Changed:ComponentState   {  return ComponentStateChanged }
   class var Completed:ComponentState {  return ComponentStateCompleted }
   class var Cancelled:ComponentState {  return ComponentStateCancelled }
+  public var description:String {
+    switch self.value {
+    case 0:  return "ComponentStateStarted"
+    case 1:  return "ComponentStateChanged"
+    case 2:  return "ComponentStateCompleted"
+    case 3:  return "ComponentStateCancelled"
+    default: return "No State"
+    }
+  }
+  public var debugDescription:String { return self.description + ", value: \(self.value)" }
 }
 public func ==(lhs:ComponentState, rhs:ComponentState) -> Bool { return lhs.value == rhs.value }
 
@@ -52,7 +62,7 @@ private struct __Hubs {
   static let view         = NotificationHub<SKView>()
   static let contact      = NotificationHub<(SKPhysicsContact, state:ComponentState)>()
   static let contactNode  = NotificationHub<(SKNode, contact:SKPhysicsContact, state:ComponentState)>()
-  static let touch        = NotificationHub<([UITouch])>()
+  static let touch        = NotificationHub<([UITouch], state:ComponentState)>()
 }
 
 @objc public class Component : ComponentBehaviour  {
@@ -74,8 +84,6 @@ private struct __Hubs {
       for observer in self.contact     { observer.remove() }
       for observer in self.contactNode { observer.remove() }
       for observer in self.touch       { observer.remove() }
-
-
     }
     
   }
@@ -90,9 +98,7 @@ private struct __Hubs {
   }
   private(set) weak var node:SKNode? {
     willSet { if newValue  == nil { self._didRemoveFromNode() } }
-    didSet  {
-      if self.node != nil { self._didAddToNode() }
-    }
+    didSet  { if self.node != nil { self._didAddToNode() } }
   }
   
   init(){}
@@ -161,23 +167,34 @@ private struct __Hubs {
         })
     }
 
-    if let didContactOnScene = b.didContactOnScene{
+    if let didContactOnScene = b.didContactOnScene {
       self.observerCollection.contact.append(
         __Hubs.contact.subscribeNotificationForName("didContactOnScene", sender: scene) {
           n in didContactOnScene(n.userInfo!)
         })
     }
     
-    if let didContactWithNode = b.didContactWithNode{
+    if let didContactWithNode = b.didContactWithNode {
       self.observerCollection.contactNode.append(
-        __Hubs.contactNode.subscribeNotificationForName("didContactWithNode", sender: scene) {
+        __Hubs.contactNode.subscribeNotificationForName("didContactWithNode", sender: node) {
           n in didContactWithNode(n.userInfo!)
         })
     }
 
-
-
+    if let didTouchOnScene = b.didTouchOnScene {
+      self.observerCollection.touch.append(
+        __Hubs.touch.subscribeNotificationForName("didTouchOnScene", sender: scene) {
+          n in didTouchOnScene(n.userInfo!)
+        })
+    }
     
+    if let didTouchOnNode = b.didTouchOnNode {
+      node.userInteractionEnabled = true
+      self.observerCollection.touch.append(
+        __Hubs.touch.subscribeNotificationForName("didTouchOnNode", sender: node) {
+          n in didTouchOnNode(n.userInfo!)
+        })
+    }
     
   }
   
@@ -360,37 +377,27 @@ extension SKScene : SKPhysicsContactDelegate {
 extension SKNode {
   
   
-  
-//    final private func internalTouchesBegan(touches: [UITouch], withEvent event: UIEvent) {
-      
-      
-//      for component in self.components { if component.isEnabled { component.touchesBegan?(touches, withEvent: event) } }
-//      for child in self.childNodes     { child.internalTouchesBegan(touches, withEvent: event) }
-  
-//    }
+  private func touches(touchSet: NSSet, state:ComponentState) {
+    let touches:[UITouch] = touchSet.allObjects as [UITouch]
+    __Hubs.touch.publishNotificationName("didTouchOnNode", sender: self, userInfo:(touches, state:state))
+    __Hubs.touch.publishNotificationName("didTouchOnScene", sender: self.scene, userInfo:(touches, state:state))
+    
+  }
 
   override public func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-    let touchesList:[UITouch] = touches.allObjects as [UITouch]
-    __Hubs.touch.publishNotificationName("didBeginNodeTouches", sender: self, userInfo:touchesList)
-    __Hubs.touch.publishNotificationName("didBeginSceneTouches", sender: self.scene, userInfo:touchesList)
+    self.touches(touches, state: ComponentState.Started)
    }
   
   override public func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
-    let touchesList:[UITouch] = touches.allObjects as [UITouch]
-    __Hubs.touch.publishNotificationName("didMoveNodeTouches", sender: self, userInfo:touchesList)
-    __Hubs.touch.publishNotificationName("didMoveSceneTouches", sender: self.scene, userInfo:touchesList)
+    self.touches(touches, state: ComponentState.Changed)
   }
 
   override public func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
-    let touchesList:[UITouch] = touches.allObjects as [UITouch]
-    __Hubs.touch.publishNotificationName("didEndNodeTouches", sender: self, userInfo:touchesList)
-    __Hubs.touch.publishNotificationName("didEndSceneTouches", sender: self.scene, userInfo:touchesList)
+    self.touches(touches, state: ComponentState.Completed)
   }
 
   override public func touchesCancelled(touches: NSSet, withEvent event: UIEvent) {
-    let touchesList:[UITouch] = touches.allObjects as [UITouch]
-    __Hubs.touch.publishNotificationName("didCancelNodeTouches", sender: self, userInfo:touchesList)
-    __Hubs.touch.publishNotificationName("didCancelSceneTouches", sender: self.scene, userInfo:touchesList)
+    self.touches(touches, state: ComponentState.Cancelled)
   }
 
   
@@ -400,10 +407,6 @@ extension SKNode {
 extension SKNode {
   
   private func _addedChild(node:SKNode) {
-//    if self is SKScene {
-//      for component in node.components { component._didAddNodeToScene() }
-//      for childNode in node.childNodes { node._addedChild(childNode) }
-//    }
    if self.scene != nil {
       for component in node.components { component._didAddNodeToScene() }
       for childNode in node.childNodes { node._addedChild(childNode) }
@@ -433,10 +436,6 @@ extension SKNode {
   }
   
   private func _removedChild(node:SKNode) {
-//    if self is SKScene {
-//      for component in node.components { component._didRemoveNodeFromScene() }
-//      for childNode in node.childNodes { node._removedChild(childNode) }
-//    }
     if self.scene != nil {
       for component in node.components { component._didRemoveNodeFromScene() }
       for childNode in node.childNodes { node._removedChild(childNode) }
@@ -465,14 +464,12 @@ extension SKNode {
   func _removeFromParent() {
     self.parent?._removedChild(self)
     self._removeFromParent()
-    
   }
   
   
   
   final private var componentContainer:InternalComponentContainer {
     get {
-      //      println(SharedComponentManager.sharedInstance.mapTable)
       var manager = SharedComponentManager.sharedInstance.mapTable.objectForKey(self) as InternalComponentContainer?
       if manager == nil {
         manager = InternalComponentContainer()
@@ -480,15 +477,6 @@ extension SKNode {
       }
       return manager!
     }
-    
-    //    get {
-    //      var manager = objc_getAssociatedObject(self, &AssociatedKeyComponentManager) as ComponentManager?
-    //      if(manager == nil) {
-    //          manager = ComponentManager()
-    //          objc_setAssociatedObject(self, &AssociatedKeyComponentManager, manager, objc_AssociationPolicy(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
-    //        }
-    //      return manager!
-    //    }
   }
   
 }

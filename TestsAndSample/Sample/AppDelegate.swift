@@ -121,20 +121,19 @@ class Sample : Component {
   }
 
   
-  func didBeginNodeTouches(touches:[UITouch]) {
-    println("NODE")
+  func didContactOnScene(contact:SKPhysicsContact, state:ComponentState) {
+    
+  }
+  func didContactWithNode(node:SKNode, contact:SKPhysicsContact, state:ComponentState) {
+    
   }
   
-  func didBeginSceneTouches(touches:[UITouch]) {
-    println("SCENE")
-  }
-
-  func didMoveNodeTouches(touches:[UITouch]) {
-    println("MOVE NODE")
+  func didTouchOnScene(touches:[UITouch], state:ComponentState) {
+    println(state)
   }
   
-  func didMoveSceneTouches(touches:[UITouch]) {
-    println("MOVE SCENE")
+  func didTouchOnNode(touches:[UITouch], state:ComponentState) {
+    println(state)
   }
 
 
