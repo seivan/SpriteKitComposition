@@ -238,6 +238,15 @@ class NodeTests: SpriteKitTestCase {
     XCTAssertNil(node.scene)
     
   }
+  
+  func testEnableUserinteractionOnNode() {
+    let mainComponent   = SampleComponent()
+    XCTAssertFalse(self.node.userInteractionEnabled)
+    self.node.addComponent(mainComponent)
+    self.scene.addChild(self.node)
+    XCTAssertTrue(self.node.userInteractionEnabled)
+    
+  }
 
 
   
