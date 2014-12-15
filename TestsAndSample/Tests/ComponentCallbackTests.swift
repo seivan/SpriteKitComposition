@@ -255,35 +255,53 @@ class ComponentCallbackTests: SpriteKitTestCase {
   }
   
   func testDidBeginNodeTouches() {
-    self.scene.touchesBegan(NSSet(), withEvent: UIEvent())
-    XCTAssertNil(self.component.assertionDidBeginNodeTouches)
-    XCTAssertNotNil(self.component.assertionDidBeginSceneTouches)
-    
+    self.node.addComponent(self.component)
     self.node.touchesBegan(NSSet(), withEvent: UIEvent())
     XCTAssertNotNil(self.component.assertionDidBeginNodeTouches)
-    
+    XCTAssertNotNil(self.component.assertionDidBeginSceneTouches)
   }
   
   func testDidMoveNodeTouches() {
-
+    self.node.addComponent(self.component)
+    self.node.touchesMoved(NSSet(), withEvent: UIEvent())
+    XCTAssertNotNil(self.component.assertionDidMoveNodeTouches)
+    XCTAssertNotNil(self.component.assertionDidMoveSceneTouches)
   }
   func testDidEndNodeTouches() {
-
+    self.node.addComponent(self.component)
+    self.node.touchesEnded(NSSet(), withEvent: UIEvent())
+    XCTAssertNotNil(self.component.assertionDidEndNodeTouches)
+    XCTAssertNotNil(self.component.assertionDidEndSceneTouches)
   }
   func testDidCancelNodeTouches() {
-
+    self.node.addComponent(self.component)
+    self.node.touchesCancelled(NSSet(), withEvent: UIEvent())
+    XCTAssertNotNil(self.component.assertionDidCancelNodeTouches)
+    XCTAssertNotNil(self.component.assertionDidCancelSceneTouches)
   }
   func testDidBeginSceneTouches() {
-
+    self.node.addComponent(self.component)
+    self.scene.touchesBegan(NSSet(), withEvent: UIEvent())
+    XCTAssertNil(self.component.assertionDidBeginNodeTouches)
+    XCTAssertNotNil(self.component.assertionDidBeginSceneTouches)
   }
   func testDidMoveSceneTouches() {
-
+    self.node.addComponent(self.component)
+    self.scene.touchesMoved(NSSet(), withEvent: UIEvent())
+    XCTAssertNil(self.component.assertionDidMoveNodeTouches)
+    XCTAssertNotNil(self.component.assertionDidMoveSceneTouches)
   }
   func testDidEndSceneTouches() {
-
+    self.node.addComponent(self.component)
+    self.scene.touchesEnded(NSSet(), withEvent: UIEvent())
+    XCTAssertNil(self.component.assertionDidEndNodeTouches)
+    XCTAssertNotNil(self.component.assertionDidEndSceneTouches)
   }
   func testDidCancelSceneTouches() {
-
+    self.node.addComponent(self.component)
+    self.scene.touchesCancelled(NSSet(), withEvent: UIEvent())
+    XCTAssertNil(self.component.assertionDidCancelNodeTouches)
+    XCTAssertNotNil(self.component.assertionDidCancelSceneTouches)
   }
 
 

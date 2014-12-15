@@ -101,6 +101,7 @@ private struct __Hubs {
   final private func _addObservers() {
     let b = (self as ComponentBehaviour)
     let scene = self.node!.scene!
+    let node = self.node!
     
     if let didChangeSceneSizedFrom = b.didChangeSceneSizedFrom {
       self.observerCollection.size = __Hubs.size.subscribeNotificationForName("didChangeSceneSizedFrom", sender: scene) {
@@ -171,14 +172,14 @@ private struct __Hubs {
     
     if let didBeginContactWithNode =  b.didBeginContactWithNode {
       self.observerCollection.nodeContact.append(
-        __Hubs.nodeContact.subscribeNotificationForName("didBeginContactWithNode", sender: self.node) {
+        __Hubs.nodeContact.subscribeNotificationForName("didBeginContactWithNode", sender: node) {
           n in didBeginContactWithNode(n.userInfo!)
         })
     }
     
     if let didEndContactWithNode = b.didEndContactWithNode {
       self.observerCollection.nodeContact.append(
-        __Hubs.nodeContact.subscribeNotificationForName("didEndContactWithNode", sender: self.node) {
+        __Hubs.nodeContact.subscribeNotificationForName("didEndContactWithNode", sender: node) {
           n in didEndContactWithNode(n.userInfo!)
         })
     }
@@ -186,7 +187,7 @@ private struct __Hubs {
     if let didBeginNodeTouches = b.didBeginNodeTouches {
       self.node?.userInteractionEnabled = true
       self.observerCollection.touch.append(
-        __Hubs.touch.subscribeNotificationForName("didBeginNodeTouches", sender: self.node) {
+        __Hubs.touch.subscribeNotificationForName("didBeginNodeTouches", sender: node) {
           n in didBeginNodeTouches(n.userInfo!)
         })
     }
@@ -194,7 +195,7 @@ private struct __Hubs {
     if let didMoveNodeTouches = b.didMoveNodeTouches {
       self.node?.userInteractionEnabled = true
       self.observerCollection.touch.append(
-        __Hubs.touch.subscribeNotificationForName("didMoveNodeTouches", sender: self.node) {
+        __Hubs.touch.subscribeNotificationForName("didMoveNodeTouches", sender: node) {
           n in didMoveNodeTouches(n.userInfo!)
         })
     }
@@ -202,7 +203,7 @@ private struct __Hubs {
     if let didEndNodeTouches = b.didEndNodeTouches {
       self.node?.userInteractionEnabled = true
       self.observerCollection.touch.append(
-        __Hubs.touch.subscribeNotificationForName("didEndNodeTouches", sender: self.node) {
+        __Hubs.touch.subscribeNotificationForName("didEndNodeTouches", sender: node) {
           n in didEndNodeTouches(n.userInfo!)
         })
     }
@@ -210,7 +211,7 @@ private struct __Hubs {
     if let didCancelNodeTouches = b.didCancelNodeTouches {
       self.node?.userInteractionEnabled = true
       self.observerCollection.touch.append(
-        __Hubs.touch.subscribeNotificationForName("didCancelNodeTouches", sender: self.node) {
+        __Hubs.touch.subscribeNotificationForName("didCancelNodeTouches", sender: node) {
           n in didCancelNodeTouches(n.userInfo!)
         })
     }
