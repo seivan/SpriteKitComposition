@@ -1,5 +1,18 @@
 import SpriteKit
 
+
+@objc class ComponentState {
+  let value: Int
+  init(_ val: Int) { value = val }
+  class var Started: ComponentState {  return ComponentState(0) }
+  class var Changed: ComponentState {  return ComponentState(1) }
+  class var Completed: ComponentState {  return ComponentState(2) }
+  class var Cancelled: ComponentState {  return ComponentState(3) }
+}
+func ==(lhs:ComponentState, rhs:ComponentState) -> Bool { return lhs.value == rhs.value }
+
+
+
 @objc private protocol ComponentBehaviour {
   optional func didAddToNode()
   optional func didAddNodeToScene()
@@ -18,6 +31,13 @@ import SpriteKit
   optional func didSimulatePhysics()
   optional func didApplyConstraints()
   optional func didFinishUpdate()
+
+  optional func didContactOnScene(contact:SKPhysicsContact, state:ComponentState)
+  optional func didContactWithNode(node:SKNode, contact:SKPhysicsContact, state:ComponentState)
+
+  optional func didTouchOnScene(touches:[UITouch], state:ComponentState)
+  optional func didTouchOnNode(touches:[UITouch], state:ComponentState)
+
   
   optional func didBeginContactWithNode(node:SKNode, contact:SKPhysicsContact)
   optional func didEndContactWithNode(node:SKNode, contact:SKPhysicsContact)
