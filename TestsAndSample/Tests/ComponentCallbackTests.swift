@@ -185,7 +185,23 @@ class ComponentCallbackTests: SpriteKitTestCase {
     
   }
   
-  
+
+  func didContactOnSceneStarted() {
+    self.node.addComponent(self.component)
+    self.nextPhysicsContact() { node in
+      XCTAssertEqual(self.component.assertionDidBeginContactWithNode.node, node)
+      XCTAssertEqual(self.component.assertionDidBeginContactWithNode.contact.bodyB.node!, self.node)
+    }
+
+    self.setUpScene()
+    self.node.addComponent(self.component)
+    self.component.isEnabled = false
+    self.component.assertionDidBeginContactWithNode = nil
+    self.nextPhysicsContact() { node in
+      XCTAssertTrue(self.component.assertionDidBeginContactWithNode == nil)
+    }
+  }
+
   
 //  func testDidBeginContactWithNode() {
 //    self.node.addComponent(self.component)
