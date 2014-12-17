@@ -185,23 +185,43 @@ class ComponentCallbackTests: SpriteKitTestCase {
     
   }
   
-
-  func didContactOnSceneStarted() {
-    self.node.addComponent(self.component)
-    self.nextPhysicsContact() { node in
-      XCTAssertEqual(self.component.assertionDidBeginContactWithNode.node, node)
-      XCTAssertEqual(self.component.assertionDidBeginContactWithNode.contact.bodyB.node!, self.node)
+  
+    func testDidContactOnScene() {
+      self.node.addComponent(self.component)
+      self.nextPhysicsContact() { node in
+        XCTAssertEqual(self.component.assertionDidContactOnSceneStarted.contact.bodyA.node!, node)
+        XCTAssertEqual(self.component.assertionDidContactOnSceneStarted.contact.bodyB.node!, self.node)
+      }
+  
+      self.setUpScene()
+      self.node.addComponent(self.component)
+      self.component.isEnabled = false
+      self.component.assertionDidBeginContact = nil
+      self.nextPhysicsContact() { node in
+        XCTAssertTrue(self.component.assertionDidBeginContact == nil)
+      }
+  
     }
+  
+//    func testDidEndContact() {
+//      self.node.addComponent(self.component)
+//      self.nextPhysicsContact() { node in
+//        XCTAssertEqual(self.component.assertionDidEndContact.bodyA.node!, node)
+//        XCTAssertEqual(self.component.assertionDidEndContact.bodyB.node!, self.node)
+//      }
+//  
+//      self.setUpScene()
+//      self.node.addComponent(self.component)
+//      self.component.isEnabled = false
+//      self.component.assertionDidEndContact = nil
+//      self.nextPhysicsContact() { node in
+//        XCTAssertTrue(self.component.assertionDidEndContact == nil)
+//      }
+//      
+//    }
 
-    self.setUpScene()
-    self.node.addComponent(self.component)
-    self.component.isEnabled = false
-    self.component.assertionDidBeginContactWithNode = nil
-    self.nextPhysicsContact() { node in
-      XCTAssertTrue(self.component.assertionDidBeginContactWithNode == nil)
-    }
-  }
-
+  
+  
   
 //  func testDidBeginContactWithNode() {
 //    self.node.addComponent(self.component)
@@ -238,40 +258,7 @@ class ComponentCallbackTests: SpriteKitTestCase {
 //    
 //  }
 //  
-//  func testBeginContact() {
-//    self.node.addComponent(self.component)
-//    self.nextPhysicsContact() { node in
-//      XCTAssertEqual(self.component.assertionDidBeginContact.bodyA.node!, node)
-//      XCTAssertEqual(self.component.assertionDidBeginContact.bodyB.node!, self.node)
-//    }
-//    
-//    self.setUpScene()
-//    self.node.addComponent(self.component)
-//    self.component.isEnabled = false
-//    self.component.assertionDidBeginContact = nil
-//    self.nextPhysicsContact() { node in
-//      XCTAssertTrue(self.component.assertionDidBeginContact == nil)
-//    }
-//    
-//  }
-//  
-//  func testDidEndContact() {
-//    self.node.addComponent(self.component)
-//    self.nextPhysicsContact() { node in
-//      XCTAssertEqual(self.component.assertionDidEndContact.bodyA.node!, node)
-//      XCTAssertEqual(self.component.assertionDidEndContact.bodyB.node!, self.node)
-//    }
-//    
-//    self.setUpScene()
-//    self.node.addComponent(self.component)
-//    self.component.isEnabled = false
-//    self.component.assertionDidEndContact = nil
-//    self.nextPhysicsContact() { node in
-//      XCTAssertTrue(self.component.assertionDidEndContact == nil)
-//    }
-//    
-//  }
-//  
+//
 //  func testDidBeginNodeTouches() {
 //    self.node.addComponent(self.component)
 //    self.node.touchesBegan(NSSet(), withEvent: UIEvent())
