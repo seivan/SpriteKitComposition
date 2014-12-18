@@ -186,128 +186,138 @@ class ComponentCallbackTests: SpriteKitTestCase {
   }
   
   
-    func testDidContactOnScene() {
+    func testDidContactSceneStarted() {
       self.node.addComponent(self.component)
       self.nextPhysicsContact() { node in
-        XCTAssertEqual(self.component.assertionDidContactOnSceneStarted.contact.bodyA.node!, node)
-        XCTAssertEqual(self.component.assertionDidContactOnSceneStarted.contact.bodyB.node!, self.node)
+        XCTAssertEqual(self.component.assertionDidContactSceneStarted.contact.bodyA.node!, node)
+        XCTAssertEqual(self.component.assertionDidContactSceneStarted.contact.bodyB.node!, self.node)
+        XCTAssertEqual(self.component.assertionDidContactSceneStarted.state, ComponentState.Started)
+        
+
       }
   
       self.setUpScene()
       self.node.addComponent(self.component)
       self.component.isEnabled = false
-      self.component.assertionDidBeginContact = nil
+      self.component.assertionDidContactSceneStarted = nil
       self.nextPhysicsContact() { node in
-        XCTAssertTrue(self.component.assertionDidBeginContact == nil)
+        XCTAssertTrue(self.component.assertionDidContactSceneStarted == nil)
       }
   
     }
+
+  func testDidContactSceneCompleted() {
+    self.node.addComponent(self.component)
+    self.nextPhysicsContact() { node in
+      XCTAssertEqual(self.component.assertionDidContactSceneCompleted.contact.bodyA.node!, node)
+      XCTAssertEqual(self.component.assertionDidContactSceneCompleted.contact.bodyB.node!, self.node)
+      XCTAssertEqual(self.component.assertionDidContactSceneCompleted.state, ComponentState.Completed)
+    }
+    
+    self.setUpScene()
+    self.node.addComponent(self.component)
+    self.component.isEnabled = false
+    self.component.assertionDidContactSceneCompleted = nil
+    self.nextPhysicsContact() { node in
+      XCTAssertTrue(self.component.assertionDidContactSceneCompleted == nil)
+    }
+    
+  }
   
-//    func testDidEndContact() {
-//      self.node.addComponent(self.component)
-//      self.nextPhysicsContact() { node in
-//        XCTAssertEqual(self.component.assertionDidEndContact.bodyA.node!, node)
-//        XCTAssertEqual(self.component.assertionDidEndContact.bodyB.node!, self.node)
-//      }
-//  
-//      self.setUpScene()
-//      self.node.addComponent(self.component)
-//      self.component.isEnabled = false
-//      self.component.assertionDidEndContact = nil
-//      self.nextPhysicsContact() { node in
-//        XCTAssertTrue(self.component.assertionDidEndContact == nil)
-//      }
-//      
-//    }
+  
+  func testDidContactWithNodeStarted() {
+    self.node.addComponent(self.component)
+    self.nextPhysicsContact() { node in
+      XCTAssertEqual(self.component.assertionDidContactNodeStarted.node, node)
+      XCTAssertEqual(self.component.assertionDidContactNodeStarted.contact.bodyB.node!, self.node)
+      XCTAssertEqual(self.component.assertionDidContactNodeStarted.state, ComponentState.Started)
+    }
+    
+    self.setUpScene()
+    self.node.addComponent(self.component)
+    self.component.isEnabled = false
+    self.component.assertionDidContactSceneStarted = nil
+    self.nextPhysicsContact() { node in
+      XCTAssertTrue(self.component.assertionDidContactSceneStarted == nil)
+    }
+
+    
+  }
+
+  func testDidContactWithNodeCompleted() {
+    self.node.addComponent(self.component)
+    self.nextPhysicsContact() { node in
+      XCTAssertEqual(self.component.assertionDidContactNodeCompleted.node, node)
+      XCTAssertEqual(self.component.assertionDidContactNodeCompleted.contact.bodyB.node!, self.node)
+      XCTAssertEqual(self.component.assertionDidContactNodeCompleted.state, ComponentState.Completed)
+    }
+    
+    self.setUpScene()
+    self.node.addComponent(self.component)
+    self.component.isEnabled = false
+    self.component.assertionDidContactNodeCompleted = nil
+    self.nextPhysicsContact() { node in
+      XCTAssertTrue(self.component.assertionDidContactNodeCompleted == nil)
+    }
+    
+    
+  }
 
   
-  
-  
-//  func testDidBeginContactWithNode() {
-//    self.node.addComponent(self.component)
-//    self.nextPhysicsContact() { node in
-//      XCTAssertEqual(self.component.assertionDidBeginContactWithNode.node, node)
-//      XCTAssertEqual(self.component.assertionDidBeginContactWithNode.contact.bodyB.node!, self.node)
-//    }
-//    
-//    self.setUpScene()
-//    self.node.addComponent(self.component)
-//    self.component.isEnabled = false
-//    self.component.assertionDidBeginContactWithNode = nil
-//    self.nextPhysicsContact() { node in
-//      XCTAssertTrue(self.component.assertionDidBeginContactWithNode == nil)
-//    }
-//
-//    
-//  }
-//  
-//  func testDidEndContactWithNode() {
-//    self.node.addComponent(self.component)
-//    self.nextPhysicsContact() { node in
-//      XCTAssertEqual(self.component.assertionDidEndContactWithNode.node, node)
-//      XCTAssertEqual(self.component.assertionDidEndContactWithNode.contact.bodyB.node!, self.node)
-//    }
-//    
-//    self.setUpScene()
-//    self.node.addComponent(self.component)
-//    self.component.isEnabled = false
-//    self.component.assertionDidEndContactWithNode = nil
-//    self.nextPhysicsContact() { node in
-//      XCTAssertTrue(self.component.assertionDidEndContactWithNode == nil)
-//    }
-//    
-//  }
-//  
-//
-//  func testDidBeginNodeTouches() {
-//    self.node.addComponent(self.component)
-//    self.node.touchesBegan(NSSet(), withEvent: UIEvent())
-//    XCTAssertNotNil(self.component.assertionDidBeginNodeTouches)
-//    XCTAssertNotNil(self.component.assertionDidBeginSceneTouches)
-//  }
-//  
-//  func testDidMoveNodeTouches() {
-//    self.node.addComponent(self.component)
-//    self.node.touchesMoved(NSSet(), withEvent: UIEvent())
-//    XCTAssertNotNil(self.component.assertionDidMoveNodeTouches)
-//    XCTAssertNotNil(self.component.assertionDidMoveSceneTouches)
-//  }
-//  func testDidEndNodeTouches() {
-//    self.node.addComponent(self.component)
-//    self.node.touchesEnded(NSSet(), withEvent: UIEvent())
-//    XCTAssertNotNil(self.component.assertionDidEndNodeTouches)
-//    XCTAssertNotNil(self.component.assertionDidEndSceneTouches)
-//  }
-//  func testDidCancelNodeTouches() {
-//    self.node.addComponent(self.component)
-//    self.node.touchesCancelled(NSSet(), withEvent: UIEvent())
-//    XCTAssertNotNil(self.component.assertionDidCancelNodeTouches)
-//    XCTAssertNotNil(self.component.assertionDidCancelSceneTouches)
-//  }
-//  func testDidBeginSceneTouches() {
-//    self.node.addComponent(self.component)
-//    self.scene.touchesBegan(NSSet(), withEvent: UIEvent())
-//    XCTAssertNil(self.component.assertionDidBeginNodeTouches)
-//    XCTAssertNotNil(self.component.assertionDidBeginSceneTouches)
-//  }
-//  func testDidMoveSceneTouches() {
-//    self.node.addComponent(self.component)
-//    self.scene.touchesMoved(NSSet(), withEvent: UIEvent())
-//    XCTAssertNil(self.component.assertionDidMoveNodeTouches)
-//    XCTAssertNotNil(self.component.assertionDidMoveSceneTouches)
-//  }
-//  func testDidEndSceneTouches() {
-//    self.node.addComponent(self.component)
-//    self.scene.touchesEnded(NSSet(), withEvent: UIEvent())
-//    XCTAssertNil(self.component.assertionDidEndNodeTouches)
-//    XCTAssertNotNil(self.component.assertionDidEndSceneTouches)
-//  }
-//  func testDidCancelSceneTouches() {
-//    self.node.addComponent(self.component)
-//    self.scene.touchesCancelled(NSSet(), withEvent: UIEvent())
-//    XCTAssertNil(self.component.assertionDidCancelNodeTouches)
-//    XCTAssertNotNil(self.component.assertionDidCancelSceneTouches)
-//  }
+  func testDidTouchSceneStarted() {
+    self.node.addComponent(self.component)
+    self.scene.touchesBegan(NSSet(), withEvent: UIEvent())
+    XCTAssertNotNil(self.component.assertionDidTouchSceneStarted.touches)
+    XCTAssertEqual(self.component.assertionDidTouchSceneStarted.state, ComponentState.Started)
+  }
 
+  func testDidTouchSceneChanged() {
+    self.node.addComponent(self.component)
+    self.scene.touchesMoved(NSSet(), withEvent: UIEvent())
+    XCTAssertNotNil(self.component.assertionDidTouchSceneChanged.touches)
+    XCTAssertEqual(self.component.assertionDidTouchSceneChanged.state, ComponentState.Changed)
+  }
+
+  func testDidTouchSceneCompleted() {
+    self.node.addComponent(self.component)
+    self.scene.touchesEnded(NSSet(), withEvent: UIEvent())
+    XCTAssertNotNil(self.component.assertionDidTouchSceneCompleted.touches)
+    XCTAssertEqual(self.component.assertionDidTouchSceneCompleted.state, ComponentState.Completed)
+  }
+
+  func testDidTouchSceneCancelled() {
+    self.node.addComponent(self.component)
+    self.scene.touchesCancelled(NSSet(), withEvent: UIEvent())
+    XCTAssertNotNil(self.component.assertionDidTouchSceneCancelled.touches)
+    XCTAssertEqual(self.component.assertionDidTouchSceneCancelled.state, ComponentState.Cancelled)
+  }
+
+  func testDidTouchNodeStarted() {
+    self.node.addComponent(self.component)
+    self.node.touchesBegan(NSSet(), withEvent: UIEvent())
+    XCTAssertNotNil(self.component.assertionDidTouchNodeStarted.touches)
+    XCTAssertEqual(self.component.assertionDidTouchNodeStarted.state, ComponentState.Started)
+  }
+  
+  func testDidTouchNodeChanged() {
+    self.node.addComponent(self.component)
+    self.node.touchesMoved(NSSet(), withEvent: UIEvent())
+    XCTAssertNotNil(self.component.assertionDidTouchNodeChanged.touches)
+    XCTAssertEqual(self.component.assertionDidTouchNodeChanged.state, ComponentState.Changed)
+  }
+  
+  func testDidTouchNodeCompleted() {
+    self.node.addComponent(self.component)
+    self.node.touchesEnded(NSSet(), withEvent: UIEvent())
+    XCTAssertNotNil(self.component.assertionDidTouchSceneCompleted.touches)
+    XCTAssertEqual(self.component.assertionDidTouchSceneCompleted.state, ComponentState.Completed)
+  }
+  
+  func testDidTouchNodeCancelled() {
+    self.node.addComponent(self.component)
+    self.node.touchesCancelled(NSSet(), withEvent: UIEvent())
+    XCTAssertNotNil(self.component.assertionDidTouchNodeCancelled.touches)
+    XCTAssertEqual(self.component.assertionDidTouchNodeCancelled.state, ComponentState.Cancelled)
+  }
 
 }

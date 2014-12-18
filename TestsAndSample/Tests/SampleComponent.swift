@@ -23,21 +23,21 @@ class SampleComponent: Component {
   var assertionDidApplyConstraints = false
   var assertionDidFinishUpdate = false
   
-  var assertionDidContactOnSceneStarted:(contact:SKPhysicsContact, state:ComponentState)! = nil
-  var assertionDidContactOnSceneCompleted:(contact:SKPhysicsContact, state:ComponentState)! = nil
+  var assertionDidContactSceneStarted:(contact:SKPhysicsContact, state:ComponentState)! = nil
+  var assertionDidContactSceneCompleted:(contact:SKPhysicsContact, state:ComponentState)! = nil
   
-  var assertionDidContactWithNodeStarted:(node:SKNode, contact:SKPhysicsContact, state:ComponentState)! = nil
-  var assertionDidContactWithNodeCompleted:(node:SKNode, contact:SKPhysicsContact, state:ComponentState)! = nil
+  var assertionDidContactNodeStarted:(node:SKNode, contact:SKPhysicsContact, state:ComponentState)! = nil
+  var assertionDidContactNodeCompleted:(node:SKNode, contact:SKPhysicsContact, state:ComponentState)! = nil
 
-  var assertionDidTouchOnSceneStarted:(touches:[UITouch], state:ComponentState)! = nil
-  var assertionDidTouchOnSceneChanged:(touches:[UITouch], state:ComponentState)! = nil
-  var assertionDidTouchOnSceneCompleted:(touches:[UITouch], state:ComponentState)! = nil
-  var assertionDidTouchOnSceneCancelled:(touches:[UITouch], state:ComponentState)! = nil
+  var assertionDidTouchSceneStarted:(touches:[UITouch], state:ComponentState)! = nil
+  var assertionDidTouchSceneChanged:(touches:[UITouch], state:ComponentState)! = nil
+  var assertionDidTouchSceneCompleted:(touches:[UITouch], state:ComponentState)! = nil
+  var assertionDidTouchSceneCancelled:(touches:[UITouch], state:ComponentState)! = nil
   
-  var assertionDidTouchOnNodeStarted:(touches:[UITouch], state:ComponentState)! = nil
-  var assertionDidTouchOnNodeChanged:(touches:[UITouch], state:ComponentState)! = nil
-  var assertionDidTouchOnNodeCompleted:(touches:[UITouch], state:ComponentState)! = nil
-  var assertionDidTouchOnNodeCancelled:(touches:[UITouch], state:ComponentState)! = nil
+  var assertionDidTouchNodeStarted:(touches:[UITouch], state:ComponentState)! = nil
+  var assertionDidTouchNodeChanged:(touches:[UITouch], state:ComponentState)! = nil
+  var assertionDidTouchNodeCompleted:(touches:[UITouch], state:ComponentState)! = nil
+  var assertionDidTouchNodeCancelled:(touches:[UITouch], state:ComponentState)! = nil
   
   
   
@@ -94,63 +94,63 @@ class SampleComponent: Component {
     self.assertionDidFinishUpdate = true
   }
   
-  func didContactOnScene(contact:SKPhysicsContact, state:ComponentState) {
+  func didContactScene(contact:SKPhysicsContact, state:ComponentState) {
     switch state.value {
     case ComponentState.Started.value:
-      self.assertionDidContactOnSceneStarted = (contact:contact, state:state)
+      self.assertionDidContactSceneStarted = (contact:contact, state:state)
     case ComponentState.Completed.value:
-      self.assertionDidContactOnSceneCompleted = (contact:contact, state:state)
+      self.assertionDidContactSceneCompleted = (contact:contact, state:state)
     default:
-      self.assertionDidContactOnSceneCompleted = nil
-      self.assertionDidContactOnSceneStarted = nil
+      self.assertionDidContactSceneCompleted = nil
+      self.assertionDidContactSceneStarted = nil
     }
     
   }
-  func didContactWithNode(node:SKNode, contact:SKPhysicsContact, state:ComponentState) {
+  func didContactNode(node:SKNode, contact:SKPhysicsContact, state:ComponentState) {
     switch state.value {
     case ComponentState.Started.value:
-      self.assertionDidContactWithNodeStarted = (node:node, contact:contact, state:state)
+      self.assertionDidContactNodeStarted = (node:node, contact:contact, state:state)
     case ComponentState.Completed.value:
-      self.assertionDidContactWithNodeCompleted = (node:node, contact:contact, state:state)
+      self.assertionDidContactNodeCompleted = (node:node, contact:contact, state:state)
     default:
-      self.assertionDidContactWithNodeStarted = (node:node, contact:contact, state:state)
-      self.assertionDidContactWithNodeCompleted = (node:node, contact:contact, state:state)
+      self.assertionDidContactNodeStarted = (node:node, contact:contact, state:state)
+      self.assertionDidContactNodeCompleted = (node:node, contact:contact, state:state)
     }
 
   }
-  func didTouchOnScene(touches:[UITouch], state:ComponentState) {
+  func didTouchScene(touches:[UITouch], state:ComponentState) {
     switch state.value {
     case ComponentState.Started.value:
-      self.assertionDidTouchOnSceneStarted = (touches:touches, state:state)
+      self.assertionDidTouchSceneStarted = (touches:touches, state:state)
     case ComponentState.Changed.value:
-      self.assertionDidTouchOnSceneChanged = (touches:touches, state:state)
+      self.assertionDidTouchSceneChanged = (touches:touches, state:state)
     case ComponentState.Completed.value:
-      self.assertionDidTouchOnSceneCompleted = (touches:touches, state:state)
+      self.assertionDidTouchSceneCompleted = (touches:touches, state:state)
     case ComponentState.Cancelled.value:
-      self.assertionDidTouchOnSceneCancelled = (touches:touches, state:state)
+      self.assertionDidTouchSceneCancelled = (touches:touches, state:state)
     default:
-     self.assertionDidTouchOnSceneStarted   = nil
-     self.assertionDidTouchOnSceneChanged   = nil
-     self.assertionDidTouchOnSceneCompleted = nil
-     self.assertionDidTouchOnSceneCancelled = nil
+     self.assertionDidTouchSceneStarted   = nil
+     self.assertionDidTouchSceneChanged   = nil
+     self.assertionDidTouchSceneCompleted = nil
+     self.assertionDidTouchSceneCancelled = nil
     }
 
   }
-  func didTouchOnNode(touches:[UITouch], state:ComponentState) {
+  func didTouchNode(touches:[UITouch], state:ComponentState) {
     switch state.value {
     case ComponentState.Started.value:
-      self.assertionDidTouchOnNodeStarted = (touches:touches, state:state)
+      self.assertionDidTouchNodeStarted = (touches:touches, state:state)
     case ComponentState.Changed.value:
-      self.assertionDidTouchOnNodeChanged = (touches:touches, state:state)
+      self.assertionDidTouchNodeChanged = (touches:touches, state:state)
     case ComponentState.Completed.value:
-      self.assertionDidTouchOnNodeCompleted = (touches:touches, state:state)
+      self.assertionDidTouchNodeCompleted = (touches:touches, state:state)
     case ComponentState.Cancelled.value:
-      self.assertionDidTouchOnNodeCancelled = (touches:touches, state:state)
+      self.assertionDidTouchNodeCancelled = (touches:touches, state:state)
     default:
-      self.assertionDidTouchOnNodeStarted   = nil
-      self.assertionDidTouchOnNodeChanged   = nil
-      self.assertionDidTouchOnNodeCompleted = nil
-      self.assertionDidTouchOnNodeCancelled = nil
+      self.assertionDidTouchNodeStarted   = nil
+      self.assertionDidTouchNodeChanged   = nil
+      self.assertionDidTouchNodeCompleted = nil
+      self.assertionDidTouchNodeCancelled = nil
     }
     
   }

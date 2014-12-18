@@ -6,7 +6,7 @@ private let ComponentStateChanged   = ComponentState(1)
 private let ComponentStateCompleted = ComponentState(2)
 private let ComponentStateCancelled = ComponentState(3)
 
-@objc public class ComponentState : DebugPrintable, Printable {
+@objc public class ComponentState : DebugPrintable, Printable, Equatable {
   let value: Int
   init(_ val: Int) { value = val }
   class var Started:ComponentState   {  return ComponentStateStarted }
@@ -47,11 +47,11 @@ public func ==(lhs:ComponentState, rhs:ComponentState) -> Bool { return lhs.valu
   optional func didApplyConstraints()
   optional func didFinishUpdate()
 
-  optional func didContactOnScene(contact:SKPhysicsContact, state:ComponentState)
-  optional func didContactWithNode(node:SKNode, contact:SKPhysicsContact, state:ComponentState)
+  optional func didContactScene(contact:SKPhysicsContact, state:ComponentState)
+  optional func didContactNode(node:SKNode, contact:SKPhysicsContact, state:ComponentState)
 
-  optional func didTouchOnScene(touches:[UITouch], state:ComponentState)
-  optional func didTouchOnNode(touches:[UITouch], state:ComponentState)
+  optional func didTouchScene(touches:[UITouch], state:ComponentState)
+  optional func didTouchNode(touches:[UITouch], state:ComponentState)
 
 }
 
@@ -169,32 +169,32 @@ private struct __Hubs {
         })
     }
 
-    if let didContactOnScene = b.didContactOnScene {
+    if let didContactScene = b.didContactScene {
       self.observerCollection.contact.append(
-        __Hubs.contact.subscribeNotificationForName("didContactOnScene", sender: scene) {
-          n in didContactOnScene(n.userInfo!)
+        __Hubs.contact.subscribeNotificationForName("didContactScene", sender: scene) {
+          n in didContactScene(n.userInfo!)
         })
     }
     
-    if let didContactWithNode = b.didContactWithNode {
+    if let didContactNode = b.didContactNode {
       self.observerCollection.contactNode.append(
-        __Hubs.contactNode.subscribeNotificationForName("didContactWithNode", sender: node) {
-          n in didContactWithNode(n.userInfo!)
+        __Hubs.contactNode.subscribeNotificationForName("didContactNode", sender: node) {
+          n in didContactNode(n.userInfo!)
         })
     }
 
-    if let didTouchOnScene = b.didTouchOnScene {
+    if let didTouchScene = b.didTouchScene {
       self.observerCollection.touch.append(
-        __Hubs.touch.subscribeNotificationForName("didTouchOnScene", sender: scene) {
-          n in didTouchOnScene(n.userInfo!)
+        __Hubs.touch.subscribeNotificationForName("didTouchScene", sender: scene) {
+          n in didTouchScene(n.userInfo!)
         })
     }
     
-    if let didTouchOnNode = b.didTouchOnNode {
+    if let didTouchNode = b.didTouchNode {
       node.userInteractionEnabled = true
       self.observerCollection.touch.append(
-        __Hubs.touch.subscribeNotificationForName("didTouchOnNode", sender: node) {
-          n in didTouchOnNode(n.userInfo!)
+        __Hubs.touch.subscribeNotificationForName("didTouchNode", sender: node) {
+          n in didTouchNode(n.userInfo!)
         })
     }
     
@@ -337,35 +337,35 @@ extension SKScene : SKPhysicsContactDelegate {
   
   
   public func didBeginContact(contact: SKPhysicsContact) {
-    __Hubs.contact.publishNotificationName("didContactOnScene",
+    __Hubs.contact.publishNotificationName("didContactScene",
       sender: self, userInfo:(contact,state:ComponentState.Started))
     let nodeA = contact.bodyA.node
     let nodeB = contact.bodyB.node
     
     if let nodeA = nodeA {
-      __Hubs.contactNode.publishNotificationName("didContactWithNode",
+      __Hubs.contactNode.publishNotificationName("didContactNode",
         sender: nodeB, userInfo:(nodeA, contact:contact, state:ComponentState.Started))
     }
     
     if let nodeB = nodeB {
-      __Hubs.contactNode.publishNotificationName("didContactWithNode",
+      __Hubs.contactNode.publishNotificationName("didContactNode",
         sender: nodeA, userInfo:(nodeB,contact:contact, state:ComponentState.Started))
     }
   }
   
   public func didEndContact(contact: SKPhysicsContact) {
-    __Hubs.contact.publishNotificationName("didContactOnScene",
+    __Hubs.contact.publishNotificationName("didContactScene",
       sender: self, userInfo:(contact, state:ComponentState.Completed))
     let nodeA = contact.bodyA.node
     let nodeB = contact.bodyB.node
     
     if let nodeA = nodeA {
-      __Hubs.contactNode.publishNotificationName("didContactWithNode",
+      __Hubs.contactNode.publishNotificationName("didContactNode",
         sender: nodeB, userInfo:(nodeA,contact:contact, state:ComponentState.Completed))
     }
     
     if let nodeB = nodeB {
-      __Hubs.contactNode.publishNotificationName("didContactWithNode",
+      __Hubs.contactNode.publishNotificationName("didContactNode",
         sender: nodeA, userInfo:(nodeB,contact:contact, state:ComponentState.Completed))
     }
     
@@ -379,27 +379,27 @@ extension SKScene : SKPhysicsContactDelegate {
 extension SKNode {
   
   
-  private func touches(touchSet: NSSet, state:ComponentState) {
+  private func publishTouches(touchSet: NSSet, state:ComponentState) {
     let touches:[UITouch] = touchSet.allObjects as [UITouch]
-    __Hubs.touch.publishNotificationName("didTouchOnNode", sender: self, userInfo:(touches, state:state))
-    __Hubs.touch.publishNotificationName("didTouchOnScene", sender: self.scene, userInfo:(touches, state:state))
+    __Hubs.touch.publishNotificationName("didTouchNode", sender: self, userInfo:(touches, state:state))
+    __Hubs.touch.publishNotificationName("didTouchScene", sender: self.scene, userInfo:(touches, state:state))
     
   }
 
   override public func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-    self.touches(touches, state: ComponentState.Started)
+    self.publishTouches(touches, state: ComponentState.Started)
    }
   
   override public func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
-    self.touches(touches, state: ComponentState.Changed)
+    self.publishTouches(touches, state: ComponentState.Changed)
   }
 
   override public func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
-    self.touches(touches, state: ComponentState.Completed)
+    self.publishTouches(touches, state: ComponentState.Completed)
   }
 
   override public func touchesCancelled(touches: NSSet, withEvent event: UIEvent) {
-    self.touches(touches, state: ComponentState.Cancelled)
+    self.publishTouches(touches, state: ComponentState.Cancelled)
   }
 
   
