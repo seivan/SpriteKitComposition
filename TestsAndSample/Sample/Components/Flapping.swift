@@ -10,7 +10,7 @@
 import UIKit
 import SpriteKit
 
-class FlappingPhysics: Component {
+class Flapping: Component {
   let level:SKNode
   
   init(level:SKNode) {

@@ -15,9 +15,12 @@
 		2233E0261A429B4A00EDF0FA /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2233E0251A429B4A00EDF0FA /* GameViewController.swift */; };
 		2233E0281A429BDF00EDF0FA /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2233E0271A429BDF00EDF0FA /* GameScene.sks */; };
 		2233E02A1A429CA200EDF0FA /* bird.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 2233E0291A429CA200EDF0FA /* bird.atlas */; };
-		2233E02D1A429DE600EDF0FA /* RotationPhysics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2233E02C1A429DE600EDF0FA /* RotationPhysics.swift */; };
-		2233E02F1A42A0C600EDF0FA /* Gravity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2233E02E1A42A0C600EDF0FA /* Gravity.swift */; };
-		2233E0311A42A36300EDF0FA /* FlappingPhysics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2233E0301A42A36300EDF0FA /* FlappingPhysics.swift */; };
+		2233E02D1A429DE600EDF0FA /* Rotating.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2233E02C1A429DE600EDF0FA /* Rotating.swift */; };
+		2233E02F1A42A0C600EDF0FA /* Gravitating.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2233E02E1A42A0C600EDF0FA /* Gravitating.swift */; };
+		2233E0311A42A36300EDF0FA /* Flapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2233E0301A42A36300EDF0FA /* Flapping.swift */; };
+		2233E0391A4342D900EDF0FA /* Texturing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2233E0381A4342D900EDF0FA /* Texturing.swift */; };
+		2233E03B1A4342EB00EDF0FA /* RepeatAnimating.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2233E03A1A4342EB00EDF0FA /* RepeatAnimating.swift */; };
+		2233E03D1A445A3B00EDF0FA /* Physical.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2233E03C1A445A3B00EDF0FA /* Physical.swift */; };
 		228C0ACA1A26538F00025DEC /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 228C0AC51A26538F00025DEC /* Info.plist */; };
 		228C0ACC1A26538F00025DEC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C0AC81A26538F00025DEC /* AppDelegate.swift */; };
 		228C0ACE1A26539500025DEC /* SpriteKitTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C0AC61A26538F00025DEC /* SpriteKitTestCase.swift */; };
@@ -51,9 +54,12 @@
 		2233E0251A429B4A00EDF0FA /* GameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		2233E0271A429BDF00EDF0FA /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		2233E0291A429CA200EDF0FA /* bird.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = bird.atlas; sourceTree = "<group>"; };
-		2233E02C1A429DE600EDF0FA /* RotationPhysics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RotationPhysics.swift; sourceTree = "<group>"; };
-		2233E02E1A42A0C600EDF0FA /* Gravity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Gravity.swift; sourceTree = "<group>"; };
-		2233E0301A42A36300EDF0FA /* FlappingPhysics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlappingPhysics.swift; sourceTree = "<group>"; };
+		2233E02C1A429DE600EDF0FA /* Rotating.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rotating.swift; sourceTree = "<group>"; };
+		2233E02E1A42A0C600EDF0FA /* Gravitating.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Gravitating.swift; sourceTree = "<group>"; };
+		2233E0301A42A36300EDF0FA /* Flapping.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Flapping.swift; sourceTree = "<group>"; };
+		2233E0381A4342D900EDF0FA /* Texturing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Texturing.swift; sourceTree = "<group>"; };
+		2233E03A1A4342EB00EDF0FA /* RepeatAnimating.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepeatAnimating.swift; sourceTree = "<group>"; };
+		2233E03C1A445A3B00EDF0FA /* Physical.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Physical.swift; sourceTree = "<group>"; };
 		228C0A9E1A26534300025DEC /* TestHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		228C0AB61A26534300025DEC /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		228C0AC51A26538F00025DEC /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -122,9 +128,12 @@
 		2233E02B1A429D5F00EDF0FA /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				2233E02C1A429DE600EDF0FA /* RotationPhysics.swift */,
-				2233E02E1A42A0C600EDF0FA /* Gravity.swift */,
-				2233E0301A42A36300EDF0FA /* FlappingPhysics.swift */,
+				2233E02C1A429DE600EDF0FA /* Rotating.swift */,
+				2233E02E1A42A0C600EDF0FA /* Gravitating.swift */,
+				2233E0301A42A36300EDF0FA /* Flapping.swift */,
+				2233E0381A4342D900EDF0FA /* Texturing.swift */,
+				2233E03A1A4342EB00EDF0FA /* RepeatAnimating.swift */,
+				2233E03C1A445A3B00EDF0FA /* Physical.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -332,14 +341,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2233E0391A4342D900EDF0FA /* Texturing.swift in Sources */,
 				2233E0221A42989A00EDF0FA /* GameScene.swift in Sources */,
 				22160DDA1A255A190033DE51 /* AppDelegate.swift in Sources */,
 				228C0ADC1A26587300025DEC /* SampleComponent.swift in Sources */,
+				2233E03B1A4342EB00EDF0FA /* RepeatAnimating.swift in Sources */,
 				2201CDFE19AA68FE00F4BCED /* SpriteKitComposition.swift in Sources */,
 				2233E0261A429B4A00EDF0FA /* GameViewController.swift in Sources */,
-				2233E02D1A429DE600EDF0FA /* RotationPhysics.swift in Sources */,
-				2233E02F1A42A0C600EDF0FA /* Gravity.swift in Sources */,
-				2233E0311A42A36300EDF0FA /* FlappingPhysics.swift in Sources */,
+				2233E02D1A429DE600EDF0FA /* Rotating.swift in Sources */,
+				2233E02F1A42A0C600EDF0FA /* Gravitating.swift in Sources */,
+				2233E0311A42A36300EDF0FA /* Flapping.swift in Sources */,
+				2233E03D1A445A3B00EDF0FA /* Physical.swift in Sources */,
 				22EC4C071A22D6D800C07BA9 /* NotificationHub.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

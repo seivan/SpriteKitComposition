@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-class RotationPhysics: Component {
+class Rotating: Component {
 
   func didUpdate(time:NSTimeInterval) {
     if let node = self.node {

@@ -32,7 +32,7 @@ class GameScene: SKScene {
     canRestart = false
     
     // setup physics
-    self.addComponent(Gravity())
+    self.addComponent(Gravitating())
     
     
     // setup background color
@@ -96,30 +96,30 @@ class GameScene: SKScene {
     let spawnThenDelayForever = SKAction.repeatActionForever(spawnThenDelay)
     self.runAction(spawnThenDelayForever)
     
+    
+    
+    
+    
     // setup our bird
     let birdTexture1 = SKTexture(imageNamed: "bird-01")
     birdTexture1.filteringMode = .Nearest
     let birdTexture2 = SKTexture(imageNamed: "bird-02")
     birdTexture2.filteringMode = .Nearest
     
-    let anim = SKAction.animateWithTextures([birdTexture1, birdTexture2], timePerFrame: 0.2)
-    let flap = SKAction.repeatActionForever(anim)
     
-    bird = SKSpriteNode(texture: birdTexture1)
-    bird.addComponent(RotationPhysics())
-    bird.addComponent(FlappingPhysics(level: moving))
+
+    bird = SKSpriteNode()
+  
+    bird.addComponent(Texturing(texture: birdTexture1))
+    bird.addComponent(Rotating())
+    bird.addComponent(Flapping(level: moving))
+    bird.addComponent(RepeatAnimating(textures: [birdTexture1, birdTexture2], timePerFrame: 0.2))
+    
     bird.setScale(2.0)
     bird.position = CGPoint(x: self.frame.size.width * 0.35, y:self.frame.size.height * 0.6)
-    bird.runAction(flap)
     
-    
-    bird.physicsBody = SKPhysicsBody(circleOfRadius: bird.size.height / 2.0)
-    bird.physicsBody?.dynamic = true
-    bird.physicsBody?.allowsRotation = false
-    
-    bird.physicsBody?.categoryBitMask = birdCategory
-    bird.physicsBody?.collisionBitMask = worldCategory | pipeCategory
-    bird.physicsBody?.contactTestBitMask = worldCategory | pipeCategory
+    bird.addComponent(Physical(collisionsAs: birdCategory, collisionsWith: worldCategory | pipeCategory))
+
     
     self.addChild(bird)
     
