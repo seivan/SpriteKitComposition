@@ -20,8 +20,8 @@ class Flapping: Component {
   func didTouchScene(touches:[UITouch],state:ComponentState) {
     if self.level.speed > 0 && state == ComponentState.Started  {
 //      let location = touches.first!.locationInNode(self.node?.scene)
-      self.node?.physicsBody?.velocity = CGVectorMake(0, 0)
-      self.node?.physicsBody?.applyImpulse(CGVectorMake(0, 30))
+      self.node?.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
+      self.node?.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 30))
     }    
   }
 }

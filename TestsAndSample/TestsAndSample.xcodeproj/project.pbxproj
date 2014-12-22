@@ -31,6 +31,9 @@
 		228C0ADD1A2666A800025DEC /* SpriteKitComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2201CDFD19AA68FE00F4BCED /* SpriteKitComposition.swift */; };
 		228C0ADE1A2666B100025DEC /* NotificationHub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EC4C061A22D6D800C07BA9 /* NotificationHub.swift */; };
 		228C0ADF1A2667C700025DEC /* SampleComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C0AD61A2657E200025DEC /* SampleComponent.swift */; };
+		22BA39211A45F0FB00D7051C /* Skying.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BA39201A45F0FB00D7051C /* Skying.swift */; };
+		22BA39231A46749500D7051C /* GroundMoving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BA39221A46749500D7051C /* GroundMoving.swift */; };
+		22BA39251A4674FC00D7051C /* SkyMoving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BA39241A4674FC00D7051C /* SkyMoving.swift */; };
 		22EC4C071A22D6D800C07BA9 /* NotificationHub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EC4C061A22D6D800C07BA9 /* NotificationHub.swift */; };
 /* End PBXBuildFile section */
 
@@ -71,6 +74,9 @@
 		228C0AD41A2657C600025DEC /* ComponentCallbackTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComponentCallbackTests.swift; sourceTree = "<group>"; };
 		228C0AD61A2657E200025DEC /* SampleComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleComponent.swift; sourceTree = "<group>"; };
 		22AFC479195F9D02003572F3 /* Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		22BA39201A45F0FB00D7051C /* Skying.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Skying.swift; sourceTree = "<group>"; };
+		22BA39221A46749500D7051C /* GroundMoving.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroundMoving.swift; sourceTree = "<group>"; };
+		22BA39241A4674FC00D7051C /* SkyMoving.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkyMoving.swift; sourceTree = "<group>"; };
 		22EC4C061A22D6D800C07BA9 /* NotificationHub.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationHub.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -112,6 +118,7 @@
 		22160DD61A255A190033DE51 /* Sample */ = {
 			isa = PBXGroup;
 			children = (
+				2233E0211A42989A00EDF0FA /* GameScene.swift */,
 				2233E02B1A429D5F00EDF0FA /* Components */,
 				2233E0291A429CA200EDF0FA /* bird.atlas */,
 				2233E0271A429BDF00EDF0FA /* GameScene.sks */,
@@ -120,7 +127,6 @@
 				22160DD71A255A190033DE51 /* AppDelegate.swift */,
 				22160DD81A255A190033DE51 /* Images.xcassets */,
 				22160DD91A255A190033DE51 /* Info.plist */,
-				2233E0211A42989A00EDF0FA /* GameScene.swift */,
 			);
 			path = Sample;
 			sourceTree = "<group>";
@@ -134,6 +140,9 @@
 				2233E0381A4342D900EDF0FA /* Texturing.swift */,
 				2233E03A1A4342EB00EDF0FA /* RepeatAnimating.swift */,
 				2233E03C1A445A3B00EDF0FA /* Physical.swift */,
+				22BA39201A45F0FB00D7051C /* Skying.swift */,
+				22BA39221A46749500D7051C /* GroundMoving.swift */,
+				22BA39241A4674FC00D7051C /* SkyMoving.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -342,12 +351,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				2233E0391A4342D900EDF0FA /* Texturing.swift in Sources */,
+				22BA39211A45F0FB00D7051C /* Skying.swift in Sources */,
 				2233E0221A42989A00EDF0FA /* GameScene.swift in Sources */,
 				22160DDA1A255A190033DE51 /* AppDelegate.swift in Sources */,
+				22BA39231A46749500D7051C /* GroundMoving.swift in Sources */,
 				228C0ADC1A26587300025DEC /* SampleComponent.swift in Sources */,
 				2233E03B1A4342EB00EDF0FA /* RepeatAnimating.swift in Sources */,
 				2201CDFE19AA68FE00F4BCED /* SpriteKitComposition.swift in Sources */,
 				2233E0261A429B4A00EDF0FA /* GameViewController.swift in Sources */,
+				22BA39251A4674FC00D7051C /* SkyMoving.swift in Sources */,
 				2233E02D1A429DE600EDF0FA /* Rotating.swift in Sources */,
 				2233E02F1A42A0C600EDF0FA /* Gravitating.swift in Sources */,
 				2233E0311A42A36300EDF0FA /* Flapping.swift in Sources */,

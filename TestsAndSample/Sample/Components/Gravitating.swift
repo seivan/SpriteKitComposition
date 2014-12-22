@@ -11,7 +11,8 @@ import SpriteKit
 class Gravitating: Component {
 
   func didMoveToView(view:SKView) {
-    view.scene?.physicsWorld.gravity = CGVectorMake( 0.0, -5.0 )
+
+    view.scene?.physicsWorld.gravity = CGVector(dx: 0.0, dy: -5.0)
   }
   
 }

@@ -18,7 +18,7 @@ class RepeatAnimating: Component {
     self.animation  = SKAction.repeatActionForever(anim)
   }
   
-  func didAddToScene() {
+  func didAddNodeToScene() {
     self.node?.removeActionForKey(self.key.UUIDString)
     self.node?.runAction(self.animation, withKey: self.key.UUIDString)
   }
