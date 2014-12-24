@@ -26,8 +26,7 @@ class Physical : Component {
         sprite.physicsBody = SKPhysicsBody(rectangleOfSize:
           CGSizeMake(sprite.scene!.frame.size.width,
             sprite.size.height * 2.0))
-        
-        
+
       }
       sprite.physicsBody?.dynamic = dynamic
       sprite.physicsBody?.allowsRotation = false

@@ -28,8 +28,6 @@ class SkyMoving: Component {
       sprite.setScale(2.0)
       sprite.zPosition = -20
       
-//      sprite.position = CGPointMake(i * sprite.size.width,
-//                                    sprite.size.height / 2.0 + groundTexture.size().height * 2.0)
       sprite.position = CGPoint(x: i * sprite.size.width,
                                 y: sprite.size.height / 2.0 + self.groundTexture.size().height * 2.0)
       sprite.runAction(moveSkySpritesForever)

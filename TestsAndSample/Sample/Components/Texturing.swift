@@ -17,6 +17,10 @@ class Texturing: Component {
     let sprite = (self.node as SKSpriteNode?)
     sprite?.texture = self.texture
     sprite?.size = self.texture.size()
-
+  }
+  
+  func didRemoveFromNode() {
+    let sprite = (self.node as SKSpriteNode?)
+    sprite!.texture = nil
   }
 }

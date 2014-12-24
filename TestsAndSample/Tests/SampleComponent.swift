@@ -10,10 +10,10 @@ import UIKit
 import SpriteKit
 
 class SampleComponent: Component {
-  var assertionDidAddToNode = false
-  var assertionDidAddNodeToScene = false
-  var assertionDidRemoveFromNode = false
-  var assertionDidRemoveNodeFromScene = false
+  var assertionDidAddToNode:SKNode! = nil
+  var assertionDidAddNodeToScene:SKScene! = nil
+  var assertionDidRemoveFromNode:SKNode! = nil
+  var assertionDidRemoveNodeFromScene:SKScene! = nil
   var assertionDidChangeSceneSizedFrom:CGSize! = nil
   var assertionDidMoveToView:SKView! = nil
   var assertionWillMoveFromView:SKView! = nil
@@ -57,17 +57,17 @@ class SampleComponent: Component {
   
   
   
-  func didAddToNode() {
-    self.assertionDidAddToNode = true
+  func didAddToNode(node:SKNode) {
+    self.assertionDidAddToNode = node
   }
-  func didAddNodeToScene() {
-    self.assertionDidAddNodeToScene = true
+  func didAddNodeToScene(scene:SKScene) {
+    self.assertionDidAddNodeToScene = scene
   }
-  func didRemoveFromNode() {
-    self.assertionDidRemoveFromNode = true
+  func didRemoveFromNode(node:SKNode) {
+    self.assertionDidRemoveFromNode = node
   }
-  func didRemoveNodeFromScene() {
-    self.assertionDidRemoveNodeFromScene = true
+  func didRemoveNodeFromScene(scene:SKScene) {
+    self.assertionDidRemoveNodeFromScene = scene
   }
   func didChangeSceneSizedFrom(previousSize:CGSize) {
     self.assertionDidChangeSceneSizedFrom = previousSize

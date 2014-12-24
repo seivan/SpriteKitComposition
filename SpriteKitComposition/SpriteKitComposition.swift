@@ -8,7 +8,7 @@ private let ComponentStateCancelled = ComponentState(3)
 
 @objc public class ComponentState : DebugPrintable, Printable, Equatable {
   let value: Int
-  init(_ val: Int) { value = val }
+  private init(_ val: Int) { value = val }
   class var Started:ComponentState   {  return ComponentStateStarted }
   class var Changed:ComponentState   {  return ComponentStateChanged }
   class var Completed:ComponentState {  return ComponentStateCompleted }
@@ -30,11 +30,12 @@ public func ==(lhs:ComponentState, rhs:ComponentState) -> Bool { return lhs.valu
 
 
 @objc private protocol __Componentable {
-  optional func didAddToNode()
-  optional func didAddNodeToScene()
   
-  optional func didRemoveFromNode()
-  optional func didRemoveNodeFromScene()
+  optional func didAddToNode(node:SKNode)
+  optional func didAddNodeToScene(scene:SKScene)
+  
+  optional func didRemoveFromNode(node:SKNode)
+  optional func didRemoveNodeFromScene(scene:SKScene)
   
   optional func didChangeSceneSizedFrom(previousSize:CGSize)
   optional func didMoveToView(view: SKView)
@@ -203,24 +204,24 @@ private struct __Hubs {
   
   
   final private func _didAddToNode() {
-    (self as __Componentable).didAddToNode?()
+    (self as __Componentable).didAddToNode?(self.node!)
     if self.node?.scene != nil { self._didAddNodeToScene() }
     
   }
   final private func _didAddNodeToScene() {
-    (self as __Componentable).didAddNodeToScene?()
+    (self as __Componentable).didAddNodeToScene?(self.node!.scene!)
     if(self.isEnabled) { self._addObservers() }
     
   }
   
   final private func _didRemoveFromNode() {
-    (self as __Componentable).didRemoveFromNode?()
+    (self as __Componentable).didRemoveFromNode?(self.node!)
     self._removeObservers()
 
   }
   
   final private func _didRemoveNodeFromScene() {
-    (self as __Componentable).didRemoveNodeFromScene?()
+    (self as __Componentable).didRemoveNodeFromScene?(self.node!.scene!)
     self._removeObservers()
   }
   

@@ -92,13 +92,14 @@ class GameScene: SKScene {
     
     
     bird = SKSpriteNode()
+    bird.setScale(2.0)
+    bird.position = CGPoint(x: self.scene!.frame.size.width * 0.35, y:self.scene!.frame.size.height * 0.6)
+
     bird.addComponent(Texturing(texture: birdTexture1))
     bird.addComponent(Rotating())
     bird.addComponent(Flapping(level: moving))
     bird.addComponent(RepeatAnimating(textures: [birdTexture1, birdTexture2, birdTexture3, birdTexture4], timePerFrame: 0.2))
     
-    bird.setScale(2.0)
-    bird.position = CGPoint(x: self.frame.size.width * 0.35, y:self.frame.size.height * 0.6)
     
     bird.addComponent(
       Physical(collisionsAs: birdCategory,
@@ -121,9 +122,6 @@ class GameScene: SKScene {
         shape:.Rectangle)
     )
 
-//    ground.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(self.frame.size.width, groundTexture.size().height * 2.0))
-//    ground.physicsBody?.dynamic = false
-//    ground.physicsBody?.categoryBitMask = worldCategory
     self.addChild(ground)
     
     // Initialize label and create a label which holds the score
