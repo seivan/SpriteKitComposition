@@ -38,7 +38,7 @@ class Physical : Component {
     }
   }
 
-  func didAddNodeToScene() {
+  func didAddNodeToScene(scene:SKScene) {
     self.closure!()
 
   }

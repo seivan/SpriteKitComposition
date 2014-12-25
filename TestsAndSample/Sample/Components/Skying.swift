@@ -10,7 +10,7 @@ import SpriteKit
 
 class Skying : Component {
   
-  func didAddToNode() {
+  func didAddToNode(node:SKNode) {
     let skyColor = SKColor(red: 81.0/255.0, green: 192.0/255.0, blue: 201.0/255.0, alpha: 1.0)
     (self.node as SKScene).backgroundColor = skyColor
   }

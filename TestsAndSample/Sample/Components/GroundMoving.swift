@@ -13,7 +13,7 @@ import SpriteKit
       init(texture:SKTexture) {
         self.texture = texture
       }
-      func didAddToNode() {
+      func didAddToNode(node:SKNode) {
         let groundTexture = self.texture
         let moveGroundSprite = SKAction.moveByX(-groundTexture.size().width * 2.0, y: 0, duration: NSTimeInterval(0.02 * groundTexture.size().width * 2.0))
         let resetGroundSprite = SKAction.moveByX(groundTexture.size().width * 2.0, y: 0, duration: 0.0)

@@ -13,14 +13,10 @@ class Texturing: Component {
   init(texture:SKTexture) {
     self.texture = texture
   }
-  func didAddToNode() {
+  func didAddToNode(node:SKNode) {
     let sprite = (self.node as SKSpriteNode?)
     sprite?.texture = self.texture
     sprite?.size = self.texture.size()
   }
   
-  func didRemoveFromNode() {
-    let sprite = (self.node as SKSpriteNode?)
-    sprite!.texture = nil
-  }
 }

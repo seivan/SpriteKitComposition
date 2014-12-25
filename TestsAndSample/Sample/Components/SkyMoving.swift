@@ -15,7 +15,8 @@ class SkyMoving: Component {
     self.texture = texture
     self.groundTexture = aboveGroundTexture
   }
-  func didAddToNode() {
+  
+  func didAddToNode(node:SKNode) {
     let skyTexture = self.texture
     let moveSkySprite = SKAction.moveByX(-skyTexture.size().width * 2.0, y: 0, duration: NSTimeInterval(0.1 * skyTexture.size().width * 2.0))
     let resetSkySprite = SKAction.moveByX(skyTexture.size().width * 2.0, y: 0, duration: 0.0)
