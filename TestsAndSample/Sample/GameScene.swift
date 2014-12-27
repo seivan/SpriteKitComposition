@@ -15,7 +15,6 @@ class GameScene: SKScene {
   var skyColor:SKColor!
   var pipeTextureUp:SKTexture!
   var pipeTextureDown:SKTexture!
-  var movePipesAndRemove:SKAction!
   var moving:SKNode!
   var pipes:SKNode!
   var canRestart = Bool()
@@ -62,31 +61,13 @@ class GameScene: SKScene {
     self.pipeTextureDown = SKTexture(imageNamed: "PipeDown")
     self.pipeTextureDown.filteringMode = .Nearest
     
-    class ObstacleMoving : Component {
-      var closure:((SKScene)->())?
-      init(width:CGFloat) {
-        super.init()
-        self.closure = { scene in
-          let distanceToMove = CGFloat(scene.frame.size.width + 2.0 * width)
-          let moveObstacle = SKAction.moveByX(-distanceToMove, y:0.0, duration:NSTimeInterval(0.01 * distanceToMove))
-          let removeObstacle = SKAction.removeFromParent()
-          let moveObstacleAndRemove = SKAction.sequence([moveObstacle, removeObstacle])
-          self.node?.runAction(moveObstacleAndRemove)
-        }
-      }
-      
-      func didAddNodeToScene(scene:SKScene) {
-        self.closure!(scene)
-      }
-      
-    }
 
     
-    // create the pipes movement actions
-    let distanceToMove = CGFloat(self.scene!.frame.size.width + 2.0 * pipeTextureUp.size().width)
-    let movePipes = SKAction.moveByX(-distanceToMove, y:0.0, duration:NSTimeInterval(0.01 * distanceToMove))
-    let removePipes = SKAction.removeFromParent()
-    self.movePipesAndRemove = SKAction.sequence([movePipes, removePipes])
+//    // create the pipes movement actions
+//    let distanceToMove = CGFloat(self.scene!.frame.size.width + 2.0 * pipeTextureUp.size().width)
+//    let movePipes = SKAction.moveByX(-distanceToMove, y:0.0, duration:NSTimeInterval(0.01 * distanceToMove))
+//    let removePipes = SKAction.removeFromParent()
+//    self.movePipesAndRemove = SKAction.sequence([movePipes, removePipes])
     
 
 //    class ObstacleSpawning : Component {
@@ -115,12 +96,12 @@ class GameScene: SKScene {
       let pipeDown = SKSpriteNode(texture: self.pipeTextureDown)
       pipeDown.setScale(2.0)
       pipeDown.position = CGPointMake(0.0, CGFloat(Double(y)) + pipeDown.size.height + CGFloat(self.verticalPipeGap))
+      pipeDown.addComponent(Physical(collisionsAs: self.pipeCategory, collisionsWith: self.birdCategory, dynamic: false, shape: .Rectangle(size:pipeDown.size)))
       
-      
-      pipeDown.physicsBody = SKPhysicsBody(rectangleOfSize: pipeDown.size)
-      pipeDown.physicsBody?.dynamic = false
-      pipeDown.physicsBody?.categoryBitMask = self.pipeCategory
-      pipeDown.physicsBody?.contactTestBitMask = self.birdCategory
+//      pipeDown.physicsBody = SKPhysicsBody(rectangleOfSize: pipeDown.size)
+//      pipeDown.physicsBody?.dynamic = false
+//      pipeDown.physicsBody?.categoryBitMask = self.pipeCategory
+//      pipeDown.physicsBody?.contactTestBitMask = self.birdCategory
       pipePair.addChild(pipeDown)
       
       let pipeUp = SKSpriteNode(texture: self.pipeTextureUp)
@@ -141,7 +122,7 @@ class GameScene: SKScene {
       contactNode.physicsBody?.contactTestBitMask = self.birdCategory
       pipePair.addChild(contactNode)
       
-      pipePair.runAction(self.movePipesAndRemove)
+      pipePair.addComponent(ObstacleMoving(width: self.pipeTextureUp.size().width))
       self.pipes.addChild(pipePair)
 
     }
@@ -180,7 +161,7 @@ class GameScene: SKScene {
       Physical(collisionsAs: birdCategory,
                collisionsWith: worldCategory | pipeCategory,
                dynamic:true,
-               shape:.Circle)
+               shape:.Circle(50))
     )
     
     
@@ -194,7 +175,8 @@ class GameScene: SKScene {
       Physical(collisionsAs: worldCategory,
         collisionsWith: birdCategory,
         dynamic:false,
-        shape:.Rectangle)
+        shape:.Rectangle(CGSizeMake(self.scene!.frame.size.width,
+          ground.size.height * 2.0)))
     )
 
     self.addChild(ground)

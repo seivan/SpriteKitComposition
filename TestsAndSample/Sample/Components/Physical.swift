@@ -7,39 +7,35 @@
 //
 
 import SpriteKit
+
 enum PhysicalBodyShape {
-  case Circle
-  case Rectangle
+  case Circle(radius:Double)
+  case Rectangle(size:CGSize)
 }
 
 class Physical : Component {
   var closure:(()->())?
+
   init(collisionsAs:UInt32, collisionsWith:UInt32, dynamic:Bool, shape:PhysicalBodyShape) {
     super.init()
     self.closure = {
       let sprite = self.node! as SKSpriteNode
       switch shape {
-      case .Circle:
-        let radius = sprite.size.height / 2
-        sprite.physicsBody = SKPhysicsBody(circleOfRadius: radius)
-      case .Rectangle:
-        sprite.physicsBody = SKPhysicsBody(rectangleOfSize:
-          CGSizeMake(sprite.scene!.frame.size.width,
-            sprite.size.height * 2.0))
-
+      case .Circle(let radius):
+        sprite.physicsBody = SKPhysicsBody(circleOfRadius: CGFloat(radius))
+      case .Rectangle(let size):
+        sprite.physicsBody = SKPhysicsBody(rectangleOfSize:size)
       }
-      sprite.physicsBody?.dynamic = dynamic
-      sprite.physicsBody?.allowsRotation = false
-      
-      sprite.physicsBody?.categoryBitMask = collisionsAs
-      sprite.physicsBody?.collisionBitMask = collisionsWith
-      sprite.physicsBody?.contactTestBitMask = collisionsWith
+      if let body = sprite.physicsBody {
+        body.dynamic            = dynamic
+        body.allowsRotation     = false
+        body.categoryBitMask    = collisionsAs
+        body.collisionBitMask   = collisionsWith
+        body.contactTestBitMask = collisionsWith
+      }
 
     }
   }
 
-  func didAddNodeToScene(scene:SKScene) {
-    self.closure!()
-
-  }
+  func didAddNodeToScene(scene:SKScene) { self.closure!() }
 }
