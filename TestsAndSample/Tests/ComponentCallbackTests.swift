@@ -20,43 +20,43 @@ class ComponentCallbackTests: SpriteKitTestCase {
   
   func testDidAddToNodeWithScene() {
     self.node.addComponent(self.component)
-    XCTAssertTrue(self.component.assertionDidAddToNode)
-    XCTAssertTrue(self.component.assertionDidAddNodeToScene)
+    XCTAssertEqual(self.node, self.component.assertionDidAddToNode)
+    XCTAssertEqual(self.scene, self.component.assertionDidAddNodeToScene)
   }
   
   func testDidAddToNodeWithoutScene() {
     self.node.removeFromParent()
     self.node.addComponent(self.component)
-    XCTAssertTrue(self.component.assertionDidAddToNode)
-    XCTAssertFalse(self.component.assertionDidAddNodeToScene)
+    XCTAssertEqual(self.node, self.component.assertionDidAddToNode)
+    XCTAssertNil(self.component.assertionDidAddNodeToScene)
     self.scene.addChild(self.node)
-    XCTAssertTrue(self.component.assertionDidAddNodeToScene)
+    XCTAssertEqual(self.scene, self.component.assertionDidAddNodeToScene)
   }
 
   func testDidAddNodeToSceneBefore() {
     self.node.addComponent(self.component)
-    XCTAssertTrue(self.component.assertionDidAddNodeToScene)
+    XCTAssertEqual(self.scene, self.component.assertionDidAddNodeToScene)
   }
   
   func testDidAddNodeToSceneAfter() {
     self.node.removeFromParent()
     self.node.addComponent(self.component)
-    XCTAssertFalse(self.component.assertionDidAddNodeToScene)
+    XCTAssertNil(self.component.assertionDidAddNodeToScene)
     self.scene.addChild(self.node)
-    XCTAssertTrue(self.component.assertionDidAddNodeToScene)
+    XCTAssertEqual(self.scene, self.component.assertionDidAddNodeToScene)
   }
 
   func testDidRemoveFromNode() {
     self.node.addComponent(self.component)
     let didRemove = self.component.removeFromNode()
     XCTAssertTrue(didRemove)
-    XCTAssertTrue(self.component.assertionDidRemoveFromNode)
+    XCTAssertNotNil(self.component.assertionDidRemoveFromNode)
   }
   
   func testDidRemoveNodeFromScene() {
     self.node.addComponent(self.component)
     self.node.removeFromParent()
-    XCTAssertTrue(self.component.assertionDidRemoveNodeFromScene)
+    XCTAssertEqual(self.scene, self.component.assertionDidRemoveNodeFromScene)
   }
   
   func testDidChangeSceneSizedFromWithScene() {

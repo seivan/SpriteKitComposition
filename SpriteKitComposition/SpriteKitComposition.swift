@@ -8,11 +8,12 @@ private let ComponentStateCancelled = ComponentState(3)
 
 @objc public class ComponentState : DebugPrintable, Printable, Equatable {
   let value: Int
-  init(_ val: Int) { value = val }
+  private init(_ val: Int) { value = val }
   class var Started:ComponentState   {  return ComponentStateStarted }
   class var Changed:ComponentState   {  return ComponentStateChanged }
   class var Completed:ComponentState {  return ComponentStateCompleted }
   class var Cancelled:ComponentState {  return ComponentStateCancelled }
+  
   public var description:String {
     switch self.value {
     case 0:  return "ComponentStateStarted"
@@ -28,12 +29,13 @@ public func ==(lhs:ComponentState, rhs:ComponentState) -> Bool { return lhs.valu
 
 
 
-@objc private protocol ComponentBehaviour {
-  optional func didAddToNode()
-  optional func didAddNodeToScene()
+@objc private protocol __ComponentInterfacing {
   
-  optional func didRemoveFromNode()
-  optional func didRemoveNodeFromScene()
+  optional func didAddToNode(node:SKNode)
+  optional func didAddNodeToScene(scene:SKScene)
+  
+  optional func didRemoveFromNode(node:SKNode)
+  optional func didRemoveNodeFromScene(scene:SKScene)
   
   optional func didChangeSceneSizedFrom(previousSize:CGSize)
   optional func didMoveToView(view: SKView)
@@ -65,7 +67,7 @@ private struct __Hubs {
   static let touch        = NotificationHub<([UITouch], state:ComponentState)>()
 }
 
-@objc public class Component : ComponentBehaviour  {
+@objc public class Component : __ComponentInterfacing  {
   private struct ObserverCollection {
     var updated:Notification<CFTimeInterval>?
     var size:Notification<CGSize>?
@@ -110,7 +112,7 @@ private struct __Hubs {
   }
   
   final private func _addObservers() {
-    let b = (self as ComponentBehaviour)
+    let b = (self as __ComponentInterfacing)
     let scene = self.node!.scene!
     let node = self.node!
     
@@ -202,24 +204,24 @@ private struct __Hubs {
   
   
   final private func _didAddToNode() {
-    (self as ComponentBehaviour).didAddToNode?()
+    (self as __ComponentInterfacing).didAddToNode?(self.node!)
     if self.node?.scene != nil { self._didAddNodeToScene() }
     
   }
   final private func _didAddNodeToScene() {
-    (self as ComponentBehaviour).didAddNodeToScene?()
+    (self as __ComponentInterfacing).didAddNodeToScene?(self.node!.scene!)
     if(self.isEnabled) { self._addObservers() }
     
   }
   
   final private func _didRemoveFromNode() {
-    (self as ComponentBehaviour).didRemoveFromNode?()
+    (self as __ComponentInterfacing).didRemoveFromNode?(self.node!)
     self._removeObservers()
 
   }
   
   final private func _didRemoveNodeFromScene() {
-    (self as ComponentBehaviour).didRemoveNodeFromScene?()
+    (self as __ComponentInterfacing).didRemoveNodeFromScene?(self.node!.scene!)
     self._removeObservers()
   }
   
