@@ -96,30 +96,42 @@ class GameScene: SKScene {
       let pipeDown = SKSpriteNode(texture: self.pipeTextureDown)
       pipeDown.setScale(2.0)
       pipeDown.position = CGPointMake(0.0, CGFloat(Double(y)) + pipeDown.size.height + CGFloat(self.verticalPipeGap))
-      pipeDown.addComponent(Physical(collisionsAs: self.pipeCategory, collisionsWith: self.birdCategory, dynamic: false, shape: .Rectangle(size:pipeDown.size)))
       
-//      pipeDown.physicsBody = SKPhysicsBody(rectangleOfSize: pipeDown.size)
-//      pipeDown.physicsBody?.dynamic = false
-//      pipeDown.physicsBody?.categoryBitMask = self.pipeCategory
-//      pipeDown.physicsBody?.contactTestBitMask = self.birdCategory
+      pipeDown.addComponent(
+        Physical(collisionsAs: self.pipeCategory,
+                 collisionsWith: self.birdCategory,
+                 dynamic: false,
+                 shape: .Rectangle(pipeDown.size)
+        )
+      )
+      
       pipePair.addChild(pipeDown)
       
       let pipeUp = SKSpriteNode(texture: self.pipeTextureUp)
       pipeUp.setScale(2.0)
       pipeUp.position = CGPointMake(0.0, CGFloat(Double(y)))
       
-      pipeUp.physicsBody = SKPhysicsBody(rectangleOfSize: pipeUp.size)
-      pipeUp.physicsBody?.dynamic = false
-      pipeUp.physicsBody?.categoryBitMask = self.pipeCategory
-      pipeUp.physicsBody?.contactTestBitMask = self.birdCategory
+      pipeUp.addComponent(
+        Physical(collisionsAs: self.pipeCategory,
+          collisionsWith: self.birdCategory,
+          dynamic: false,
+          shape: .Rectangle(pipeUp.size)
+        )
+      )
       pipePair.addChild(pipeUp)
       
       var contactNode = SKNode()
       contactNode.position = CGPointMake( pipeDown.size.width + self.bird.size.width / 2, CGRectGetMidY( self.frame ) )
-      contactNode.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake( pipeUp.size.width, self.frame.size.height ))
-      contactNode.physicsBody?.dynamic = false
-      contactNode.physicsBody?.categoryBitMask = self.scoreCategory
-      contactNode.physicsBody?.contactTestBitMask = self.birdCategory
+      
+      contactNode.addComponent(
+        Physical(collisionsAs: self.scoreCategory,
+          contactWith: self.birdCategory,
+          dynamic: false,
+          shape: .Rectangle(CGSizeMake( pipeUp.size.width, self.frame.size.height ))
+        )
+      )
+      
+      
       pipePair.addChild(contactNode)
       
       pipePair.addComponent(ObstacleMoving(width: self.pipeTextureUp.size().width))
@@ -160,6 +172,7 @@ class GameScene: SKScene {
     self.bird.addComponent(
       Physical(collisionsAs: birdCategory,
                collisionsWith: worldCategory | pipeCategory,
+               contactWith: worldCategory | pipeCategory,
                dynamic:true,
                shape:.Circle(50))
     )
@@ -212,6 +225,7 @@ class GameScene: SKScene {
     
     // Restart animation
     moving.speed = 1
+    self.bird.addComponent(Flapping())
   }
   
   override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
@@ -234,8 +248,11 @@ class GameScene: SKScene {
         
         // Add a little visual feedback for the score increment
         scoreLabelNode.runAction(SKAction.sequence([SKAction.scaleTo(1.5, duration:NSTimeInterval(0.1)), SKAction.scaleTo(1.0, duration:NSTimeInterval(0.1))]))
-      } else {
+      }
+      else {
         
+        
+        self.bird.removeComponentWithClass(Flapping.self)
         moving.speed = 0
         
         bird.physicsBody?.collisionBitMask = worldCategory
