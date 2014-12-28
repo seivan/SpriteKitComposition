@@ -61,13 +61,6 @@ class GameScene: SKScene {
     self.pipeTextureDown = SKTexture(imageNamed: "PipeDown")
     self.pipeTextureDown.filteringMode = .Nearest
     
-
-    
-//    // create the pipes movement actions
-//    let distanceToMove = CGFloat(self.scene!.frame.size.width + 2.0 * pipeTextureUp.size().width)
-//    let movePipes = SKAction.moveByX(-distanceToMove, y:0.0, duration:NSTimeInterval(0.01 * distanceToMove))
-//    let removePipes = SKAction.removeFromParent()
-//    self.movePipesAndRemove = SKAction.sequence([movePipes, removePipes])
     
 
 //    class ObstacleSpawning : Component {
@@ -87,7 +80,7 @@ class GameScene: SKScene {
     // spawn the pipes
     let spawn = SKAction.runBlock {
       let pipePair = SKNode()
-      pipePair.position = CGPointMake( self.frame.size.width + self.pipeTextureUp.size().width * 2, 0 )
+      pipePair.position = CGPoint( x: self.frame.size.width + self.pipeTextureUp.size().width * 2, y:0)
       pipePair.zPosition = -10
       
       let height = UInt32( UInt(self.frame.size.height / 4) )
@@ -95,7 +88,7 @@ class GameScene: SKScene {
       
       let pipeDown = SKSpriteNode(texture: self.pipeTextureDown)
       pipeDown.setScale(2.0)
-      pipeDown.position = CGPointMake(0.0, CGFloat(Double(y)) + pipeDown.size.height + CGFloat(self.verticalPipeGap))
+      pipeDown.position = CGPoint(x:0.0, y:CGFloat(Double(y)) + pipeDown.size.height + CGFloat(self.verticalPipeGap))
       
       pipeDown.addComponent(
         Physical(collisionsAs: self.pipeCategory,
@@ -121,7 +114,7 @@ class GameScene: SKScene {
       pipePair.addChild(pipeUp)
       
       var contactNode = SKNode()
-      contactNode.position = CGPointMake( pipeDown.size.width + self.bird.size.width / 2, CGRectGetMidY( self.frame ) )
+      contactNode.position = CGPoint(x:pipeDown.size.width + self.bird.size.width / 2, y:CGRectGetMidY( self.frame ) )
       
       contactNode.addComponent(
         Physical(collisionsAs: self.scoreCategory,
@@ -182,7 +175,7 @@ class GameScene: SKScene {
     
     // create the ground
     var ground = SKSpriteNode()
-    ground.position = CGPointMake(0, groundTexture.size().height)
+    ground.position = CGPoint(x:0, y:groundTexture.size().height)
     ground.size = groundTexture.size()
     ground.addComponent(
       Physical(collisionsAs: worldCategory,
