@@ -29,7 +29,7 @@ public func ==(lhs:ComponentState, rhs:ComponentState) -> Bool { return lhs.valu
 
 
 
-@objc private protocol __Componentable {
+@objc private protocol __ComponentInterfacing {
   
   optional func didAddToNode(node:SKNode)
   optional func didAddNodeToScene(scene:SKScene)
@@ -67,7 +67,7 @@ private struct __Hubs {
   static let touch        = NotificationHub<([UITouch], state:ComponentState)>()
 }
 
-@objc public class Component : __Componentable  {
+@objc public class Component : __ComponentInterfacing  {
   private struct ObserverCollection {
     var updated:Notification<CFTimeInterval>?
     var size:Notification<CGSize>?
@@ -112,7 +112,7 @@ private struct __Hubs {
   }
   
   final private func _addObservers() {
-    let b = (self as __Componentable)
+    let b = (self as __ComponentInterfacing)
     let scene = self.node!.scene!
     let node = self.node!
     
@@ -204,24 +204,24 @@ private struct __Hubs {
   
   
   final private func _didAddToNode() {
-    (self as __Componentable).didAddToNode?(self.node!)
+    (self as __ComponentInterfacing).didAddToNode?(self.node!)
     if self.node?.scene != nil { self._didAddNodeToScene() }
     
   }
   final private func _didAddNodeToScene() {
-    (self as __Componentable).didAddNodeToScene?(self.node!.scene!)
+    (self as __ComponentInterfacing).didAddNodeToScene?(self.node!.scene!)
     if(self.isEnabled) { self._addObservers() }
     
   }
   
   final private func _didRemoveFromNode() {
-    (self as __Componentable).didRemoveFromNode?(self.node!)
+    (self as __ComponentInterfacing).didRemoveFromNode?(self.node!)
     self._removeObservers()
 
   }
   
   final private func _didRemoveNodeFromScene() {
-    (self as __Componentable).didRemoveNodeFromScene?(self.node!.scene!)
+    (self as __ComponentInterfacing).didRemoveNodeFromScene?(self.node!.scene!)
     self._removeObservers()
   }
   
