@@ -136,21 +136,21 @@ class NodeTests: SpriteKitTestCase {
     self.node.addChild(node)
     
     
-    XCTAssertFalse(mainComponent.assertionDidAddNodeToScene)
-    XCTAssertFalse(nestedComponent.assertionDidAddNodeToScene)
+    XCTAssertNil(mainComponent.assertionDidAddNodeToScene)
+    XCTAssertNil(nestedComponent.assertionDidAddNodeToScene)
     
     self.scene.addChild(self.node)
-    XCTAssertTrue(mainComponent.assertionDidAddNodeToScene)
-    XCTAssertTrue(nestedComponent.assertionDidAddNodeToScene)
-    mainComponent.assertionDidAddNodeToScene = false
-    nestedComponent.assertionDidAddNodeToScene = false
+    XCTAssertEqual(self.scene,mainComponent.assertionDidAddNodeToScene)
+    XCTAssertEqual(self.scene,nestedComponent.assertionDidAddNodeToScene)
+    mainComponent.assertionDidAddNodeToScene = nil
+    nestedComponent.assertionDidAddNodeToScene = nil
     
     let oldScene = self.scene
     self.scene = SKScene()
     self.scene.addChild(self.node)
     
-    XCTAssertTrue(mainComponent.assertionDidAddNodeToScene)
-    XCTAssertTrue(nestedComponent.assertionDidAddNodeToScene)
+    XCTAssertEqual(self.scene,mainComponent.assertionDidAddNodeToScene)
+    XCTAssertEqual(self.scene,nestedComponent.assertionDidAddNodeToScene)
     XCTAssertNotEqual(self.node.scene!, oldScene)
     XCTAssertNotEqual(node.scene!, oldScene)
 
@@ -165,21 +165,21 @@ class NodeTests: SpriteKitTestCase {
     self.node.insertChild(node, atIndex:0)
     
     
-    XCTAssertFalse(mainComponent.assertionDidAddNodeToScene)
-    XCTAssertFalse(nestedComponent.assertionDidAddNodeToScene)
+    XCTAssertNil(mainComponent.assertionDidAddNodeToScene)
+    XCTAssertNil(nestedComponent.assertionDidAddNodeToScene)
     
     self.scene.insertChild(self.node, atIndex:0)
-    XCTAssertTrue(mainComponent.assertionDidAddNodeToScene)
-    XCTAssertTrue(nestedComponent.assertionDidAddNodeToScene)
-    mainComponent.assertionDidAddNodeToScene = false
-    nestedComponent.assertionDidAddNodeToScene = false
+    XCTAssertEqual(self.scene,mainComponent.assertionDidAddNodeToScene)
+    XCTAssertEqual(self.scene,nestedComponent.assertionDidAddNodeToScene)
+    mainComponent.assertionDidAddNodeToScene = nil
+    nestedComponent.assertionDidAddNodeToScene = nil
     
     let oldScene = self.scene
     self.scene = SKScene()
     self.scene.addChild(self.node)
     
-    XCTAssertTrue(mainComponent.assertionDidAddNodeToScene)
-    XCTAssertTrue(nestedComponent.assertionDidAddNodeToScene)
+    XCTAssertEqual(self.scene,mainComponent.assertionDidAddNodeToScene)
+    XCTAssertEqual(self.scene,nestedComponent.assertionDidAddNodeToScene)
     XCTAssertNotEqual(self.node.scene!, oldScene)
     XCTAssertNotEqual(node.scene!, oldScene)
 
@@ -196,8 +196,8 @@ class NodeTests: SpriteKitTestCase {
     
     
     self.node.removeFromParent()
-    XCTAssertTrue(mainComponent.assertionDidRemoveNodeFromScene)
-    XCTAssertTrue(nestedComponent.assertionDidRemoveNodeFromScene)
+    XCTAssertEqual(self.scene,mainComponent.assertionDidRemoveNodeFromScene)
+    XCTAssertEqual(self.scene,nestedComponent.assertionDidRemoveNodeFromScene)
     XCTAssertNil(self.node.scene)
     XCTAssertNil(node.scene)
 
@@ -214,8 +214,8 @@ class NodeTests: SpriteKitTestCase {
     
     
     self.scene.removeAllChildren()
-    XCTAssertTrue(mainComponent.assertionDidRemoveNodeFromScene)
-    XCTAssertTrue(nestedComponent.assertionDidRemoveNodeFromScene)
+    XCTAssertEqual(self.scene,mainComponent.assertionDidRemoveNodeFromScene)
+    XCTAssertEqual(self.scene,nestedComponent.assertionDidRemoveNodeFromScene)
     XCTAssertNil(self.node.scene)
     XCTAssertNil(node.scene)
     
@@ -232,8 +232,8 @@ class NodeTests: SpriteKitTestCase {
     
     
     self.scene.removeChildrenInArray([self.node])
-    XCTAssertTrue(mainComponent.assertionDidRemoveNodeFromScene)
-    XCTAssertTrue(nestedComponent.assertionDidRemoveNodeFromScene)
+    XCTAssertEqual(self.scene,mainComponent.assertionDidRemoveNodeFromScene)
+    XCTAssertEqual(self.scene,nestedComponent.assertionDidRemoveNodeFromScene)
     XCTAssertNil(self.node.scene)
     XCTAssertNil(node.scene)
     
