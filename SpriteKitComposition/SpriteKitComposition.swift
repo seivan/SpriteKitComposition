@@ -105,9 +105,9 @@ private struct __Hubs {
   
   init(){}
   
-  final func removeFromNode() -> Bool {
+  final func removeFromNode() -> Component? {
     if let n = self.node { return n.removeComponent(self) }
-    else { return false }
+    else { return nil }
     
   }
   
@@ -253,35 +253,35 @@ extension SKNode {
     return self.componentContainer.components[key]
   }
   
-  final func addComponent<T:Component>(component:T, withKey key:String) -> Bool {
+  final func addComponent<T:Component>(component:T, withKey key:String) -> T? {
     if self.componentContainer.components[key] == nil {
       self.componentContainer.components[key] = component
       component.node = self
-      return true
+      return component
     }
-    else { return false }
+    else { return nil }
     
   }
   
-  final func addComponent<T:Component>(component:T) -> Bool {
+  final func addComponent<T:Component>(component:T) -> T? {
     let key = NSStringFromClass(component.dynamicType)
     return self.addComponent(component, withKey: key)
   }
   
-  final func removeComponentWithClass(theClass:AnyClass) -> Bool {
+  final func removeComponentWithClass(theClass:AnyClass) -> Component? {
     let key = NSStringFromClass(theClass)
     return self.removeComponentWithKey(key)
   }
   
-  final func removeComponentWithKey(key:String) -> Bool {
+  final func removeComponentWithKey(key:String) -> Component? {
     if let componentToRemove = self.componentContainer.components.removeValueForKey(key) {
       componentToRemove.node = nil
-      return true
+      return componentToRemove
     }
-    else { return false }
+    else { return nil }
   }
   
-  final func removeComponent<T:Component>(component:T) -> Bool {
+  final func removeComponent<T:Component>(component:T) -> Component? {
     var foundKey:String?
     for (key, value) in self.componentContainer.components {
       if value === component {
@@ -290,7 +290,7 @@ extension SKNode {
       }
     }
     if let key = foundKey { return self.removeComponentWithKey(key) }
-    else { return false }
+    else { return nil }
   }
   
 }

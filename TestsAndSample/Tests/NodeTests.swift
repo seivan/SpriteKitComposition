@@ -75,17 +75,19 @@ class NodeTests: SpriteKitTestCase {
   
   func testAddComponentWithKey() {
     let component = Component()
-    XCTAssertTrue(self.node.addComponent(component, withKey:"added"))
-    XCTAssertFalse(self.node.addComponent(Component(), withKey:"added"))
+    var addedComponent = self.node.addComponent(component, withKey:"added")!
+    XCTAssertEqual(addedComponent, component)
+    XCTAssertNil(self.node.addComponent(Component(), withKey:"added"))
     XCTAssertEqual(self.node.components, [component])
     XCTAssertEqual(self.node, component.node!)
   }
   
   func testAddComponent() {
     let component = Component()
-    XCTAssertTrue(self.node.addComponent(component))
-    XCTAssertFalse(self.node.addComponent(component))
-    XCTAssertFalse(self.node.addComponent(Component()))
+    let addedComponent = self.node.addComponent(component)!
+    XCTAssertEqual(addedComponent, component)
+    XCTAssertNil(self.node.addComponent(component))
+    XCTAssertNil(self.node.addComponent(Component()))
     XCTAssertEqual(self.node.components, [component])
     XCTAssertEqual(self.node, component.node!)    
   }
@@ -94,14 +96,18 @@ class NodeTests: SpriteKitTestCase {
     let component = Component()
     self.node.addComponent(component)
     XCTAssertFalse(self.node.components.isEmpty)
-    XCTAssertTrue(self.node.removeComponentWithClass(component.dynamicType))
-    XCTAssertFalse(self.node.removeComponentWithClass(component.dynamicType))
+    let removedComponent = self.node.removeComponentWithClass(component.dynamicType)!
+    XCTAssertEqual(removedComponent, component)
+    XCTAssertNil(self.node.removeComponentWithClass(component.dynamicType))
     XCTAssertTrue(self.node.components.isEmpty)
 
     self.node.addComponent(component)
     XCTAssertFalse(self.node.components.isEmpty)
-    XCTAssertTrue(self.node.removeComponentWithClass(Component.self))
-    XCTAssertFalse(self.node.removeComponentWithClass(Component.self))
+    let anotherRemovedComponent = self.node.removeComponentWithClass(Component.self)!
+    
+
+    XCTAssertEqual(anotherRemovedComponent,component)
+    XCTAssertNil(self.node.removeComponentWithClass(Component.self))
     XCTAssertTrue(self.node.components.isEmpty)
 
     
@@ -111,8 +117,9 @@ class NodeTests: SpriteKitTestCase {
     let component = Component()
     self.node.addComponent(component, withKey: "removed")
     XCTAssertFalse(self.node.components.isEmpty)
-    XCTAssertTrue(self.node.removeComponentWithKey("removed"))
-    XCTAssertFalse(self.node.removeComponentWithKey("removed"))
+    let removedComponent = self.node.removeComponentWithKey("removed")!
+    XCTAssertEqual(removedComponent, component)
+    XCTAssertNil(self.node.removeComponentWithKey("removed"))
     XCTAssertTrue(self.node.components.isEmpty)
     
   }
@@ -121,8 +128,10 @@ class NodeTests: SpriteKitTestCase {
     let component = Component()
     self.node.addComponent(component)
     XCTAssertFalse(self.node.components.isEmpty)
-    XCTAssertTrue(self.node.removeComponent(component))
-    XCTAssertFalse(self.node.removeComponent(component))
+    let removedComponent = self.node.removeComponent(component)!
+
+    XCTAssertEqual(removedComponent, component)
+    XCTAssertNil(self.node.removeComponent(component))
     XCTAssertTrue(self.node.components.isEmpty)
     
   }

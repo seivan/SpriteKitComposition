@@ -49,7 +49,7 @@ class ComponentCallbackTests: SpriteKitTestCase {
   func testDidRemoveFromNode() {
     self.node.addComponent(self.component)
     let didRemove = self.component.removeFromNode()
-    XCTAssertTrue(didRemove)
+    XCTAssertEqual(self.component, didRemove!)
     XCTAssertNotNil(self.component.assertionDidRemoveFromNode)
   }
   

@@ -15,6 +15,8 @@ enum ColliderType : UInt32 {
   case Score
 }
 
+
+
 class GameScene: SKScene {
   
   var bird:SKSpriteNode!
