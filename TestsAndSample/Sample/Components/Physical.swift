@@ -14,7 +14,7 @@ enum PhysicalBodyShape {
 
 class Physical : Component {
   var closure:(()->())?
-  init(collisionsAs:UInt32, collisionsWith:UInt32? = nil, contactWith:UInt32? = nil, dynamic:Bool, shape:PhysicalBodyShape) {
+  init(dynamic:Bool, shape:PhysicalBodyShape) {
     super.init()
     self.closure = {
       let sprite = self.node!
@@ -28,10 +28,6 @@ class Physical : Component {
 
       sprite.physicsBody?.dynamic             = dynamic
       sprite.physicsBody?.allowsRotation      = false
-      sprite.physicsBody?.categoryBitMask     = collisionsAs
-
-      if let collisionsWith = collisionsWith { sprite.physicsBody?.collisionBitMask    = collisionsWith }
-      if let contactWith    = contactWith    { sprite.physicsBody?.contactTestBitMask  = contactWith    }
 
 
 
@@ -40,6 +36,13 @@ class Physical : Component {
 
   func didAddNodeToScene(scene:SKScene) {
     self.closure!()
+    if let colliding = self.node!.componentWithClass(Colliding) as Colliding? {
+      let node = self.node!
+      node.physicsBody?.categoryBitMask     = colliding.collisionsAs
+      if let collisionsWith = colliding.collisionsWith { node.physicsBody?.collisionBitMask    = collisionsWith }
+      if let contactWith    = colliding.contactWith    { node.physicsBody?.contactTestBitMask  = contactWith    }
+    }
+
 
   }
 }

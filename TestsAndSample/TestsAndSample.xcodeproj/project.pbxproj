@@ -23,6 +23,7 @@
 		2233E03D1A445A3B00EDF0FA /* Physical.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2233E03C1A445A3B00EDF0FA /* Physical.swift */; };
 		223D21621A4C0D100038AEB9 /* ObstacleMoving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223D21611A4C0D100038AEB9 /* ObstacleMoving.swift */; };
 		223D21641A4FAC470038AEB9 /* ObstacleSpawning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223D21631A4FAC470038AEB9 /* ObstacleSpawning.swift */; };
+		223D21661A5983360038AEB9 /* Colliding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223D21651A5983360038AEB9 /* Colliding.swift */; };
 		228C0ACA1A26538F00025DEC /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 228C0AC51A26538F00025DEC /* Info.plist */; };
 		228C0ACC1A26538F00025DEC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C0AC81A26538F00025DEC /* AppDelegate.swift */; };
 		228C0ACE1A26539500025DEC /* SpriteKitTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C0AC61A26538F00025DEC /* SpriteKitTestCase.swift */; };
@@ -67,6 +68,7 @@
 		2233E03C1A445A3B00EDF0FA /* Physical.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Physical.swift; sourceTree = "<group>"; };
 		223D21611A4C0D100038AEB9 /* ObstacleMoving.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObstacleMoving.swift; sourceTree = "<group>"; };
 		223D21631A4FAC470038AEB9 /* ObstacleSpawning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObstacleSpawning.swift; sourceTree = "<group>"; };
+		223D21651A5983360038AEB9 /* Colliding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colliding.swift; sourceTree = "<group>"; };
 		228C0A9E1A26534300025DEC /* TestHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		228C0AB61A26534300025DEC /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		228C0AC51A26538F00025DEC /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 				22BA39241A4674FC00D7051C /* SkyMoving.swift */,
 				223D21611A4C0D100038AEB9 /* ObstacleMoving.swift */,
 				223D21631A4FAC470038AEB9 /* ObstacleSpawning.swift */,
+				223D21651A5983360038AEB9 /* Colliding.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -369,6 +372,7 @@
 				22BA39251A4674FC00D7051C /* SkyMoving.swift in Sources */,
 				2233E02D1A429DE600EDF0FA /* Rotating.swift in Sources */,
 				2233E02F1A42A0C600EDF0FA /* Gravitating.swift in Sources */,
+				223D21661A5983360038AEB9 /* Colliding.swift in Sources */,
 				223D21621A4C0D100038AEB9 /* ObstacleMoving.swift in Sources */,
 				2233E0311A42A36300EDF0FA /* Flapping.swift in Sources */,
 				2233E03D1A445A3B00EDF0FA /* Physical.swift in Sources */,
