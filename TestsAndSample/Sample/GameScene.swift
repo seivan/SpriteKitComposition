@@ -9,7 +9,7 @@
 import SpriteKit
 
 enum ColliderType : UInt32 {
-  case Bird
+  case Bird = 1
   case Ground
   case Pipe
   case Score
@@ -29,6 +29,14 @@ class GameScene: SKScene {
   
   override func didMoveToView(view: SKView) {
     super.didMoveToView(view)
+    view.showsFPS = true
+    view.showsNodeCount = true
+    view.showsDrawCount = true
+    view.showsQuadCount = true
+    view.showsPhysics = true
+    view.showsFields = true
+    view.setValue(NSNumber(bool: true), forKey: "_showsCulledNodesInNodeCount")
+
     self.canRestart = false
     
     // setup physics
