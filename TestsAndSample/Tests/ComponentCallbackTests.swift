@@ -333,5 +333,20 @@ class ComponentCallbackTests: SpriteKitTestCase {
     XCTAssertNotNil(self.component.assertionDidTouchNodeCancelled.touches)
     XCTAssertEqual(self.component.assertionDidTouchNodeCancelled.state, ComponentState.Cancelled)
   }
+  
+  func testDidEnable(isEnabled:Bool) {
+    self.node.addComponent(self.component)
+    
+    self.component.isEnabled = false
+    XCTAssertFalse(self.component.assertionDidEnable)
+    
+    self.component.isEnabled = true
+    XCTAssertTrue(self.component.assertionDidEnable)
+    
+    self.component.assertionDidEnable = false
+    self.component.isEnabled = true
+    XCTAssertFalse(self.component.assertionDidEnable)
+
+  }
 
 }

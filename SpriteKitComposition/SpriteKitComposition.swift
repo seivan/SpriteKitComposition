@@ -54,6 +54,8 @@ public func ==(lhs:ComponentState, rhs:ComponentState) -> Bool { return lhs.valu
 
   optional func didTouchScene(touches:[UITouch], state:ComponentState)
   optional func didTouchNode(touches:[UITouch], state:ComponentState)
+  
+  optional func didEnable(isEnabled:Bool)
 
 }
 
@@ -97,6 +99,7 @@ private struct __Hubs {
       self._removeObservers()
       if newValue == true && self.node?.scene != nil { self._addObservers() }
     }
+    didSet { if oldValue != self.isEnabled { (self as __ComponentInterfacing).didEnable?(self.isEnabled) } }
   }
   private(set) weak var node:SKNode? {
     willSet { if newValue  == nil { self._didRemoveFromNode() } }

@@ -40,6 +40,9 @@ class SampleComponent: Component {
   var assertionDidTouchNodeCancelled:(touches:[UITouch], state:ComponentState)! = nil
   
   
+  var assertionDidEnable:Bool = false
+  
+  
   
 //  var assertionDidBeginContactWithNode:(node:SKNode, contact:SKPhysicsContact)! = nil
 //  var assertionDidEndContactWithNode:(node:SKNode, contact:SKPhysicsContact)! = nil
@@ -153,6 +156,10 @@ class SampleComponent: Component {
       self.assertionDidTouchNodeCancelled = nil
     }
     
+  }
+  
+  func didEnable(isEnabled:Bool) {
+    self.assertionDidEnable = isEnabled
   }
   
 
