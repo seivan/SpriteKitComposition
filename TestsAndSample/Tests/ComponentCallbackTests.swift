@@ -22,6 +22,7 @@ class ComponentCallbackTests: SpriteKitTestCase {
     self.node.addComponent(self.component)
     XCTAssertEqual(self.node, self.component.assertionDidAddToNode)
     XCTAssertEqual(self.scene, self.component.assertionDidAddNodeToScene)
+    XCTAssertEqual(self.controller.view, self.component.assertionDidMoveToView)
   }
   
   func testDidAddToNodeWithoutScene() {
@@ -29,34 +30,47 @@ class ComponentCallbackTests: SpriteKitTestCase {
     self.node.addComponent(self.component)
     XCTAssertEqual(self.node, self.component.assertionDidAddToNode)
     XCTAssertNil(self.component.assertionDidAddNodeToScene)
+    XCTAssertNil(self.component.assertionDidMoveToView)
+
     self.scene.addChild(self.node)
     XCTAssertEqual(self.scene, self.component.assertionDidAddNodeToScene)
+    XCTAssertEqual(self.controller.view, self.component.assertionDidMoveToView)
+
   }
 
   func testDidAddNodeToSceneBefore() {
     self.node.addComponent(self.component)
     XCTAssertEqual(self.scene, self.component.assertionDidAddNodeToScene)
+    XCTAssertEqual(self.controller.view, self.component.assertionDidMoveToView)
+
   }
   
   func testDidAddNodeToSceneAfter() {
     self.node.removeFromParent()
     self.node.addComponent(self.component)
     XCTAssertNil(self.component.assertionDidAddNodeToScene)
+    XCTAssertNil(self.component.assertionDidMoveToView)
+
     self.scene.addChild(self.node)
     XCTAssertEqual(self.scene, self.component.assertionDidAddNodeToScene)
+    XCTAssertEqual(self.controller.view, self.component.assertionDidMoveToView)
+
   }
 
   func testDidRemoveFromNode() {
     self.node.addComponent(self.component)
     let didRemove = self.component.removeFromNode()
     XCTAssertEqual(self.component, didRemove!)
-    XCTAssertNotNil(self.component.assertionDidRemoveFromNode)
+    XCTAssertEqual(self.node, self.component.assertionDidRemoveFromNode)
+    
   }
   
   func testDidRemoveNodeFromScene() {
     self.node.addComponent(self.component)
     self.node.removeFromParent()
     XCTAssertEqual(self.scene, self.component.assertionDidRemoveNodeFromScene)
+    XCTAssertEqual(self.controller.view, self.component.assertionWillMoveFromView)
+
   }
   
   func testDidChangeSceneSizedFromWithScene() {

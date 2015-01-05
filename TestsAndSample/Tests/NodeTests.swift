@@ -16,6 +16,9 @@ class NodeTests: SpriteKitTestCase {
     super.setUp()
     self.scene = SKScene()
     self.node = SKNode()
+    self.controller = UIViewController()
+    self.controller.view = SKView()
+    
   }
   
   override func tearDown() {
@@ -147,21 +150,42 @@ class NodeTests: SpriteKitTestCase {
     
     XCTAssertNil(mainComponent.assertionDidAddNodeToScene)
     XCTAssertNil(nestedComponent.assertionDidAddNodeToScene)
+    XCTAssertNil(mainComponent.assertionDidMoveToView)
+    XCTAssertNil(nestedComponent.assertionDidMoveToView)
+    
     
     self.scene.addChild(self.node)
+    (self.controller.view as SKView).presentScene(self.scene)
+    
     XCTAssertEqual(self.scene,mainComponent.assertionDidAddNodeToScene)
     XCTAssertEqual(self.scene,nestedComponent.assertionDidAddNodeToScene)
+    XCTAssertEqual(self.controller.view,mainComponent.assertionDidMoveToView)
+    XCTAssertEqual(self.controller.view,nestedComponent.assertionDidMoveToView)
+
     mainComponent.assertionDidAddNodeToScene = nil
     nestedComponent.assertionDidAddNodeToScene = nil
+    mainComponent.assertionDidMoveToView = nil
+    nestedComponent.assertionDidMoveToView = nil
     
     let oldScene = self.scene
+    let oldView = self.controller.view as SKView
     self.scene = SKScene()
     self.scene.addChild(self.node)
+    self.controller.view = SKView()
+    (self.controller.view as SKView).presentScene(self.scene)
+
     
     XCTAssertEqual(self.scene,mainComponent.assertionDidAddNodeToScene)
     XCTAssertEqual(self.scene,nestedComponent.assertionDidAddNodeToScene)
+    XCTAssertEqual(oldView,mainComponent.assertionWillMoveFromView)
+    XCTAssertEqual(oldView,nestedComponent.assertionWillMoveFromView)
+    
+    XCTAssertEqual(self.controller.view,mainComponent.assertionDidMoveToView)
+    XCTAssertEqual(self.controller.view,nestedComponent.assertionDidMoveToView)
+
     XCTAssertNotEqual(self.node.scene!, oldScene)
     XCTAssertNotEqual(node.scene!, oldScene)
+    
 
   }
 
@@ -176,19 +200,39 @@ class NodeTests: SpriteKitTestCase {
     
     XCTAssertNil(mainComponent.assertionDidAddNodeToScene)
     XCTAssertNil(nestedComponent.assertionDidAddNodeToScene)
-    
+    XCTAssertNil(mainComponent.assertionDidMoveToView)
+    XCTAssertNil(nestedComponent.assertionDidMoveToView)
+
+    (self.controller.view as SKView).presentScene(self.scene)
     self.scene.insertChild(self.node, atIndex:0)
+    
     XCTAssertEqual(self.scene,mainComponent.assertionDidAddNodeToScene)
     XCTAssertEqual(self.scene,nestedComponent.assertionDidAddNodeToScene)
+    XCTAssertEqual(self.controller.view,mainComponent.assertionDidMoveToView)
+    XCTAssertEqual(self.controller.view,nestedComponent.assertionDidMoveToView)
+
     mainComponent.assertionDidAddNodeToScene = nil
     nestedComponent.assertionDidAddNodeToScene = nil
+    mainComponent.assertionDidMoveToView = nil
+    nestedComponent.assertionDidMoveToView = nil
+
     
     let oldScene = self.scene
+    let oldView = self.controller.view as SKView
     self.scene = SKScene()
     self.scene.addChild(self.node)
+    self.controller.view = SKView()
+    (self.controller.view as SKView).presentScene(self.scene)
+
     
     XCTAssertEqual(self.scene,mainComponent.assertionDidAddNodeToScene)
     XCTAssertEqual(self.scene,nestedComponent.assertionDidAddNodeToScene)
+    XCTAssertEqual(oldView,mainComponent.assertionWillMoveFromView)
+    XCTAssertEqual(oldView,nestedComponent.assertionWillMoveFromView)
+    
+    XCTAssertEqual(self.controller.view,mainComponent.assertionDidMoveToView)
+    XCTAssertEqual(self.controller.view,nestedComponent.assertionDidMoveToView)
+
     XCTAssertNotEqual(self.node.scene!, oldScene)
     XCTAssertNotEqual(node.scene!, oldScene)
 
@@ -202,11 +246,15 @@ class NodeTests: SpriteKitTestCase {
     node.addComponent(nestedComponent)
     self.node.addChild(node)
     self.scene.addChild(self.node)
-    
+    (self.controller.view as SKView).presentScene(self.scene)
+
     
     self.node.removeFromParent()
     XCTAssertEqual(self.scene,mainComponent.assertionDidRemoveNodeFromScene)
     XCTAssertEqual(self.scene,nestedComponent.assertionDidRemoveNodeFromScene)
+    XCTAssertEqual(self.controller.view,mainComponent.assertionWillMoveFromView)
+    XCTAssertEqual(self.controller.view,nestedComponent.assertionWillMoveFromView)
+
     XCTAssertNil(self.node.scene)
     XCTAssertNil(node.scene)
 
@@ -220,11 +268,15 @@ class NodeTests: SpriteKitTestCase {
     node.addComponent(nestedComponent)
     self.node.addChild(node)
     self.scene.addChild(self.node)
-    
+    (self.controller.view as SKView).presentScene(self.scene)
+
     
     self.scene.removeAllChildren()
     XCTAssertEqual(self.scene,mainComponent.assertionDidRemoveNodeFromScene)
     XCTAssertEqual(self.scene,nestedComponent.assertionDidRemoveNodeFromScene)
+    XCTAssertEqual(self.controller.view,mainComponent.assertionWillMoveFromView)
+    XCTAssertEqual(self.controller.view,nestedComponent.assertionWillMoveFromView)
+
     XCTAssertNil(self.node.scene)
     XCTAssertNil(node.scene)
     
@@ -238,11 +290,16 @@ class NodeTests: SpriteKitTestCase {
     node.addComponent(nestedComponent)
     self.node.addChild(node)
     self.scene.addChild(self.node)
+    (self.controller.view as SKView).presentScene(self.scene)
+
     
     
     self.scene.removeChildrenInArray([self.node])
     XCTAssertEqual(self.scene,mainComponent.assertionDidRemoveNodeFromScene)
     XCTAssertEqual(self.scene,nestedComponent.assertionDidRemoveNodeFromScene)
+    XCTAssertEqual(self.controller.view,mainComponent.assertionWillMoveFromView)
+    XCTAssertEqual(self.controller.view,nestedComponent.assertionWillMoveFromView)
+
     XCTAssertNil(self.node.scene)
     XCTAssertNil(node.scene)
     

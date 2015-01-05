@@ -209,7 +209,9 @@ private struct __Hubs {
     
   }
   final private func _didAddNodeToScene() {
-    (self as __ComponentInterfacing).didAddNodeToScene?(self.node!.scene!)
+    let component = self as __ComponentInterfacing
+    component.didAddNodeToScene?(self.node!.scene!)
+    if let view = self.node!.scene!.view { component.didMoveToView?(view) }
     if(self.isEnabled) { self._addObservers() }
     
   }
@@ -221,7 +223,9 @@ private struct __Hubs {
   }
   
   final private func _didRemoveNodeFromScene() {
-    (self as __ComponentInterfacing).didRemoveNodeFromScene?(self.node!.scene!)
+    let component = self as __ComponentInterfacing
+    component.didRemoveNodeFromScene?(self.node!.scene!)
+    if let view = self.node!.scene!.view { component.willMoveFromView?(view) }
     self._removeObservers()
   }
   
