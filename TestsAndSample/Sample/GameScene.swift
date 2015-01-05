@@ -9,10 +9,10 @@
 import SpriteKit
 
 enum ColliderType : UInt32 {
-  case Bird = 1
-  case Ground
-  case Pipe
-  case Score
+  case Bird = 0
+  case Ground = 2
+  case Pipe = 4
+  case Score = 8
 }
 
 
@@ -31,28 +31,7 @@ class GameScene: SKScene {
   
   override func didMoveToView(view: SKView) {
     super.didMoveToView(view)
-    view.showsFPS = true
-    view.showsNodeCount = true
-    view.showsDrawCount = true
-    view.showsQuadCount = true
-    view.showsPhysics = true
-    view.showsFields = true
-    view.setValue(NSNumber(bool: true), forKey: "_showsCulledNodesInNodeCount")
 
-    self.canRestart = false
-    
-    // setup physics
-    self.addComponent(Gravitating())
-    
-    //Setup background color
-    self.addComponent(Skying())
-    
-    
-    
-    self.moving = SKNode()
-    self.addChild(self.moving)
-//    self.pipes = SKNode()
-//    self.moving.addChild(self.pipes)
     
     // ground
     let groundTexture = SKTexture(imageNamed: "land")
@@ -60,18 +39,41 @@ class GameScene: SKScene {
     // skyline
     let skyTexture = SKTexture(imageNamed: "sky")
     skyTexture.filteringMode = .Nearest
-    
-  
-    
-    self.moving.addComponent(GroundMoving(texture: groundTexture))
-    self.moving.addComponent(SkyMoving(texture: skyTexture, aboveGroundTexture:groundTexture))
-    
+    // setup our bird
+    let birdTexture1 = SKTexture(imageNamed: "bird-01")
+    birdTexture1.filteringMode = .Nearest
+    let birdTexture2 = SKTexture(imageNamed: "bird-02")
+    birdTexture2.filteringMode = .Nearest
+    let birdTexture3 = SKTexture(imageNamed: "bird-03")
+    birdTexture2.filteringMode = .Nearest
+    let birdTexture4 = SKTexture(imageNamed: "bird-04")
+    birdTexture2.filteringMode = .Nearest
     // create the pipes textures
     self.pipeTextureUp = SKTexture(imageNamed: "PipeUp")
     self.pipeTextureUp.filteringMode = .Nearest
     self.pipeTextureDown = SKTexture(imageNamed: "PipeDown")
     self.pipeTextureDown.filteringMode = .Nearest
+
+  
+  
+    self.moving = SKNode()
+    self.addChild(self.moving)
+
     
+    self.canRestart = false
+
+    self.scene?.addComponent(Debugging())
+
+    self.moving.addComponent(GroundMoving(texture: groundTexture))
+    self.moving.addComponent(SkyMoving(texture: skyTexture, aboveGroundTexture:groundTexture))
+    
+    
+    // setup physics
+    self.addComponent(Gravitating())
+    
+    //Setup background color
+    self.addComponent(Skying())
+
     
     
     // spawn the pipes
@@ -85,15 +87,6 @@ class GameScene: SKScene {
 
     
     
-    // setup our bird
-    let birdTexture1 = SKTexture(imageNamed: "bird-01")
-    birdTexture1.filteringMode = .Nearest
-    let birdTexture2 = SKTexture(imageNamed: "bird-02")
-    birdTexture2.filteringMode = .Nearest
-    let birdTexture3 = SKTexture(imageNamed: "bird-03")
-    birdTexture2.filteringMode = .Nearest
-    let birdTexture4 = SKTexture(imageNamed: "bird-04")
-    birdTexture2.filteringMode = .Nearest
     
     
     
@@ -162,8 +155,8 @@ class GameScene: SKScene {
     
     // Remove all existing pipes
 //    pipes.removeAllChildren()
-    let component = self.moving.componentWithClass(ObstacleSpawning.self)
-    self.moving.removeComponentWithClass(ObstacleSpawning.self)
+
+    let component = self.moving.removeComponentWithClass(ObstacleSpawning.self)
     self.moving.addComponent(component!)
     
     // Reset _canRestart
@@ -202,22 +195,17 @@ class GameScene: SKScene {
       else {
         
         
+        bird.physicsBody?.collisionBitMask = ColliderType.Ground.rawValue
+
+        
         self.bird.removeComponentWithClass(Flapping.self)
         moving.speed = 0
         
-        bird.physicsBody?.collisionBitMask = ColliderType.Ground.rawValue
-        bird.runAction(  SKAction.rotateByAngle(CGFloat(M_PI) * CGFloat(bird.position.y) * 0.01, duration:1), completion:{self.bird.speed = 0 })
+        bird.runAction(  SKAction.rotateByAngle(CGFloat(M_PI) * CGFloat(bird.position.y) * 0.01, duration:1), completion:{ self.bird.speed = 0 })
         
         
-        // Flash background if contact is detected
-        self.removeActionForKey("flash")
-        self.runAction(SKAction.sequence([SKAction.repeatAction(SKAction.sequence([SKAction.runBlock({
-          self.backgroundColor = SKColor(red: 1, green: 0, blue: 0, alpha: 1.0)
-        }),SKAction.waitForDuration(NSTimeInterval(0.05)), SKAction.runBlock({
-          //          self.backgroundColor = self.skyColor
-        }), SKAction.waitForDuration(NSTimeInterval(0.05))]), count:4), SKAction.runBlock({
-          self.canRestart = true
-        })]), withKey: "flash")
+       self.canRestart = true
+
       }
     }
   }

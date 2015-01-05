@@ -19,7 +19,7 @@ class RepeatAnimating: Component {
   }
   
   func didAddToNode(node:SKNode) {
-    self.node?.removeActionForKey(self.key.UUIDString)
+//    self.node?.removeActionForKey(self.key.UUIDString)
     self.node?.runAction(self.animation, withKey: self.key.UUIDString)
   }
   
