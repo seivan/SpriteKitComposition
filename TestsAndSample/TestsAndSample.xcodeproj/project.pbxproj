@@ -283,6 +283,7 @@
 					};
 					22AFC478195F9D02003572F3 = {
 						CreatedOnToolsVersion = 6.0;
+						DevelopmentTeam = D46H93GKTK;
 					};
 				};
 			};

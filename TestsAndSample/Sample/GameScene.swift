@@ -8,12 +8,14 @@
 
 import SpriteKit
 
+
 enum ColliderType : UInt32 {
-  case Bird = 0
+  case Bird = 1
   case Ground = 2
   case Pipe = 4
   case Score = 8
 }
+
 
 
 
@@ -56,23 +58,21 @@ class GameScene: SKScene {
 
   
   
-    self.moving = SKNode()
-    self.addChild(self.moving)
 
     
     self.canRestart = false
 
+
+    self.scene?.addComponent(Gravitating())
+    self.scene?.addComponent(Skying())
     self.scene?.addComponent(Debugging())
 
+    self.moving = SKNode()
+    self.scene?.addChild(self.moving)
     self.moving.addComponent(GroundMoving(texture: groundTexture))
     self.moving.addComponent(SkyMoving(texture: skyTexture, aboveGroundTexture:groundTexture))
     
     
-    // setup physics
-    self.addComponent(Gravitating())
-    
-    //Setup background color
-    self.addComponent(Skying())
 
     
     
@@ -102,13 +102,10 @@ class GameScene: SKScene {
     
     self.bird.addComponent(Colliding(
       collisionsAs: ColliderType.Bird.rawValue,
-      collisionsWith: ColliderType.Ground.rawValue | ColliderType.Pipe.rawValue,
+      collisionsWith: ColliderType.Ground.rawValue,
       contactWith: ColliderType.Ground.rawValue | ColliderType.Pipe.rawValue)
     )
-    self.bird.addComponent(
-      Physical(dynamic:true,
-               shape:.Circle(50)
-      )
+    self.bird.addComponent( Physical(dynamic:true, shape:.Circle(50) )
     )
     
     
@@ -119,17 +116,12 @@ class GameScene: SKScene {
     ground.position = CGPoint(x:0, y:groundTexture.size().height)
     ground.size = groundTexture.size()
     
-    ground.addComponent(Colliding(
-      collisionsAs: ColliderType.Ground.rawValue,
-      collisionsWith: ColliderType.Bird.rawValue
-      )
+    ground.addComponent(
+      Colliding( collisionsAs: ColliderType.Ground.rawValue, collisionsWith: ColliderType.Bird.rawValue )
     )
 
     ground.addComponent(
-      Physical(
-        dynamic:false,
-        shape:.Rectangle(CGSizeMake(self.scene!.frame.size.width,
-          ground.size.height * 2.0)))
+      Physical( dynamic:false, shape:.Rectangle(CGSizeMake(self.scene!.frame.size.width, ground.size.height * 2.0)))
     )
 
     self.addChild(ground)
@@ -149,7 +141,6 @@ class GameScene: SKScene {
     // Move bird to original position and reset velocity
     bird.position = CGPointMake(self.frame.size.width / 2.5, CGRectGetMidY(self.frame))
     bird.physicsBody?.velocity = CGVectorMake( 0, 0 )
-    bird.physicsBody?.collisionBitMask = ColliderType.Ground.rawValue | ColliderType.Pipe.rawValue
     bird.speed = 1.0
     bird.zRotation = 0.0
     
@@ -195,7 +186,7 @@ class GameScene: SKScene {
       else {
         
         
-        bird.physicsBody?.collisionBitMask = ColliderType.Ground.rawValue
+//        bird.physicsBody?.collisionBitMask = ColliderType.Ground.rawValue
 
         
         self.bird.removeComponentWithClass(Flapping.self)

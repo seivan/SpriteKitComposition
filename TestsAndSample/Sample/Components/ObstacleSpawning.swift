@@ -29,53 +29,39 @@ class ObstacleSpawning: Component {
           y:CGFloat(Double(y)) + pipeDown.size.height + CGFloat(verticalGap))
         
         
-        pipeDown.addComponent(Colliding(
-          collisionsAs: ColliderType.Pipe.rawValue,
-          collisionsWith: ColliderType.Bird.rawValue)
+        pipeDown.addComponent(
+          Colliding( collisionsAs: ColliderType.Pipe.rawValue, contactWith: ColliderType.Bird.rawValue)
         )
         
         pipeDown.addComponent(
-          Physical(
-            dynamic: false,
-            shape: .Rectangle(pipeDown.size)
-          )
+          Physical( dynamic: false, shape: .Rectangle(pipeDown.size) )
         )
         
         pipePair.addChild(pipeDown)
         
         let pipeUp = SKSpriteNode(texture: topObstacleGesture)
         pipeUp.setScale(2.0)
-        pipeUp.position = CGPointMake(0.0, CGFloat(Double(y)))
+        pipeUp.position = CGPoint(x:0.0, y:CGFloat(Double(y)))
         
-        pipeUp.addComponent(Colliding(
-          collisionsAs: ColliderType.Pipe.rawValue,
-          collisionsWith: ColliderType.Bird.rawValue)
+        pipeUp.addComponent(
+          Colliding( collisionsAs: ColliderType.Pipe.rawValue, contactWith: ColliderType.Bird.rawValue)
         )
         
         pipeUp.addComponent(
-          Physical(
-            dynamic: false,
-            shape: .Rectangle(pipeUp.size)
+          Physical( dynamic: false, shape: .Rectangle(pipeUp.size)
           )
         )
         pipePair.addChild(pipeUp)
         
         var contactNode = SKNode()
-        // + self.bird.size.width / 2
-        contactNode.position = CGPoint(x:pipeDown.size.width,
-                                       y:CGRectGetMidY(scene.frame)
-                                      )
+        contactNode.position = CGPoint(x:pipeDown.size.width, y:CGRectGetMidY(scene.frame) )
         
-        contactNode.addComponent(Colliding(
-          collisionsAs: ColliderType.Score.rawValue,
-          contactWith: ColliderType.Bird.rawValue
-          )
+        contactNode.addComponent(
+          Colliding( collisionsAs: ColliderType.Score.rawValue, contactWith: ColliderType.Bird.rawValue )
         )
         
         contactNode.addComponent(
-          Physical(
-            dynamic: false,
-            shape: .Rectangle(CGSizeMake( pipeUp.size.width, scene.frame.size.height ))
+          Physical( dynamic: false, shape: .Rectangle(CGSize( width: pipeUp.size.width, height:scene.frame.size.height ))
           )
         )
         

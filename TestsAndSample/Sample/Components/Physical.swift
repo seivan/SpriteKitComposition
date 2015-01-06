@@ -37,10 +37,7 @@ class Physical : Component {
   func didAddNodeToScene(scene:SKScene) {
     self.closure!()
     if let colliding = self.node!.componentWithClass(Colliding) as Colliding? {
-      let node = self.node!
-      node.physicsBody?.categoryBitMask     = colliding.collisionsAs
-      if let collisionsWith = colliding.collisionsWith { node.physicsBody?.collisionBitMask    = collisionsWith }
-      if let contactWith    = colliding.contactWith    { node.physicsBody?.contactTestBitMask  = contactWith    }
+      colliding.didAddToNode(self.node!)
     }
 
 
