@@ -66,6 +66,7 @@ class GameScene: SKScene {
     self.scene?.addComponent(Gravitating())
     self.scene?.addComponent(Skying())
     self.scene?.addComponent(Debugging())
+    self.scene?.componentWithClass(Debugging.self)?.isEnabled = false
 
     self.moving = SKNode()
     self.scene?.addChild(self.moving)

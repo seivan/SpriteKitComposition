@@ -11,14 +11,17 @@ import SpriteKIt
 class Debugging: Component {
   
 
-  
-  func didMoveToView(view:SKView) {
-    view.showsFPS = true
-    view.showsNodeCount = true
-    view.showsDrawCount = true
-    view.showsQuadCount = true
-    view.showsPhysics = true
-    view.showsFields = true
-    view.setValue(NSNumber(bool: true), forKey: "_showsCulledNodesInNodeCount")
+  func didEnable(isEnabled:Bool) {
+    if let view = self.node?.scene?.view {
+    view.showsFPS = isEnabled
+    view.showsNodeCount = isEnabled
+    view.showsDrawCount = isEnabled
+    view.showsQuadCount = isEnabled
+    view.showsPhysics = isEnabled
+    view.showsFields = isEnabled
+    view.setValue(NSNumber(bool: isEnabled), forKey: "_showsCulledNodesInNodeCount")
+    }
+
   }
+
 }
