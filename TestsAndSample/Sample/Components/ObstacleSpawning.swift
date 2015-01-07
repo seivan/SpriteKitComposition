@@ -8,16 +8,6 @@
 
 import SpriteKit
 
-class ObjectPooling : Component {
-  var availableObjects = [SKNode]()
-  func didRemoveChildNode(node:SKNode) {
-    self.availableObjects.append(node)
-  }
-  
-  func popAvailableObject() -> SKNode? {
-    return self.availableObjects.isEmpty ? nil : self.availableObjects.removeLast()
-  }
-}
 
 class ObstacleSpawning: Component {
   var obstacles:SKNode = SKNode()
