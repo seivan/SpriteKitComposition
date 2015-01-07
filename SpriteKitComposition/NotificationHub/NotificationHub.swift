@@ -1,6 +1,6 @@
 import Foundation
 
-public class Notification<T>  {
+public class Notification<T> : DebugPrintable, Printable  {
   typealias NotificationClosure = (Notification<T>) -> Void
   let name:String
   private(set) weak var sender:AnyObject?
@@ -33,6 +33,12 @@ public class Notification<T>  {
     self.hub = nil
     return true
   }
+  
+  public var description:String {
+    return "\(self.name) | \(self.sender) |"
+  }
+  public var debugDescription:String { return self.description }
+
   
   
 }
@@ -100,6 +106,7 @@ public class NotificationHub<T>  {
     
     var didPublish = false
     var notifications = self.internalNotifications[name] as? NSMutableArray
+
     if let notifications = notifications {
       if sender != nil {
         for notification in notifications {

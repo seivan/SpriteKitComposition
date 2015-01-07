@@ -14,6 +14,10 @@ class SampleComponent: Component {
   var assertionDidAddNodeToScene:SKScene! = nil
   var assertionDidRemoveFromNode:SKNode! = nil
   var assertionDidRemoveNodeFromScene:SKScene! = nil
+  
+  var assertionDidAddChildNode:SKNode! = nil
+  var assertionDidRemoveChildNode:SKNode! = nil
+  
   var assertionDidChangeSceneSizedFrom:CGSize! = nil
   var assertionDidMoveToView:SKView! = nil
   var assertionWillMoveFromView:SKView! = nil
@@ -40,7 +44,7 @@ class SampleComponent: Component {
   var assertionDidTouchNodeCancelled:(touches:[UITouch], state:ComponentState)! = nil
   
   
-  var assertionDidEnable:Bool = false
+  var assertionDidChangeEnableState:Bool = false
   
   
   
@@ -60,42 +64,20 @@ class SampleComponent: Component {
   
   
   
-  func didAddToNode(node:SKNode) {
-    self.assertionDidAddToNode = node
-  }
-  func didAddNodeToScene(scene:SKScene) {
-    self.assertionDidAddNodeToScene = scene
-  }
-  func didRemoveFromNode(node:SKNode) {
-    self.assertionDidRemoveFromNode = node
-  }
-  func didRemoveNodeFromScene(scene:SKScene) {
-    self.assertionDidRemoveNodeFromScene = scene
-  }
-  func didChangeSceneSizedFrom(previousSize:CGSize) {
-    self.assertionDidChangeSceneSizedFrom = previousSize
-  }
-  func didMoveToView(view: SKView) {
-    self.assertionDidMoveToView = view
-  }
-  func willMoveFromView(view: SKView) {
-    self.assertionWillMoveFromView = view
-  }
-  func didUpdate(time:NSTimeInterval) {
-    self.assertionDidUpdate = time
-  }
-  func didEvaluateActions() {
-    self.assertionDidEvaluateActions = true
-  }
-  func didSimulatePhysics() {
-    self.assertionDidSimulatePhysics = true
-  }
-  func didApplyConstraints() {
-    self.assertionDidApplyConstraints = true
-  }
-  func didFinishUpdate() {
-    self.assertionDidFinishUpdate = true
-  }
+  func didAddToNode(node:SKNode)                    { self.assertionDidAddToNode = node }
+  func didAddNodeToScene(scene:SKScene)             { self.assertionDidAddNodeToScene = scene  }
+  func didRemoveFromNode(node:SKNode)               { self.assertionDidRemoveFromNode = node   }
+  func didRemoveNodeFromScene(scene:SKScene)        { self.assertionDidRemoveNodeFromScene = scene   }
+  func didAddChildNode(node:SKNode)                 { self.assertionDidAddChildNode = node   }
+  func didRemoveChildNode(node:SKNode)              { self.assertionDidRemoveChildNode = node  }
+  func didChangeSceneSizedFrom(previousSize:CGSize) { self.assertionDidChangeSceneSizedFrom = previousSize  }
+  func didMoveToView(view: SKView)                  { self.assertionDidMoveToView = view }
+  func willMoveFromView(view: SKView)               { self.assertionWillMoveFromView = view }
+  func didUpdate(time:NSTimeInterval)               { self.assertionDidUpdate = time }
+  func didEvaluateActions()                         { self.assertionDidEvaluateActions = true }
+  func didSimulatePhysics()                         { self.assertionDidSimulatePhysics = true }
+  func didApplyConstraints()                        { self.assertionDidApplyConstraints = true }
+  func didFinishUpdate()                            { self.assertionDidFinishUpdate = true }
   
   func didContactScene(contact:SKPhysicsContact, state:ComponentState) {
     switch state.value {
@@ -158,9 +140,7 @@ class SampleComponent: Component {
     
   }
   
-  func didEnable(isEnabled:Bool) {
-    self.assertionDidEnable = isEnabled
-  }
+  func didChangeEnableState(enable:Bool) { self.assertionDidChangeEnableState = isEnabled }
   
 
 }

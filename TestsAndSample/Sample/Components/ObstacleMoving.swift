@@ -25,4 +25,10 @@ class ObstacleMoving : Component {
     self.closure!(scene)
   }
   
+  func didRemoveNodeFromScene(scene:SKScene) {
+    self.node?.removeAllActions()
+  }
+  
+  
+  
 }

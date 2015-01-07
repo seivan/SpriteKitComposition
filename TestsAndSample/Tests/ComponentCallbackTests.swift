@@ -73,6 +73,54 @@ class ComponentCallbackTests: SpriteKitTestCase {
 
   }
   
+  func testDidAddChildNodeAddChild() {
+    self.node.addComponent(self.component)
+    let childNode = SKNode()
+    self.node.addChild(childNode)
+    XCTAssertEqual(childNode, self.component.assertionDidAddChildNode)
+  }
+
+  func testDidAddChildNodeInsertChild() {
+    let otherComponent = SampleComponent()
+    self.node.addComponent(otherComponent)
+    let childNode = SKNode()
+    self.node.addChild(childNode)
+    let newNode = SKNode()
+
+    newNode.addComponent(self.component)
+    
+    newNode.insertChild(childNode, atIndex: 0)
+    
+    XCTAssertEqual(childNode, self.component.assertionDidAddChildNode)
+    XCTAssertEqual(childNode, otherComponent.assertionDidRemoveChildNode)
+  }
+
+  func testDidRemoveChildNodeRemoveChildrenFromArray() {
+    self.node.addComponent(self.component)
+    let childNode = SKNode()
+    self.node.addChild(childNode)
+    self.node.removeChildrenInArray([childNode])
+    XCTAssertEqual(childNode, self.component.assertionDidRemoveChildNode)
+  }
+
+  func testDidRemoveChildNodeRemoveChildren() {
+    self.node.addComponent(self.component)
+    let childNode = SKNode()
+    self.node.addChild(childNode)
+    self.node.removeAllChildren()
+    XCTAssertEqual(childNode, self.component.assertionDidRemoveChildNode)
+  }
+
+
+  func testDidRemoveChildNodeRemoveFromParent() {
+    self.node.addComponent(self.component)
+    let childNode = SKNode()
+    self.node.addChild(childNode)
+    childNode.removeFromParent()
+    XCTAssertEqual(childNode, self.component.assertionDidRemoveChildNode)
+  }
+
+  
   func testDidChangeSceneSizedFromWithScene() {
     self.node.addComponent(self.component)
     let oldSize = self.scene.size
@@ -338,14 +386,14 @@ class ComponentCallbackTests: SpriteKitTestCase {
     self.node.addComponent(self.component)
     
     self.component.isEnabled = false
-    XCTAssertFalse(self.component.assertionDidEnable)
+    XCTAssertFalse(self.component.assertionDidChangeEnableState)
     
     self.component.isEnabled = true
-    XCTAssertTrue(self.component.assertionDidEnable)
+    XCTAssertTrue(self.component.assertionDidChangeEnableState)
     
-    self.component.assertionDidEnable = false
+    self.component.assertionDidChangeEnableState = false
     self.component.isEnabled = true
-    XCTAssertFalse(self.component.assertionDidEnable)
+    XCTAssertFalse(self.component.assertionDidChangeEnableState)
 
   }
 

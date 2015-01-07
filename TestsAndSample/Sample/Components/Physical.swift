@@ -39,7 +39,9 @@ class Physical : Component {
     if let colliding = self.node!.componentWithClass(Colliding) as Colliding? {
       colliding.didAddToNode(self.node!)
     }
-
-
+  }
+  
+  func didRemoveNodeFromScene(scene:SKScene) {
+    self.node?.physicsBody = nil
   }
 }

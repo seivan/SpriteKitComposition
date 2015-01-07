@@ -35,6 +35,8 @@ class GameScene: SKScene {
     super.didMoveToView(view)
 
     
+    
+    
     // ground
     let groundTexture = SKTexture(imageNamed: "land")
     groundTexture.filteringMode = .Nearest // shorter form for SKTextureFilteringMode.Nearest
@@ -53,7 +55,7 @@ class GameScene: SKScene {
     // create the pipes textures
     self.pipeTextureUp = SKTexture(imageNamed: "PipeUp")
     self.pipeTextureUp.filteringMode = .Nearest
-    self.pipeTextureDown = SKTexture(imageNamed: "PipeDown")
+    self.pipeTextureDown = SKTexture(imageNamed: "BPipeDown")
     self.pipeTextureDown.filteringMode = .Nearest
 
   
@@ -66,7 +68,7 @@ class GameScene: SKScene {
     self.scene?.addComponent(Gravitating())
     self.scene?.addComponent(Skying())
     self.scene?.addComponent(Debugging())
-    self.scene?.componentWithClass(Debugging.self)?.isEnabled = false
+    self.scene?.componentWithClass(Debugging.self)?.isEnabled = true
 
     self.moving = SKNode()
     self.scene?.addChild(self.moving)
@@ -78,11 +80,8 @@ class GameScene: SKScene {
     
     
     // spawn the pipes
-    
-    self.moving.addComponent(ObstacleSpawning(
-      topObstacleGesture: self.pipeTextureUp,
-      bottomObstacleGesture: self.pipeTextureDown)
-    )
+    let c = ObstacleSpawning(topObstacleGesture: self.pipeTextureUp, bottomObstacleGesture: self.pipeTextureDown)
+    self.moving.addComponent(c )
 
     
 

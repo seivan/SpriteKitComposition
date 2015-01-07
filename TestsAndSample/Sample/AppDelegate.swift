@@ -15,9 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
 
 
-  func fuck(t:UIPanGestureRecognizer) {
-    print(t)
-  }
   func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: NSDictionary?) -> Bool {
    
     return true

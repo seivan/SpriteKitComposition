@@ -36,6 +36,9 @@ public func ==(lhs:ComponentState, rhs:ComponentState) -> Bool { return lhs.valu
   
   optional func didRemoveFromNode(node:SKNode)
   optional func didRemoveNodeFromScene(scene:SKScene)
+
+  optional func didAddChildNode(node:SKNode)
+  optional func didRemoveChildNode(node:SKNode)
   
   optional func didChangeSceneSizedFrom(previousSize:CGSize)
   optional func didMoveToView(view: SKView)
@@ -55,13 +58,14 @@ public func ==(lhs:ComponentState, rhs:ComponentState) -> Bool { return lhs.valu
   optional func didTouchScene(touches:[UITouch], state:ComponentState)
   optional func didTouchNode(touches:[UITouch], state:ComponentState)
   
-  optional func didEnable(isEnabled:Bool)
+  optional func didChangeEnableState(enable:Bool)
 
 }
 
 private struct __Hubs {
   static let timeInterval = NotificationHub<CFTimeInterval>()
   static let node         = NotificationHub<SKNode>()
+  static let empty        = NotificationHub<SKNode>()
   static let size         = NotificationHub<CGSize>()
   static let view         = NotificationHub<SKView>()
   static let contact      = NotificationHub<(SKPhysicsContact, state:ComponentState)>()
@@ -70,7 +74,10 @@ private struct __Hubs {
 }
 
 @objc public class Component : __IComponent  {
+  
   private struct ObserverCollection {
+    var node        = [Notification<SKNode>]()
+
     var updated:Notification<CFTimeInterval>?
     var size:Notification<CGSize>?
     var empty        = [Notification<SKNode>]()
@@ -100,14 +107,17 @@ private struct __Hubs {
       self._removeObservers()
       if newValue == true && self.node?.scene != nil { self._addObservers() }
     }
-    didSet { if oldValue != self.isEnabled { (self as __IComponent).didEnable?(self.isEnabled) } }
+    didSet { if oldValue != self.isEnabled { (self as __IComponent).didChangeEnableState?(self.isEnabled) } }
   }
+  
   private(set) weak var node:SKNode? {
     willSet { if newValue  == nil { self._didRemoveFromNode() } }
     didSet  { if self.node != nil { self._didAddToNode() } }
   }
   
-  init(){ }
+  init(){
+    
+  }
   
   final func removeFromNode() -> Component? {
     if let n = self.node { return n.removeComponent(self) }
@@ -149,28 +159,28 @@ private struct __Hubs {
     
     if let didEvaluateActions =  b.didEvaluateActions {
       self.observerCollection.empty.append(
-        __Hubs.node.subscribeNotificationForName("didEvaluateActions", sender: scene) {
+        __Hubs.empty.subscribeNotificationForName("didEvaluateActions", sender: scene) {
           n in didEvaluateActions()
         })
     }
     
     if let didSimulatePhysics = b.didSimulatePhysics? {
       self.observerCollection.empty.append(
-        __Hubs.node.subscribeNotificationForName("didSimulatePhysics", sender: scene) {
+        __Hubs.empty.subscribeNotificationForName("didSimulatePhysics", sender: scene) {
           n in didSimulatePhysics()
         })
     }
     
     if let didApplyConstraints = b.didApplyConstraints? {
       self.observerCollection.empty.append(
-        __Hubs.node.subscribeNotificationForName("didApplyConstraints", sender: scene) {
+        __Hubs.empty.subscribeNotificationForName("didApplyConstraints", sender: scene) {
           n in didApplyConstraints()
         })
     }
     
     if let didFinishUpdate = b.didFinishUpdate {
       self.observerCollection.empty.append(
-        __Hubs.node.subscribeNotificationForName("didFinishUpdate", sender: scene) {
+        __Hubs.empty.subscribeNotificationForName("didFinishUpdate", sender: scene) {
           n in didFinishUpdate()
         })
     }
@@ -208,10 +218,23 @@ private struct __Hubs {
   
   
   final private func _didAddToNode() {
-    (self as __IComponent).didAddToNode?(self.node!)
-    if self.node?.scene != nil { self._didAddNodeToScene() }
-    
+    var node = self.node!
+    weak var component = (self as __IComponent)
+    component?.didAddToNode?(node)
+    if node.scene != nil { self._didAddNodeToScene() }
+    self.observerCollection.node.append(
+      __Hubs.node.subscribeNotificationForName("didAddChildNode", sender: node) { notification in
+      component?.didAddChildNode?(notification.userInfo!)
+      return
+    })
+    self.observerCollection.node.append(
+    __Hubs.node.subscribeNotificationForName("didRemoveChildNode", sender: node) { notification in
+      component?.didRemoveChildNode?(notification.userInfo!)
+      return
+    })
+
   }
+  
   final private func _didAddNodeToScene() {
     let component = self as __IComponent
     component.didAddNodeToScene?(self.node!.scene!)
@@ -223,7 +246,7 @@ private struct __Hubs {
   final private func _didRemoveFromNode() {
     (self as __IComponent).didRemoveFromNode?(self.node!)
     self._removeObservers()
-
+    for notification in self.observerCollection.node { notification.remove() }
   }
   
   final private func _didRemoveNodeFromScene() {
@@ -330,19 +353,19 @@ extension SKScene : SKPhysicsContactDelegate {
   }
   
   public func didEvaluateActions() {
-    __Hubs.node.publishNotificationName("didEvaluateActions", sender: self)
+    __Hubs.empty.publishNotificationName("didEvaluateActions", sender: self)
   }
   
   public func didSimulatePhysics() {
-    __Hubs.node.publishNotificationName("didSimulatePhysics", sender: self)
+    __Hubs.empty.publishNotificationName("didSimulatePhysics", sender: self)
   }
   
   public func didApplyConstraints() {
-    __Hubs.node.publishNotificationName("didApplyConstraints", sender: self)
+    __Hubs.empty.publishNotificationName("didApplyConstraints", sender: self)
   }
   
   public func didFinishUpdate() {
-    __Hubs.node.publishNotificationName("didFinishUpdate", sender: self)
+    __Hubs.empty.publishNotificationName("didFinishUpdate", sender: self)
   }
   
   
@@ -417,7 +440,7 @@ extension SKNode {
 }
 
 extension SKNode {
-  
+
   private func _addedChild(node:SKNode) {
    if self.scene != nil {
       for component in node.components { component._didAddNodeToScene() }
@@ -433,7 +456,7 @@ extension SKNode {
       node.removeFromParent()
       self._addChild(node)
       self._addedChild(node);
-      
+      __Hubs.node.publishNotificationName("didAddChildNode", sender: self, userInfo: node)
     }
     
   }
@@ -443,6 +466,8 @@ extension SKNode {
       node.removeFromParent()
       self._insertChild(node, atIndex: index)
       self._addedChild(node);
+      __Hubs.node.publishNotificationName("didAddChildNode", sender: self, userInfo: node)
+
     }
     
   }
@@ -459,22 +484,31 @@ extension SKNode {
   func _removeChildrenInArray(nodes: [AnyObject]!) {
     var nodesAsSKNodes = nodes as [SKNode]
     var childNodesToRemove = [SKNode]()
-    for child in self.childNodes {
-      if contains(nodesAsSKNodes, child) {
-        childNodesToRemove.append(child)
-        self._removedChild(child)
+    for node in self.childNodes {
+      if contains(nodesAsSKNodes, node) {
+        childNodesToRemove.append(node)
+        self._removedChild(node)
+        __Hubs.node.publishNotificationName("didRemoveChildNode", sender: self, userInfo: node)
       }
     }
     self._removeChildrenInArray(childNodesToRemove)
   }
   
   func _removeAllChildren() {
-    for child in self.childNodes { self._removedChild(child) }
+    for node in self.childNodes {
+      self._removedChild(node)
+      __Hubs.node.publishNotificationName("didRemoveChildNode", sender: self, userInfo: node)
+    }
     self._removeAllChildren()
   }
   
   func _removeFromParent() {
+    if let parent = self.parent {
     self.parent?._removedChild(self)
+      __Hubs.node.publishNotificationName("didRemoveChildNode", sender: self.parent, userInfo: self)
+
+    }
+    
     self._removeFromParent()
   }
   
